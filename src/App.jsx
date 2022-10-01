@@ -1,39 +1,38 @@
 import React from 'react'
-import Layout from './components/layouts/Layout'
-import ScrollToTop from './components/shared/ScrollToTop'
-import Preloader from './components/shared/Preloader'
-import ColorSetting from './components/shared/ColorSetting'
-import Home from './sections/Home'
-import About from './sections/About'
-import Skills from './sections/Skills'
-import Experience from './sections/Experience'
-import Service from './sections/Service'
-import Portfolio from './sections/Portfolio'
-import Testimonial from './sections/Testimonial'
-import Blog from './sections/Blog'
-import Contact from './sections/Contact'
-
+import { ToastContainer } from 'react-toastify'
+import { Routes, Route } from "react-router-dom"
+import Home from './page/Home'
+import AllBlog from './sections/AllBlog'
 import BlogDetails from './sections/BlogDetails'
+import Login from './sections/Login'
+import Register from './sections/Register'
+import CreateBlog from './sections/CreateBlog'
+import CategoryWisePost from './sections/CategoryWisePost'
+
+
 function App() {
-
-
   return (
     <>
-       {/* <ScrollToTop />
-       <Preloader />
-       <ColorSetting /> */}
-       <Layout>
-          <Home />
-          <About />
-          <Skills />
-          <Experience />
-          <Service />
-          <Portfolio />
-          <Testimonial />
-          <Blog />
-          <Contact />
-       </Layout>
-       
+     <ToastContainer
+            position="top-right"
+            autoClose={1500}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
+      <Routes>
+        <Route path="/" element={ <Home/> } />
+        <Route path="/blog-details/:id" element={ <BlogDetails/> } />
+        <Route path="/all-blogs" element={ <AllBlog/> } />
+        <Route path="/login" element={ <Login/> } />
+        <Route path="/register" element={ <Register/> } />
+        <Route path="/create-blog" element={ <CreateBlog/> } />
+        <Route path="/category-wise-post/:id" element={ <CategoryWisePost/> } />
+      </Routes>
     </>
   )
 }

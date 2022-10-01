@@ -1,9 +1,111 @@
-import React from 'react'
+import React, { useEffect,useState } from 'react'
+import Venobox from 'venobox'
+
+  const projectsData = [
+	{
+	image: "01.jpg",
+	tag_one: "Web Development",
+	tag_two: "Wordpress",
+	tags: ["development", "wordpress"],
+	},
+	{
+	image: "02.jpg",
+	tag_one: "Branding",
+	tag_two: "Wordpress",
+	tags: ["branding", "wordpress"],
+	},
+	{
+	image: "03.jpg",
+	tag_one: "Web Design",
+	tag_two: "Web Development",
+	tags: ["design", "development"],
+	},
+	{
+	image: "04.jpg",
+	tag_one: "Branding",
+	tag_two: "Wordpress",
+	tags: ["branding", "wordpress"],
+	},
+	{
+	image: "05.jpg",
+	tag_one: "Web Design",
+	tag_two: "Wordpress",
+	tags: ["design", "wordpress"],
+	},
+	{
+	image: "06.jpg",
+	tag_one: "Web Design",
+	tag_two: "Web Development",
+	tags: ["design", "development"],
+	},
+  ];
+  
+  const menusData = [
+	{
+	  id: 1,
+	  name: "all",
+	  isActive: true,
+	  tag: "all",
+	},
+	{
+	  id: 2,
+	  name: "web design",
+	  isActive: false,
+	  tag: "design",
+	},
+	{
+	  id: 3,
+	  name: "wordpress",
+	  isActive: false,
+	  tag: "wordpress",
+	},
+	{
+	  id: 4,
+	  name: "web development",
+	  isActive: false,
+	  tag: "development",
+	},
+	{
+	  id: 5,
+	  name: "branding",
+	  isActive: false,
+	  tag: "branding",
+	},
+  ]  
 
 function Portfolio() {
+	useEffect(() => {
+		new Venobox({
+		  autoplay: false,
+		  spinner:'wave',
+		})
+	  },[])
+
+	  const [projects, setProjects] = useState(projectsData);
+	  const [menus, setMenus] = useState(menusData);
+
+	  const handleClick = (menu) => {
+		const modifiedArr =  menusData.map((singleMenuData) => {
+			if(singleMenuData.id === menu.id){
+				singleMenuData.isActive = true
+				return singleMenuData
+			}else{
+				singleMenuData.isActive = false
+				return singleMenuData
+			 }
+		 })
+		 setMenus(modifiedArr)
+
+		// filtered data
+		const filteredArr = projectsData.filter((project) =>
+		   menu.tag === "all" ? project : project.tags.includes(menu.tag)
+		);
+		setProjects(filteredArr);
+	  }
+
   return (
     <>
-         <section id="portfolio" className="py_80 bg_secondery full_row">
+         <section id="portfolio" name="portfolio" className="py_80 bg_secondery full_row">
 					<div className="container">
 						<div className="row">
 							<div className="col-md-12 col-lg-12">
@@ -28,14 +130,23 @@ function Portfolio() {
 										<div className="col-md-12">
 											<div className="filters mb_30 w-100 text-center">
 												<ul className="filter-tabs mx-auto d-inline-block">
-													<li
-														className="active filter"
-														data-role="button"
-														data-filter="all"
-													>
-														All
-													</li>
-													<li
+													{
+														menus.map((menu) => {
+                                                           return (
+															<li
+															    key={menu.id}
+																className={`filter ${menu.isActive?'active' : ''}`}
+																data-role="button"
+																data-filter="all"
+																onClick={() => handleClick(menu)}
+															>
+																{menu.name}
+															</li>
+														   )
+														})
+													}
+													
+													{/* <li
 														className="filter"
 														data-role="button"
 														data-filter=".design"
@@ -62,45 +173,54 @@ function Portfolio() {
 														data-filter=".branding"
 													>
 														Branding
-													</li>
+													</li> */}
 												</ul>
 											</div>
 										</div>
 									</div>
 
-									<div className="filter-list">
+									<div className="">
 										<div className="portfolio-items">
 											<div className="row">
-												<div
-													className="column mix mix_all graphic development wordpress mb_30 col-md-4 col-lg-4"
-												>
-													<div className="default-portfolio-item">
-														<a
-															href="images/portfolio/01.jpg"
-															data-fancybox="gallery"
-														>
-															<img src="images/portfolio/01.jpg" alt="image" />
-															<div className="overlay-box">
-																<span
-																	><i className="fa fa-eye" aria-hidden="true"></i
-																></span>
-																<div className="tag">
-																	<ul>
-																		<li>Web Development,</li>
-																		<li>wordpress</li>
-																	</ul>
+												{
+													projects.map((project) => {
+														<div  key={project.image}
+														className="column mix mix_all graphic development wordpress mb_30 col-md-4 col-lg-4"
+													>
+														<div className="default-portfolio-item">
+															<a
+																href={`/images/portfolio/${project.image}`}
+																data-gall="myGallery"
+																className='venobox'
+															>
+																<img src={`./images/portfolio/${project.image}`} alt="image" />
+																<div className="overlay-box">
+																	<span
+																		><i className="fa fa-eye" aria-hidden="true"></i
+																	></span>
+																	<div className="tag">
+																		<ul>
+																			<li>{project.tag_one},</li>
+																			<li>{project.tag_two}</li>
+																		</ul>
+																	</div>
 																</div>
-															</div>
-														</a>
+															</a>
+														</div>
 													</div>
-												</div>
-												<div
+													})
+												}
+
+												
+
+												{/* <div
 													className="column mix mix_all graphic branding mb_30 col-md-4 col-lg-4"
 												>
 													<div className="default-portfolio-item">
 														<a
 															href="images/portfolio/02.jpg"
-															data-fancybox="gallery"
+															data-gall="myGallery"
+															className='venobox'
 														>
 															<img src="images/portfolio/02.jpg" alt="image" />
 															<div className="overlay-box">
@@ -123,7 +243,8 @@ function Portfolio() {
 													<div className="default-portfolio-item">
 														<a
 															href="images/portfolio/03.jpg"
-															data-fancybox="gallery"
+															data-gall="myGallery"
+															className='venobox'
 														>
 															<img src="images/portfolio/03.jpg" alt="image" />
 															<div className="overlay-box">
@@ -146,7 +267,8 @@ function Portfolio() {
 													<div className="default-portfolio-item">
 														<a
 															href="images/portfolio/04.jpg"
-															data-fancybox="gallery"
+															data-gall="myGallery"
+															className='venobox'
 														>
 															<img src="images/portfolio/04.jpg" alt="image" />
 															<div className="overlay-box">
@@ -169,7 +291,8 @@ function Portfolio() {
 													<div className="default-portfolio-item">
 														<a
 															href="images/portfolio/05.jpg"
-															data-fancybox="gallery"
+															data-gall="myGallery"
+															className='venobox'
 														>
 															<img src="images/portfolio/05.jpg" alt="image" />
 															<div className="overlay-box">
@@ -192,7 +315,8 @@ function Portfolio() {
 													<div className="default-portfolio-item">
 														<a
 															href="images/portfolio/06.jpg"
-															data-fancybox="gallery"
+															data-gall="myGallery"
+															className='venobox'
 														>
 															<img src="images/portfolio/06.jpg" alt="image" />
 															<div className="overlay-box">
@@ -208,7 +332,7 @@ function Portfolio() {
 															</div>
 														</a>
 													</div>
-												</div>
+												</div> */}
 											</div>
 										</div>
 									</div>

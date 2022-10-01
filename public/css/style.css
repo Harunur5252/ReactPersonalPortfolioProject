@@ -456,6 +456,7 @@ header{
 	letter-spacing:1px;
 	text-transform: uppercase;
 	line-height: 32px;
+  cursor: pointer;
 }
 
 .navbar .navbar-nav .nav-item{
@@ -1458,6 +1459,7 @@ nav ul li.page-item{
   padding: 5px 25px;
   border-radius: 50px;
 }
+
 /*===============================================================================
 28.  Blog Details
 =================================================================================*/
@@ -2736,4 +2738,5 @@ label.radios {
   .hover_overlay .border strong {
       font-size: 15px;
   }
+  
 }

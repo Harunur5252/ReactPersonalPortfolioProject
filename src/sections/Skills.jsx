@@ -1,9 +1,78 @@
-import React from 'react'
+import React,{ useState,useEffect } from 'react';
 
 function Skills() {
+	const skillsData = [
+		{
+			id:1,
+            name:'HTML',
+			percent : 0,
+		},
+		{
+			id:2,
+            name:'CSS',
+			percent : 0,
+		},
+		{
+			id:3,
+            name:'PHP',
+			percent : 0,
+		},
+		{
+			id:4,
+            name:'JQUERY',
+			percent : 0,
+		},
+		{
+			id:5,
+            name:'WORDPRESS',
+			percent : 0,
+		},
+	]
+	const [skills , setSkills] = useState(skillsData)
+
+   const handleEvent = () => {
+	const value = window.scrollY  
+	if(value >= 1140){
+		setSkills([
+			{
+				id:1,
+				name:'HTML',
+				percent : 50,
+			},
+			{
+				id:2,
+				name:'CSS',
+				percent : 40,
+			},
+			{
+				id:3,
+				name:'PHP',
+				percent : 20,
+			},
+			{
+				id:4,
+				name:'JQUERY',
+				percent : 50,
+			},
+			{
+				id:5,
+				name:'WORDPRESS',
+				percent : 80,
+			},
+		])
+	}
+   }
+
+	useEffect(() =>{
+		document.addEventListener('scroll',handleEvent)
+		return () => {
+			document.removeEventListener('scroll',handleEvent)
+		}
+	})
+	
   return (
     <>
-         <section id="skill" className="py_80 bg_secondery full_row">
+         <section id="skill" name="skill" className="py_80 bg_secondery full_row">
 					<div className="container">
 						<div className="row">
 							<div className="col-md-12 col-lg-12">
@@ -50,26 +119,37 @@ function Skills() {
 								</div>
 								<div className="col-md-12 col-lg-6">
 									<div className="skill-progress wow animated slideInRight">
-										<div className="prgs-bar fact-counter">
-											<span>HTML</span>
-											<div className="progress count wow" data-wow-duration="0ms">
+										{skills?.map((skill) => {
+											return (
+												<div key={skill.id} className="prgs-bar fact-counter">
+											<span>{skill.name}</span>
+											<div
+												className="progress count wow"
+												data-wow-duration="0ms"
+											>
 												<div className="skill-percent">
-													<span
-														className="count-num"
-														data-speed="3000"
-														data-stop="90"
-														>0</span
-													>%
+												<span
+													className="count-num"
+													data-speed="3000"
+													data-stop={skill.percent}
+												>
+													{skill.percent}
+												</span>
+												%
 												</div>
 												<div
-													className="progress-bar"
-													role="progressbar"
-													aria-valuenow="90"
-													aria-valuemax="100"
+												className="progress-bar"
+												role="progressbar"
+												aria-valuenow={skill.percent}
+												aria-valuemax="100"
+												style={{ width: `${skill.percent}%` }}
 												></div>
 											</div>
-										</div>
-										<div className="prgs-bar fact-counter">
+											</div>
+											)
+										})}
+										
+										{/* <div className="prgs-bar fact-counter">
 											<span>CSS</span>
 											<div className="progress count wow" data-wow-duration="0ms">
 												<div className="skill-percent">
@@ -144,7 +224,7 @@ function Skills() {
 													aria-valuemax="100"
 												></div>
 											</div>
-										</div>
+										</div> */}
 									</div>
 								</div>
 							</div>

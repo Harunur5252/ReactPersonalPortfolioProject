@@ -1,6 +1,11 @@
 import React from 'react'
+import CountUp from 'react-countup';
+import VisibilitySensor from "react-visibility-sensor";
 
 function Experience() {
+	
+
+	
   return (
     <>
         <div className="experience background2 overlay_two py_60 full_row">
@@ -18,9 +23,13 @@ function Experience() {
 													className="flaticon-man-working-on-a-laptop-from-side-view"
 												></span>
 												<div className="counting_digit color_default mt_15">
-													<h2 className="count-num" data-speed="3000" data-stop="7">
-														0
-													</h2>
+													<CountUp start={0} end={7} duration={5}>
+														{({ countUpRef,start }) => (
+															<VisibilitySensor onChange={start} delayedCall>
+															    <span ref={countUpRef} style={{fontSize:'2rem',fontWeight:'600'}} /> 
+															</VisibilitySensor>
+														)}
+													</CountUp>
 													<span>+</span>
 												</div>
 												<h3 className="color_white mt_15">Years of Experience</h3>
@@ -33,13 +42,13 @@ function Experience() {
 											>
 												<span className="flaticon-half-time-work"></span>
 												<div className="counting_digit color_default mt_15">
-													<h2
-														className="count-num"
-														data-speed="3000"
-														data-stop="145"
-													>
-														0
-													</h2>
+												    <CountUp start={0} end={145} duration={5}>
+														{({ countUpRef,start }) => (
+															<VisibilitySensor onChange={start} delayedCall>
+															    <span ref={countUpRef} style={{fontSize:'2rem',fontWeight:'600'}} /> 
+															</VisibilitySensor>
+														)}
+													</CountUp>
 													<span>+</span>
 												</div>
 												<h3 className="color_white mt_15">Porjects Done</h3>
@@ -52,13 +61,13 @@ function Experience() {
 											>
 												<span className="flaticon-happy"></span>
 												<div className="counting_digit color_default mt_15">
-													<h2
-														className="count-num"
-														data-speed="3000"
-														data-stop="137"
-													>
-														0
-													</h2>
+												    <CountUp start={0} end={137} duration={5}>
+														{({ countUpRef,start }) => (
+															<VisibilitySensor onChange={start} delayedCall>
+															    <span ref={countUpRef} style={{fontSize:'2rem',fontWeight:'600'}} /> 
+															</VisibilitySensor>
+														)}
+													</CountUp>
 													<span>+</span>
 												</div>
 												<h3 className="color_white mt_15">Happy Clients</h3>

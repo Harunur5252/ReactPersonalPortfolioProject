@@ -1,9 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import Venobox from 'venobox'
 
 function About() {
+	useEffect(() => {
+		new Venobox({
+		  autoplay: false,
+		  spinner:'wave',
+		  selector: ".video-popup",
+		})
+	  },[])
+
   return (
     <>
-         <section id="about" className="py_80 full_row bg_white">
+         <section id="about" name="about" className="py_80 full_row bg_white">
 					<div className="container">
 						<div className="row">
 							<div className="col-md-12 col-lg-12">
@@ -91,8 +100,9 @@ function About() {
 										<div className="iconround">
 											<a
 												className="video-popup"
-												href="https://vimeo.com/134660574"
-												title="video popup"
+												data-vbtype="video"
+												href="https://youtu.be/8A-V8S9FkIg"
+												title='YouTube Video'
 											>
 												<i className="fa fa-play" aria-hidden="true"></i
 											></a>

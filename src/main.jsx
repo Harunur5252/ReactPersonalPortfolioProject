@@ -1,9 +1,21 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
+import { BrowserRouter } from "react-router-dom";
+import "react-datepicker/dist/react-datepicker.css";
+import 'react-toastify/dist/ReactToastify.min.css';
+import { BlogProvider } from './components/context/Blog.Context';
+import { AuthProvider } from './components/context/Auth.Context';
+ 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-       <App />
+    <BrowserRouter>
+      <AuthProvider>
+        <BlogProvider>
+          <App />
+        </BlogProvider>
+      </AuthProvider>
+    </BrowserRouter>
   </React.StrictMode>
 )

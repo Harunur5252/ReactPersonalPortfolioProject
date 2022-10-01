@@ -1,10 +1,46 @@
 import React from 'react'
-import ScrollToTop from '../components/shared/ScrollToTop'
+import Slider from 'react-slick'
 
 function Testimonial() {
+	const settings = {
+		accessibility:true,
+		infinite: true,
+		speed: 800,
+		slidesToShow: 1,
+		slidesToScroll: 1,
+		autoplay:true,
+		centerMode:true,
+		adaptiveHeight:true,
+		fade:true,
+		nextArrow: <SampleNextArrow />,
+		prevArrow: <SamplePrevArrow />,
+	};
+
+	function SampleNextArrow(props) {
+		const { className, style, onClick } = props;
+		return (
+		  <div
+			className={className}
+			style={{ ...style, display: "block", background: "red" }}
+			onClick={onClick}
+		  />
+		);
+	  }
+	  
+	  function SamplePrevArrow(props) {
+		const { className, style, onClick } = props;
+		return (
+		  <div
+			className={className}
+			style={{ ...style, display: "block", background: "green" }}
+			onClick={onClick}
+		  />
+		);
+	  }
+
   return (
     <>
-        <section id="testimonial" className="py_80 full_row bg_white">
+        <section id="testimonial" name="testimonial" className="py_80 full_row bg_white">
 					<div className="container">
 						<div className="row">
 							<div className="col-md-12 col-lg-12">
@@ -25,8 +61,9 @@ function Testimonial() {
 							</div>
 							<div className="col-md-12 col-lg-12">
 								<div
-									className="testimonial_item owl-carousel wow animated slideInUp"
+									className="animated slideInUp"
 								>
+									<Slider {...settings}>
 									<div className="member_feedback p_30 color_secondery">
 										<div className="client_img">
 											<img src="images/testimonial/01.jpg" alt="image" />
@@ -111,6 +148,7 @@ function Testimonial() {
 											sociosqu.
 										</p>
 									</div>
+									</Slider>
 								</div>
 							</div>
 						</div>

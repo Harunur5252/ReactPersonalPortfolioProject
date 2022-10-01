@@ -9,10 +9,28 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@hookform/resolvers": "^2.9.8",
+    "axios": "^0.27.2",
+    "bootstrap": "^5.2.1",
+    "qs": "^6.11.0",
     "react": "^18.2.0",
+    "react-bootstrap": "^2.5.0",
+    "react-countup": "^6.3.1",
+    "react-datepicker": "^4.8.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.36.1",
+    "react-icons": "^4.4.0",
+    "react-router-dom": "6",
+    "react-scroll": "^1.8.7",
+    "react-select": "^5.4.0",
     "react-slick": "^0.29.0",
-    "venobox": "^2.0.4"
+    "react-spinners": "^0.13.4",
+    "react-toastify": "^9.0.8",
+    "react-typed": "^1.2.0",
+    "react-visibility-sensor": "^5.1.1",
+    "react-water-wave": "^2.0.1",
+    "venobox": "^2.0.4",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/react": "^18.0.17",

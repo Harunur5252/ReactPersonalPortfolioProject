@@ -1,10 +1,26 @@
-import React from 'react'
+import React ,{ useContext,useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import format from 'date-fns/format'
+import { BlogContext } from '../components/context/Blog.Context'
+import { BarLoader } from 'react-spinners'
+import { AuthContext } from '../components/context/Auth.Context'
 
 function Blog() {
+	const {blogs,loaded} = useContext(BlogContext)
+	const {user} = useContext(AuthContext)
+	let ThreeBlogsData = []
+
+	if(blogs?.slice(0,3)){
+		ThreeBlogsData = blogs?.slice(0,3)
+	}
+
+
+	// const ThreeBlogsData = blogs?.slice(0,3)
+	
   return (
-    <>
-         <section id="blog" className="py_80 bg_secondery full_row">
+    <>  
+	 
+         <section id="blog" name="blog" className="py_80 bg_secondery full_row">
 					<div className="container">
 						<div className="row">
 							<div className="col-md-12 col-lg-12">
@@ -22,126 +38,64 @@ function Blog() {
 									>
 								</div>
 							</div>
-							<div className="col-md-12 col-lg-12">
+							{
+								user && 
+								<div className="col-md-12 col-lg-12">
 								<div className="blog_grid_1 wow animated slideInUp">
 									<div className="row">
-										<div className="col-md-12 col-lg-4">
-											<div className="blog_item">
+										{ThreeBlogsData ? ThreeBlogsData?.map((blog) => {
+											return (
+                                             <div key={blog?.blogId} className="col-md-12 col-lg-4">
+											<div  className="blog_item">
 												<div className="comments">
 													<i className="fa fa-comment" aria-hidden="true"></i>
 													<span className="color_white">12</span>
 												</div>
 												<div className="blog_img overlay_one">
-													<img src="images/blog/01.jpg" alt="image" />
+													<img src={blog?.blog_image} alt="image" />
 												</div>
 												<div className="blog_content bg_white color_secondery">
 													<div className="blog_title">
-														<a className="color_primary" href="blog-details">
+														<Link className="color_primary" to={`/blog-details/${blog?.blogId}`}>
 															<h5>
-																Convallis pulvinar morbi. Aenean nisi vitae
-																metus nonummy a morbi.
+															   {blog?.title}
 															</h5>
-														</a>
+														</Link>
 													</div>
 													<p className="mt_15 mb_30">
-														Dictumst integer sollicitudin venenatis ornare quam.
-														Ligula integer luctus, blandit egestas molestie
-														facilisi porttitor neque sodal luctus senectus
-														lacinia euismod adipiscing element turpis dolor
-														curae; posuere augue.
+													    {
+													     	blog?.description
+														}
 													</p>
 
 													<div className="admin">
-														<img src="images/about/02.jpg" alt="image" />
-														<span className="color_white">By - Rockstar Jack</span>
+														<img src={blog?.profilePicture} alt="image" />
+														<span className="color_white">{`by - `} {blog?.firstName} {blog?.lastName}</span>
 													</div>
 													<div className="date float-right color_primary">
-														20 Jan 2019
+													  {blog?.blog_date && format(new Date(blog?.blog_date), 'dd MMM yyyy')}
 													</div>
 												</div>
 											</div>
-										</div>
-										<div className="col-md-12 col-lg-4">
-											<div className="blog_item">
-												<div className="comments">
-													<i className="fa fa-comment" aria-hidden="true"></i>
-													<span className="color_white">18</span>
-												</div>
-												<div className="blog_img overlay_one">
-													<img src="images/blog/02.jpg" alt="image" />
-												</div>
-												<div className="blog_content bg_white color_secondery">
-													<div className="blog_title">
-														<a className="color_primary" href="blog-details.html"
-															><h5>
-																Ornare fames imperdiet sapien. Iaculis dictum
-																aptent commodo at iaculis.
-															</h5></a
-														>
-													</div>
-													<p className="mt_15 mb_30">
-														Dictumst integer sollicitudin venenatis ornare quam.
-														Ligula integer luctus, blandit egestas molestie
-														facilisi porttitor neque sodal luctus senectus
-														lacinia euismod adipiscing element turpis dolor
-														curae; posuere augue.
-													</p>
-
-													<div className="admin">
-														<img src="images/about/02.jpg" alt="image" />
-														<span className="color_white">By - Rockstar Jack</span>
-													</div>
-													<div className="date float-right color_primary">
-														18 Jan 2019
-													</div>
-												</div>
-											</div>
-										</div>
-										<div className="col-md-12 col-lg-4">
-											<div className="blog_item">
-												<div className="comments">
-													<i className="fa fa-comment" aria-hidden="true"></i>
-													<span className="color_white">23</span>
-												</div>
-												<div className="blog_img overlay_one">
-													<img src="images/blog/03.jpg" alt="image" />
-												</div>
-												<div className="blog_content bg_white color_secondery">
-													<div className="blog_title">
-														<a className="color_primary" href="blog-details.html"
-															><h5>
-																Vulputate donec sem purus litora varius auctor
-																augue suscipit hac.
-															</h5></a
-														>
-													</div>
-													<p className="mt_15 mb_30">
-														Dictumst integer sollicitudin venenatis ornare quam.
-														Ligula integer luctus, blandit egestas molestie
-														facilisi porttitor neque sodal luctus senectus
-														lacinia euismod adipiscing element turpis dolor
-														curae; posuere augue.
-													</p>
-
-													<div className="admin">
-														<img src="images/about/02.jpg" alt="image" />
-														<span className="color_white">By - Rockstar Jack</span>
-													</div>
-													<div className="date float-right color_primary">
-														17 Jan 2019
-													</div>
-												</div>
-											</div>
-										</div>
+										      </div>
+											)
+										})
+										:
+										 <span style={{margin:'0 auto'}}><BarLoader color="#36d7b7" height={8} width={500}/></span>
+										}
 									</div>
 									<div className="mx-auto text-center mt_60">
-										<a className="btn btn-default" href="blog.html">View Blog</a>
+										<Link className="btn btn-default" to="/all-blogs">View Blog</Link>
 									</div>
 								</div>
-							</div>
+							    </div>
+							}
+							
 						</div>
 					</div>
-				</section>
+		 </section>
+		
+         
     </>
   )
 }
