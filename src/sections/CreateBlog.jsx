@@ -8,7 +8,7 @@ import { BlogContext } from '../components/context/Blog.Context';
 
 
 function CreateBlog() {
-    const { register,setValue, formState: { errors,isSubmitting,isSubmitSuccessful }, handleSubmit, watch } = useForm();
+    const { register,setValue, formState: { errors,isSubmitting,isSubmitSuccessful }, handleSubmit } = useForm();
       
       const {createBlog,blogSubmit,percentage,loadedCategory} = useContext(BlogContext)
 
@@ -132,23 +132,7 @@ function CreateBlog() {
 														</select>
                                                         <span style={{color:'red'}}>{errors?.category?.message}</span>
 													</div>
-												</div>
-
-												{/* <div className="col-md-6 col-lg-6">
-													<div className="form-group">
-														<input
-															className="form-control"
-															type="text"
-															{...register("tags", { required: 'tags is required',minLength:{value:5,message:'tags at least 5 or more character'},maxLength:{value:20,message:'tags must be equal or less than 20 character'} })}
-															placeholder="Tags"
-														/>
-														{/* <Select options={options} isSearchable  isMulti 
-														  {...register("tags", { required: 'tags is required' })}
-														/> */}
-                                                        {/* <span style={{color:'red'}}>{errors?.tags?.message}</span>
-													</div>
-												</div> */}
-												 
+												</div>								 
 												<div className="col-md-12 col-lg-12">
 													<div className="form-group">
 														<button

@@ -1,4 +1,4 @@
-import { REGISTER,LOGOUT, LOGIN } from "../actions/authType"
+import { REGISTER,LOGOUT, LOGIN,USER_BLOGS } from "../actions/authType"
 
 
 
@@ -6,8 +6,8 @@ export const authReducer = (state,action) => {
     const {type,payload} = action
 
   switch (type) {
-    // case USER_CONTACTS:
-    //     return [...payload]
+    case USER_BLOGS:
+        return [...payload]
 
     case REGISTER:
          const {data : {user:registerUser,jwt:registerUserJwt},setUser:setRegisterUser,setToken:setRegisterToken} = payload

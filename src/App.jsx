@@ -8,6 +8,12 @@ import Login from './sections/Login'
 import Register from './sections/Register'
 import CreateBlog from './sections/CreateBlog'
 import CategoryWisePost from './sections/CategoryWisePost'
+import NotFound from './sections/NotFound'
+import DashBoard from './sections/DashBoard'
+import Profile from './sections/Profile'
+import ManagePassword from './sections/ManagePassword'
+import UserBlogList from './sections/UserBlogList'
+
 
 
 function App() {
@@ -32,6 +38,12 @@ function App() {
         <Route path="/register" element={ <Register/> } />
         <Route path="/create-blog" element={ <CreateBlog/> } />
         <Route path="/category-wise-post/:id" element={ <CategoryWisePost/> } />
+        <Route path="*" element={ <NotFound/> } />
+        <Route path="/user-dashboard" element={ <DashBoard/> }>
+            <Route path="profile" element={<Profile />} />
+            <Route path="manage-password" element={<ManagePassword />} />
+            <Route path="blog-list" element={<UserBlogList />} />
+        </Route>
       </Routes>
     </>
   )

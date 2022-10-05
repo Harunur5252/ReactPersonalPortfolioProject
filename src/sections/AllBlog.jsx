@@ -11,7 +11,7 @@ function AllBlog() {
 	const {blogs,loaded,loadedCategory} = useContext(BlogContext)
 	const {user} = useContext(AuthContext)
 	const blog = blogs && blogs?.find(blog=>blog?.authorId === user?.id)
-
+    
 
     useEffect(()=>{
 		window.scroll(0,0);
@@ -31,7 +31,7 @@ function AllBlog() {
 									<div className="breadcrumbs m-auto d-inline-block">
 										<ul>
 											<li className="hover_gray">
-												<a href="index-5.html">Home</a>
+											   <Link to="/">Home</Link>
 											</li>
 											<li>
 												<i className="fa fa-angle-right" aria-hidden="true"></i>
@@ -81,7 +81,7 @@ function AllBlog() {
 														<span className="color_white">{`by - `} {blog?.firstName} {blog?.lastName}</span>
 													</div>
 													<div className="date float-right color_primary">
-													{blog?.blog_date && format(new Date(blog?.blog_date), 'dd MMM yyyy')}
+													   {blog?.blog_date && format(new Date(blog?.blog_date), 'dd MMM yyyy')}
 													</div>
 												</div>
 												</div>

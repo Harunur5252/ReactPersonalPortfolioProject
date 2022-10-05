@@ -67,6 +67,9 @@ function Menu() {
 										    <li className="nav-item">
 										       <Link className="nav-link" to="/create-blog">CreateBlog</Link>
 								     	    </li>
+											 <li className="nav-item">
+										       <Link className="nav-link" to="/user-dashboard/profile">Dashboard</Link>
+								     	    </li>
 											<li className="nav-item">
 											   <a className="nav-link" onClick={logout}>Logout</a>
 											</li>

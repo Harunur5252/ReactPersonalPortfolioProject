@@ -160,7 +160,6 @@ export function BlogProvider({children}) {
   const loadAllCategory = async () => {
      try {
         const response = await axiosPrivateInstance(token).get(`/categories?${query_two}`)
-        // console.log(response.data)
         const categoryArr = response.data.data?.map((category) => {
            return ({
             categoryId:category?.id,
@@ -255,18 +254,18 @@ export function BlogProvider({children}) {
       });
      }
   }
-    const value = {
-      createBlog,
-      blogs,
-      loadAllBlog,
-      blogSubmit,
-      percentage,
-      blogs,
-      loaded,
-      loadedCategory,
-      handleLike,
-      handleUnLike,
-    }
+  const value = {
+    createBlog,
+    blogs,
+    loadAllBlog,
+    blogSubmit,
+    percentage,
+    blogs,
+    loaded,
+    loadedCategory,
+    handleLike,
+    handleUnLike,
+  }
   return (
     <BlogContext.Provider value={value}>
           {children}
