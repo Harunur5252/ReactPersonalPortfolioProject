@@ -1,14 +1,53 @@
-import React, { useEffect } from 'react'
+import React, { useEffect,useContext,useState } from 'react'
+import { Link } from 'react-router-dom'
+import format from 'date-fns/format'
 import Venobox from 'venobox'
+import { AuthContext } from '../components/context/Auth.Context'
+import { axiosPrivateInstance } from '../Utils/axios'
 
 function About() {
+	const {user,token,multipleProfileData} = useContext(AuthContext)
+	const [about,setAbout] = useState({})
+	
+	const singleProfile = multipleProfileData?.find((profile) => {
+        if(profile?.userId === user?.id){
+            return profile
+        }
+    })
+
 	useEffect(() => {
 		new Venobox({
 		  autoplay: false,
 		  spinner:'wave',
 		  selector: ".video-popup",
+		  maxWidth:'600px'
 		})
 	  },[])
+
+	  useEffect(() => {
+		if(user && token){
+			(async () => {
+				loadAboutSection()
+			})()
+		}
+	  },[user,token])
+      
+	  const userEmail  = JSON.parse(localStorage?.getItem('user'))
+
+	  const loadAboutSection = async () => {
+		 try {
+			const response = await axiosPrivateInstance(token).get('/about')
+			// console.log(response.data)
+			setAbout({
+				broad_details :  response.data?.data?.attributes?.broad_details,
+				short_details :  response.data?.data?.attributes?.short_details,
+				video_link :  response.data?.data?.attributes?.video_link,
+				video_title :  response.data?.data?.attributes?.video_title,
+			})
+		 } catch (err) {
+			console.log(err.response)
+		 }
+	  }
 
   return (
     <>
@@ -23,11 +62,10 @@ function About() {
 										<span className="line_double mx-auto color_default">about</span
 										>about myself
 									</h2>
-									<span className="sub_title"
-										>Interdum a etiam sagittis vehicula porta. Massa felis eros
-										quam blandit nulla dolor habitant. Ullamcorper quis ornare
-										et proin pellentesque.</span
-									>
+									<span className="sub_title">
+										{about.short_details}
+									</span>
+									
 								</div>
 							</div>
 						</div>
@@ -36,23 +74,11 @@ function About() {
 								<div className="col-md-7 col-lg-7">
 									<div className="myself color_secondery wow animated fadeInLeft">
 										<p>
-											Sodales iaculis est Scelerisque sociis magna dolor
-											pulvinar magnis. Varius praesent suscipit. Donec morbi
-											feugiat placerat gravida porttitor natoque nonummy
-											parturient posuere. Magnis suspendisse parturient. Magna
-											ultricies nostra nunc magna. Sodales etiam arcu suscipit,
-											mollis. Aenean tempor eu ipsum nisi sociosqu lorem
-											hymenaeos sapien. Aptent maecenas ac ante molestie
-											habitant.
+										   {about?.short_details}
 										</p>
 
 										<p>
-											Duis vulputate nisi nam sem penatibus parturient volutpat
-											justo phasellus. Netus. Hac montes tempor lorem tempor
-											tincidunt vehicula velit. Tellus. ClassName aenean leo elit
-											maecenas. Vehicula sagittis. Curae; eget lacus. Fames
-											neque diam elementum risus eleifend dui tortor netus
-											turpis.
+											{about?.broad_details}
 										</p>
 									</div>
 									<div className="personal_info">
@@ -60,16 +86,14 @@ function About() {
 											<div className="col-md-12 col-lg-6">
 												<ul>
 													<li>
-														<span className="color_secondery">Name :</span> Austin
-														Jackson
+														<span className="color_secondery">Name :</span> {singleProfile?.firstName} {singleProfile?.lastName}
 													</li>
 													<li>
 														<span className="color_secondery">Email :</span>
-														yourdomainname@gmail.com
+														{userEmail?.email}
 													</li>
 													<li>
-														<span className="color_secondery">Phone :</span> +00 61
-														700 800
+														<span className="color_secondery">Phone :</span> {singleProfile?.phone}
 													</li>
 												</ul>
 											</div>
@@ -77,15 +101,15 @@ function About() {
 												<ul>
 													<li>
 														<span className="color_secondery">Date of Birth :</span>
-														14 December 1993
+														{singleProfile?.dateOfBirth && format(new Date(singleProfile?.dateOfBirth), 'dd MMMM yyyy')}
 													</li>
 													<li>
 														<span className="color_secondery">Blood Group :</span>
-														A+
+														{singleProfile?.bloodGroup}
 													</li>
 													<li>
 														<span className="color_secondery">Address :</span>
-														Mouroubra WA 6472, Australia.
+														{singleProfile?.address}
 													</li>
 												</ul>
 											</div>
@@ -98,14 +122,14 @@ function About() {
 									>
 										<img src="images/about/03.png" alt="image" />
 										<div className="iconround">
-											<a
+											<Link
 												className="video-popup"
 												data-vbtype="video"
-												href="https://youtu.be/8A-V8S9FkIg"
-												title='YouTube Video'
+												to={about?.video_link}
+												title={about?.video_title}
 											>
 												<i className="fa fa-play" aria-hidden="true"></i
-											></a>
+											></Link>
 										</div>
 										<div className="loader">
 											<div className="loader-inner ball-scale-multiple">

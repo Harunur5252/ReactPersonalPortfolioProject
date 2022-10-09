@@ -13,10 +13,12 @@ const initialBlogs = []
 
 export function BlogProvider({children}) {
   const [blogs,dispatch] = useReducer(blogReducer,initialBlogs)
-  const {user,token} = useContext(AuthContext)
+  const {user,token,loadUserBlog} = useContext(AuthContext)
   const [blogSubmit,setBlogSubmit] = useState(false)
+  const [commentSubmit,setCommentSubmit] = useState(false)
   const [loaded,setLoaded] = useState(false)
   const [loadedCategory,setLoadedCategory] = useState([])
+  const [commentLoadedArr,setCommentLoadedArr] = useState([])
   const [loadedLike,setLoadedLike] = useState(false)
   const [loadedUnLike,setLoadedUnLike] = useState(false)
   const navigate = useNavigate()
@@ -38,6 +40,75 @@ export function BlogProvider({children}) {
     }
   },[user,token])
 
+  useEffect(() => {
+    if(user && token){
+        (async () => {
+          loadAllComment()
+        })()
+    }
+  },[user,token,commentSubmit])
+
+  useEffect(() => {
+    (async () => {
+        if(user && token){
+            loadUserBlog()
+        }
+    })()
+},[user,token,blogSubmit])
+  
+  const query_three = qs.stringify({
+     populate : [
+        'blog_post',
+        'user',
+        'user.profile',
+        'user.profile.profilePicture'
+     ]
+  })
+  const loadAllComment = async () => {
+     try {
+        const response = await axiosPrivateInstance(token).get(`/comments?${query_three}`)
+        // console.log(response.data)
+        const commentArr = response.data?.data?.map((comment) => {
+            return ({
+              cmtId : comment?.id,
+              blogId: comment?.attributes?.blog_post?.data?.id,
+              userId : comment?.attributes?.user?.data?.id,
+              profilePictureId : comment?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.id,
+              description: comment?.attributes?.description,
+              commentDate: comment?.attributes?.commentDate,
+              userProfileId : comment?.attributes?.user?.data?.attributes?.profile?.data?.id,
+              firstName : comment?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.firstName,
+              lastName : comment?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.lastName,
+              profilePicture : comment?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.attributes?.url,
+            })
+        })
+        setCommentLoadedArr(commentArr)
+     } catch (err) {
+        console.log(err.response)
+     }
+  }
+
+  const comment = async (data,blogId) => {
+     const commentData = {
+        description : data?.description,
+        commentDate: new Date(),
+        blog_post : blogId,
+        user : user?.id,
+     }
+     try {
+      setCommentSubmit(true)
+       const response = await axiosPrivateInstance(token).post('/comments?populate=*',
+       {
+           data : commentData
+       }
+       ) 
+       setCommentSubmit(false)
+       toast.success('comment added successfully')
+     } catch (err) {
+        setCommentSubmit(false)
+        toast.error(err?.response?.data?.error?.message)
+     }
+  }
 
   const handleLike = async (blogId) => {
       try {
@@ -101,8 +172,7 @@ export function BlogProvider({children}) {
     try {
       setLoaded(true)
       const response = await axiosPrivateInstance(token).get(`/blog-posts?${query}`)
-      // console.log(response.data)
-      const blogArray = response.data.data.map((data) =>{
+      const blogArray = response.data?.data?.map((data) =>{
           return (
             {
               blogId:data?.id,
@@ -254,9 +324,9 @@ export function BlogProvider({children}) {
       });
      }
   }
+  
   const value = {
     createBlog,
-    blogs,
     loadAllBlog,
     blogSubmit,
     percentage,
@@ -265,6 +335,9 @@ export function BlogProvider({children}) {
     loadedCategory,
     handleLike,
     handleUnLike,
+    comment,
+    commentSubmit,
+    commentLoadedArr
   }
   return (
     <BlogContext.Provider value={value}>

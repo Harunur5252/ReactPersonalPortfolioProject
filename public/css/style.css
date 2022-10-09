@@ -892,9 +892,20 @@ ul#menu li a{
 /*===============================================================================
 17.		Portfolio
 =================================================================================*/
-.custom-tooltip {
-  --bs-tooltip-bg: var(--bs-primary);
+.scrollToTopIcon {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  font-size: 2.4rem;
+  z-index: 9999;
+  display: none;
 }
+.visible{
+  display: inline-block;
+  cursor: pointer;
+  color:#ff3926;
+}
+
 
 .filters ul li{
 	float: left;

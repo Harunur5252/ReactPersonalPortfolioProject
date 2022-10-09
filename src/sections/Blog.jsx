@@ -49,7 +49,7 @@ function Blog() {
 											<div  className="blog_item">
 												<div className="comments">
 													<i className="fa fa-comment" aria-hidden="true"></i>
-													<span className="color_white">12</span>
+													<span className="color_white">{blog?.likes?.length}</span>
 												</div>
 												<div className="blog_img overlay_one">
 													<img src={blog?.blog_image} alt="image" />

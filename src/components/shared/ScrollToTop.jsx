@@ -1,8 +1,14 @@
 import React from 'react'
+import { BsFillArrowUpCircleFill } from "react-icons/bs";
+import { animateScroll as scroll } from 'react-scroll'
 
 function ScrollToTop() {
+  const scrollTop = () => {
+    scroll.scrollToTop()
+  }
+
   return (
-        <a href="#" id="scroll" style="display: none"><span></span></a>
+    <BsFillArrowUpCircleFill className='scrollToTopIcon' onClick={scrollTop}/>
   )
 }
 

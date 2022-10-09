@@ -2,18 +2,32 @@ import React,{ useContext,useEffect,useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import format from 'date-fns/format'
 import { FaThumbsUp,FaThumbsDown } from "react-icons/fa";
+import { useForm } from "react-hook-form";
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
 import { BlogContext } from '../components/context/Blog.Context'
 import Menu from '../components/shared/Menu/Menu'
 import MenuFooter from '../components/shared/Menu/MenuFooter'
 import { AuthContext } from '../components/context/Auth.Context';
 
+
+    // validation rules for all input fields
+	const schema = yup.object({
+		description: yup.string().required('description is required').min(5,'userName must be 5 or more').max(5000,'userName must be equal or less than 5000'),
+	  })
+
 function BlogDetails() {
-	const {blogs,handleLike,handleUnLike,loadedCategory} = useContext(BlogContext)
+	const { register,reset, formState: { errors,isSubmitting,isSubmitSuccessful }, handleSubmit, watch } = useForm({
+		resolver: yupResolver(schema)
+	  });
+
+	const {blogs,handleLike,handleUnLike,loadedCategory,comment,commentSubmit,commentLoadedArr} = useContext(BlogContext)
 	const {user,token,} = useContext(AuthContext)
 	const [blog,setBlog] = useState({})
 	const [likes,setLikes] = useState([])
 	const [findLike,setFindLike] = useState({})
 	const [isLike,setIsLike] = useState(false)
+	const [resetComment,setResetComment] = useState({description:''})
 	const {id} = useParams()
 	const findSingleBlog = blogs.find((blog) => blog.blogId === +id)
  
@@ -50,7 +64,31 @@ function BlogDetails() {
 		}
 	}
 
+    const blogId = blog?.blogId
+
+	const onSubmit = (data) => {
+	   setResetComment(data)
+       comment(data,blogId)
+	}
+
+    const defaultValue = {
+		description : resetComment?.description || ''
+	}
+	const {description}= defaultValue
+	useEffect(() => {
+        if(commentSubmit){
+			reset({
+                description : ''
+			})
+		}
+	},[commentSubmit])
     
+	const comments = commentLoadedArr?.filter((comment) => {
+		if(comment?.blogId === blog?.blogId){
+			return comment
+		}
+	})
+  
   return (
     <>
 	    <Menu />
@@ -115,7 +153,7 @@ function BlogDetails() {
 								
 								<div className="comment_area mt_60">
 									<h4 className="text-uppercase color_primary mb_30">
-										Comments (04)&nbsp;&nbsp;
+										Comments ({comments?.length})&nbsp;&nbsp;
 										<span style={{fontSize:'2rem',cursor:'pointer'}}>
 											{
 												isLike ? <button className='btn btn-default'   onClick={() =>handleLike(blog?.blogId)}>{<FaThumbsUp  />}</button> 
@@ -126,22 +164,27 @@ function BlogDetails() {
 										</span>
 									</h4>
 									<ul className="user_comments">
-										<li className="mb_20 wow animated slideInUp">
+										{comments?.map((comment) => {
+											return (
+												<li className="mb_20 wow animated slideInUp" key={comment?.cmtId}>
 											<div className="comment_description bg_white p_20">
 												<div className="author_img">
-													<img src="images/comments/01.png" alt="images" />
+													<img src={comment?.profilePicture} alt="images" />
 												</div>
 												<div className="author_text">
 													<div className="author_info">
-														<h5 className="author_name color_primary">Rebecca D. Nagy </h5>
-														<span>12 January, 2019 at 3.27 pm</span>
+														<h5 className="author_name color_primary">{comment?.firstName} {comment?.lastName} </h5>
+														<span>{comment?.commentDate && format(new Date(comment?.commentDate), 'dd MMMM, yyyy p')}</span>
 													</div>
-													<p>Morbi potenti arcu litora. Laoreet euismod blandit euismod sit. Nisi eu Placerat ultricies faucibus interdum tellus risus. Iaculis velit.</p>
+													<p>{comment?.description}</p>
 													<a href="#" className="btn btn_info mt_15">Replay</a>
 												</div>
 											</div>
 										</li>
-										<li className="mb_20 wow animated slideInUp">
+											)
+										})}
+										
+										{/* <li className="mb_20 wow animated slideInUp">
 											<div className="comment_description replied bg_white p_20">
 												<div className="author_img">
 													<img src="images/comments/02.png" alt="images" />
@@ -155,54 +198,30 @@ function BlogDetails() {
 													<a href="#" className="btn btn_info mt_15">Replay</a>
 												</div>
 											</div>
-										</li>
-										<li className="mb_20 wow animated slideInUp">
-											<div className="comment_description bg_white p_20">
-												<div className="author_img">
-													<img src="images/comments/03.png" alt="images" />
-												</div>
-												<div className="author_text">
-													<div className="author_info">
-														<h5 className="author_name color_primary">Ahmad Hassan</h5>
-														<span>16 January, 2019 at 12.03 pm</span>
-													</div>
-													<p>Hymenaeos maecenas, imperdiet morbi mauris sagittis libero fringilla congue purus viverra nisi aptent nascetur ultricies pede sem scelerisque ipsum className.</p>
-													<a href="#" className="btn btn_info mt_15">Replay</a>
-												</div>
-											</div>
-										</li>
-										<li className="mb_20 wow animated slideInUp">
-											<div className="comment_description bg_white p_20">
-												<div className="author_img">
-													<img src="images/comments/04.png" alt="images" />
-												</div>
-												<div className="author_text">
-													<div className="author_info">
-														<h5 className="author_name color_primary">Patty Hurd</h5>
-														<span>24 January, 2019 at 04.27 am</span>
-													</div>
-													<p>Euismod gravida laoreet vestibulum nostra sed. Ac quis auctor. Dui. Dictumst mus phasellus elit nec ornare hac faucibus interdum ligula.</p>
-													<a href="#" className="btn btn_info mt_15">Replay</a>
-												</div>
-											</div>
-										</li>
+										</li> */}
+										
 									</ul>
 								</div>
 								<div className="replay mt_60 wow animated slideInUp">
-									<h4 className="text-uppercase color_primary mb_30">Leave A Replay</h4>
-									<form action="#" method="post" className="reply_form">
+									<h4 className="text-uppercase color_primary mb_30">Leave A Comment</h4>
+									<form  className="reply_form" onSubmit={handleSubmit(onSubmit)}>
 										<div className="row">
-											<div className="col-md-6 col-lg-6">
-												<input className="form-control" name="author_name" type="text" placeholder="Your Name*" />
+											{/* <div className="col-md-6 col-lg-6">
+												<input className="form-control" {...register("email")} type="text" placeholder="Your Name*" />
+												<span style={{color:'red'}}>{errors?.email?.message}</span>
 											</div>
 											<div className="col-md-6 col-lg-6">
 												<input className="form-control" name="author_email" type="email" placeholder="Email Address*" />
+												<span style={{color:'red'}}>{errors?.email?.message}</span>
+											</div> */}
+											<div className="col-md-12">
+												<textarea className="form-control" defaultValue={description}  {...register("description")} rows="7" placeholder="Type Comments..."></textarea>
+												<span style={{color:'red'}}>{errors?.description?.message}</span>
 											</div>
 											<div className="col-md-12">
-												<textarea className="form-control" name="author_comments" rows="7" placeholder="Type Comments..."></textarea>
-											</div>
-											<div className="col-md-12">
-												<button type="submit" name="submit" className="btn btn-default">Post Comment</button>
+												<button type="submit" className="btn btn-default" disabled={commentSubmit}>
+													{commentSubmit ? 'Loading...':'Post Comment'} 
+												</button>
 											</div>
 										</div>
 									</form>
@@ -233,77 +252,7 @@ function BlogDetails() {
 											</ul>
 									</div>
 								</div>
-								<div className="widget mb_60 d-inline-block p_30 primary_link bg_white full_row wow animated slideInUp">
-									<h3 className="widget_title mb_30 text-capitalize">Recent Post</h3>
-									<div className="recent_post">
-										<ul>
-											<li className="mb_30">
-												<a href="#">
-													<div className="post_img"><img src="images/recent-post/01.jpg" alt="images" /></div>
-													<div className="recent_post_content">
-														<h6>Convallis pulvinar morbi. Aenean nisi vitae metus.</h6>
-														<span className="color_gray">30 Jan 2019</span>
-													</div>
-												</a>
-											</li>
-											<li className="mb_30">
-												<a href="#">
-													<div className="post_img"><img src="images/recent-post/02.jpg" alt="images" /></div>
-													<div className="recent_post_content">
-														<h6>Eleifend ante hac quam. Rhoncus dapibus morbi.</h6>
-														<span className="color_gray">28 Jan 2019</span>
-													</div>
-												</a>
-											</li>
-											<li className="mb_30">
-												<a href="#">
-													<div className="post_img"><img src="images/recent-post/03.jpg" alt="images" /></div>
-													<div className="recent_post_content">
-														<h6>Felis cum, elementum. Rhoncus aliquam cras.</h6>
-														<span className="color_gray">25 Jan 2019</span>
-													</div>
-												</a>
-											</li>
-											<li className="mb_30">
-												<a href="#">
-													<div className="post_img"><img src="images/recent-post/04.jpg" alt="images" /></div>
-													<div className="recent_post_content">
-														<h6>Turpis eleifend dis platea lectus nam eleifen etiam.</h6>
-														<span className="color_gray">24 Jan 2019</span>
-													</div>
-												</a>
-											</li>
-										</ul>
-									</div>
-								</div>
-								<div className="widget mb_60 d-inline-block p_30 bg_white primary_link full_row wow animated slideInUp">
-									<h3 className="widget_title mb_30 text-capitalize">Archives</h3>
-									<div className="archives">
-										<ul>
-											<li><a href="#">December 2018</a></li>
-											<li><a href="#">November 2018</a></li>
-											<li><a href="#">October 2018</a></li>
-											<li><a href="#">September 2018</a></li>
-											<li><a href="#">August 2018</a></li>
-											<li><a href="#">July 2018</a></li>
-										</ul>
-									</div>
-								</div>
-								<div className="widget mb_60 d-inline-block p_30 bg_white full_row wow animated slideInUp">
-									<h3 className="widget_title mb_30 text-capitalize">Archives</h3>
-									<div className="tags">
-										<ul>
-											<li><a href="#">Design</a></li>
-											<li><a href="#">Photographer</a></li>
-											<li><a href="#">Developer</a></li>
-											<li><a href="#">Fashion</a></li>
-											<li><a href="#">Coder</a></li>
-											<li><a href="#">Articles</a></li>
-											<li><a href="#">Mordan</a></li>
-											<li><a href="#">Web</a></li>	
-										</ul>
-									</div>
-								</div>
+								
 							</div>
 						</div>
 					</div>

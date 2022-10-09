@@ -6,7 +6,6 @@ import MenuFooter from '../components/shared/Menu/MenuFooter'
 import { BlogContext } from '../components/context/Blog.Context'
 import { AuthContext } from '../components/context/Auth.Context'
 
-
 function CategoryWisePost() {
 	const {id:categoryId} = useParams()
 	const {loadedCategory,blogs} = useContext(BlogContext)
@@ -23,6 +22,7 @@ function CategoryWisePost() {
 		}
 	})
 
+
 	const categoryWisePostArr = singleCategory?.categoryWisePostData?.data?.map((post) => {
 		    return ({
 			  blogId:post?.id,
@@ -31,6 +31,7 @@ function CategoryWisePost() {
               profileId :post?.attributes?.author?.data?.attributes?.profile?.data?.id,
               profilePictureId :post?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.id,
               title : post?.attributes?.title,
+			  likes:post?.attributes?.likes?.data,
               description:post?.attributes?.description,
               blog_image:post?.attributes?.blog_image?.data?.attributes?.url,
               blog_date:post?.attributes?.blog_date,
@@ -88,7 +89,7 @@ function CategoryWisePost() {
 							   <div key={blog?.blogId} className="blog_item mb_30 wow    animated slideInUp">
 							<div className="comments">
 								<i className="fa fa-comment" aria-hidden="true"></i>
-								<span className="color_white">12</span>
+								<span className="color_white">{blog?.likes?.length}</span>
 							</div>
 							<div className="blog_img overlay_one">
 								<img src={blog?.blog_image} alt="image" />
@@ -191,115 +192,7 @@ function CategoryWisePost() {
 											</ul>
 										</div>
 									</div>
-									<div
-										className="widget mb_60 d-inline-block p_30 primary_link bg_white full_row wow animated slideInUp"
-									>
-										<h3 className="widget_title mb_30 text-capitalize">
-											Recent Post
-										</h3>
-										<div className="recent_post">
-											<ul>
-												<li className="mb_30">
-													<a href="#">
-														<div className="post_img">
-															<img
-																src="images/recent-post/01.jpg"
-																alt="image"
-															/>
-														</div>
-														<div className="recent_post_content">
-															<h6>
-																Convallis pulvinar morbi. Aenean nisi vitae
-																metus.
-															</h6>
-															<span className="color_gray">30 Jan 2019</span>
-														</div>
-													</a>
-												</li>
-												<li className="mb_30">
-													<a href="#">
-														<div className="post_img">
-															<img
-																src="images/recent-post/02.jpg"
-																alt="image"
-															/>
-														</div>
-														<div className="recent_post_content">
-															<h6>
-																Eleifend ante hac quam. Rhoncus dapibus morbi.
-															</h6>
-															<span className="color_gray">28 Jan 2019</span>
-														</div>
-													</a>
-												</li>
-												<li className="mb_30">
-													<a href="#">
-														<div className="post_img">
-															<img
-																src="images/recent-post/03.jpg"
-																alt="image"
-															/>
-														</div>
-														<div className="recent_post_content">
-															<h6>
-																Felis cum, elementum. Rhoncus aliquam cras.
-															</h6>
-															<span className="color_gray">25 Jan 2019</span>
-														</div>
-													</a>
-												</li>
-												<li className="mb_30">
-													<a href="#">
-														<div className="post_img">
-															<img
-																src="images/recent-post/04.jpg"
-																alt="image"
-															/>
-														</div>
-														<div className="recent_post_content">
-															<h6>
-																Turpis eleifend dis platea lectus nam eleifen
-																etiam.
-															</h6>
-															<span className="color_gray">24 Jan 2019</span>
-														</div>
-													</a>
-												</li>
-											</ul>
-										</div>
-									</div>
-									<div
-										className="widget mb_60 d-inline-block p_30 bg_white primary_link full_row wow animated slideInUp"
-									>
-										<h3 className="widget_title mb_30 text-capitalize">Archives</h3>
-										<div className="archives">
-											<ul>
-												<li><a href="#">December 2018</a></li>
-												<li><a href="#">November 2018</a></li>
-												<li><a href="#">October 2018</a></li>
-												<li><a href="#">September 2018</a></li>
-												<li><a href="#">August 2018</a></li>
-												<li><a href="#">July 2018</a></li>
-											</ul>
-										</div>
-									</div>
-									<div
-										className="widget mb_60 d-inline-block p_30 bg_white full_row wow animated slideInUp"
-									>
-										<h3 className="widget_title mb_30 text-capitalize">Archives</h3>
-										<div className="tags">
-											<ul>
-												<li><a href="#">Design</a></li>
-												<li><a href="#">Photographer</a></li>
-												<li><a href="#">Developer</a></li>
-												<li><a href="#">Fashion</a></li>
-												<li><a href="#">Coder</a></li>
-												<li><a href="#">Articles</a></li>
-												<li><a href="#">Mordan</a></li>
-												<li><a href="#">Web</a></li>
-											</ul>
-										</div>
-									</div>
+									
 								</div>
 							</div>
 						</div>

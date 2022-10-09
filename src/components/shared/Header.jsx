@@ -7,6 +7,12 @@ function Header() {
 	const {logout,user} = useContext(AuthContext)
 	const handleScroll = (evt) => {
 		const scrollValue = window.scrollY
+		if(scrollValue >=400){
+			document.querySelector('.scrollToTopIcon').classList.add('visible')
+		}else{
+			document.querySelector('.scrollToTopIcon').classList.remove('visible')
+		}
+		
 		if(scrollValue >= 100){
 		   document.querySelector('.main_nav').classList.add('nav-scroll')
 		}else{

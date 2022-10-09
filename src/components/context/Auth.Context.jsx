@@ -1,5 +1,4 @@
-import React,{ useReducer,useState,useEffect } from 'react';
-import { createContext } from 'react'
+import React,{ useReducer,useState,useEffect, useContext,createContext } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import qs from 'qs'
@@ -27,7 +26,7 @@ export function AuthProvider({children}) {
     const [percentage,setPercentage] = useState(0)
     const [loadedProfile,setLoadedProfile] = useState(false)
     const navigate = useNavigate()
-    
+
     useEffect(() => {
         (async () => {
             if(user && token){
@@ -82,6 +81,8 @@ export function AuthProvider({children}) {
     const profile = async (data) => {
         const profileData= {
             user:user.id,
+            title:data.title,
+            cvLink:data.cvLink,
             firstName:data.firstName,
             lastName:data.lastName,
             phone:data.phone,
@@ -92,6 +93,8 @@ export function AuthProvider({children}) {
             instagramAccount:data.instagramAccount,
             linkdinAccount:data.linkdinAccount,
             twitterAccount:data.twitterAccount,
+            dateOfBirth : data.dateOfBirth,
+            bloodGroup : data.bloodGroup
         }
         const formData = new FormData()
         formData.append('files.profilePicture',data.profilePicture[0],data.profilePicture[0].name)
@@ -107,7 +110,7 @@ export function AuthProvider({children}) {
                 }
             }
           )
-          console.log(response.data)
+        //   console.log(response.data)
           setProfileSubmit(false)
           toast.success('profile created successfully!')
        } catch (err) {
@@ -156,6 +159,10 @@ export function AuthProvider({children}) {
                     userEmail : profile?.attributes?.user?.data?.attributes?.email,
                     address : profile?.attributes?.address,
                     firstName : profile?.attributes?.firstName,
+                    bloodGroup : profile?.attributes?.bloodGroup,
+                    dateOfBirth : profile?.attributes?.dateOfBirth,
+                    title:profile?.attributes?.title,
+                    cvLink:profile?.attributes?.cvLink,
                     lastName : profile?.attributes?.lastName,
                     phone : profile?.attributes?.phone,
                     website : profile?.attributes?.website,
@@ -235,7 +242,6 @@ export function AuthProvider({children}) {
     const logout = () => {
         dispatch({type : LOGOUT , payload : {setUser,setToken}})
         navigate('/login')
-        setLogoutTrack(true)
         toast.success('Logout successfully!', {
           position: "top-right",
           autoClose: 2000,
@@ -263,7 +269,8 @@ export function AuthProvider({children}) {
         loadAllProfile,
         userBlogs,
         passwordChange,
-        passwordSubmit
+        passwordSubmit,
+        loadUserBlog
     }
   return (
     <AuthContext.Provider value={value}>

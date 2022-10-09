@@ -1,14 +1,48 @@
-import React from 'react'
+import React,{ useContext,useEffect,useState } from 'react';
 import Typed from 'react-typed';
 import WaterWave from 'react-water-wave';
+import qs from 'qs'
+import { AuthContext } from '../components/context/Auth.Context';
+import { axiosPrivateInstance } from '../Utils/axios';
+import { Link } from 'react-router-dom';
 
 function Hero() {
-	const strings =
-	[
-	  'Search for products',
-	  'Search for categories',
-	  'Search for brands'
-	]
+    const {user,token,multipleProfileData} = useContext(AuthContext)
+	const [professionData,setProfessionData] = useState([])
+
+	useEffect(() => {
+		if(user && token){
+			(async () => {
+				loadHeroSection()
+			})()
+		}
+	},[user,token])
+
+	const singleProfile = multipleProfileData?.find((profile) => {
+        if(profile?.userId === user?.id){
+            return profile
+        }
+    })
+
+	const loadHeroSection = async () => {
+		try {
+			const response = await axiosPrivateInstance(token).get('/home?populate=*')
+			const heroArr = response.data?.data?.attributes?.homeFeatured?.map((hero) => {
+				return ({
+					homeFeatureId : hero?.id,
+					profession : hero?.profession,
+				})
+			})
+			setProfessionData(heroArr)
+		} catch (err) {
+			console.log(err.response)
+		}
+	}
+
+	const strings = professionData?.map((profession) => {
+		return profession?.profession
+	})
+	
 	
 	const options = {                    
 	  typeSpeed: 40,
@@ -33,7 +67,7 @@ function Hero() {
 						<div className="col-md-12 col-lg-12 home-content text-left">
 							<div className="mainbanner_content">
 								<span className="pb_5 banner_title color_white">
-									I Am Austin Jackson!
+									I Am {singleProfile?.firstName} {singleProfile?.lastName}!
 								</span>
 								
 								<h1 className="cd-headline clip is-full-width text-uppercase">
@@ -48,11 +82,9 @@ function Hero() {
 									</span>
 								</h1>
 								<p className="color_white mb_30">
-									Libero habitasse sollicitudin aliquet venenatis iaculis
-									placerat amet ligula, eleifend nonummy enim in volutpat
-									diam.
+									{singleProfile?.title}
 								</p>
-								<a className="btn btn-default" href="#">Download CV</a>
+								<a className="btn btn-default" target='_blank' href={singleProfile?.cvLink}>Download CV</a>
 							</div>
 						</div>
 					</div>

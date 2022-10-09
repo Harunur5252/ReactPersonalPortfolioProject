@@ -9,9 +9,9 @@ function Menu() {
 	const handleScroll = (evt) => {
 		const scrollValue = window.scrollY
 		if(scrollValue >= 100){
-		   document.querySelector('.main_nav').classList.add('nav-scroll')
+		   document.querySelector('.main_nav')?.classList?.add('nav-scroll')
 		}else{
-		   document.querySelector('.main_nav').classList.remove('nav-scroll')
+		   document.querySelector('.main_nav')?.classList?.remove('nav-scroll')
 		}
 	 }
 	 useEffect(() => {

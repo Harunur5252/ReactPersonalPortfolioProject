@@ -17,8 +17,8 @@ function Home() {
   return (
     <>
         {/* <Preloader /> */}
-        {/* <ScrollToTop /> */}
-        {/* <ColorSetting /> */}
+        <ScrollToTop />
+        <ColorSetting />
         <Layout>
           <Hero />
           <About />

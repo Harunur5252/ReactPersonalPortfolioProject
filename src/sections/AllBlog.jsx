@@ -11,7 +11,12 @@ function AllBlog() {
 	const {blogs,loaded,loadedCategory} = useContext(BlogContext)
 	const {user} = useContext(AuthContext)
 	const blog = blogs && blogs?.find(blog=>blog?.authorId === user?.id)
-    
+
+	const recentBlogArrSort = blogs?.map((recentBlog) => {
+		return recentBlog
+	})
+	recentBlogArrSort?.reverse()
+	// console.log(recentBlogArrSort)
 
     useEffect(()=>{
 		window.scroll(0,0);
@@ -58,7 +63,7 @@ function AllBlog() {
 												<div key={blog?.blogId} className="blog_item mb_30 wow animated slideInUp">
 												<div className="comments">
 													<i className="fa fa-comment" aria-hidden="true"></i>
-													<span className="color_white">12</span>
+													<span className="color_white">{blog?.likes?.length}</span>
 												</div>
 												<div className="blog_img overlay_one">
 													<img src={blog?.blog_image} alt="image" />
@@ -167,77 +172,38 @@ function AllBlog() {
 										<h3 className="widget_title mb_30 text-capitalize">
 											Recent Post
 										</h3>
-										<div className="recent_post">
+										{
+											recentBlogArrSort?.length >=1 ? 
+											<div className="recent_post">
 											<ul>
-												<li className="mb_30">
-													<a href="#">
+												{recentBlogArrSort?.map((recentPost) => {
+                                                   return (
+													<li className="mb_30" key={recentPost?.blogId}>
+													<Link to={`/blog-details/${recentPost?.blogId}`}>
 														<div className="post_img">
 															<img
-																src="images/recent-post/01.jpg"
+																src={recentPost?.blog_image}
 																alt="image"
 															/>
 														</div>
 														<div className="recent_post_content">
 															<h6>
-																Convallis pulvinar morbi. Aenean nisi vitae
-																metus.
+																{recentPost?.title}
 															</h6>
-															<span className="color_gray">30 Jan 2019</span>
+															<span className="color_gray">{recentPost?.blog_date && format(new Date(recentPost?.blog_date), 'dd MMM yyyy')}</span>
 														</div>
-													</a>
+													</Link>
 												</li>
-												<li className="mb_30">
-													<a href="#">
-														<div className="post_img">
-															<img
-																src="images/recent-post/02.jpg"
-																alt="image"
-															/>
-														</div>
-														<div className="recent_post_content">
-															<h6>
-																Eleifend ante hac quam. Rhoncus dapibus morbi.
-															</h6>
-															<span className="color_gray">28 Jan 2019</span>
-														</div>
-													</a>
-												</li>
-												<li className="mb_30">
-													<a href="#">
-														<div className="post_img">
-															<img
-																src="images/recent-post/03.jpg"
-																alt="image"
-															/>
-														</div>
-														<div className="recent_post_content">
-															<h6>
-																Felis cum, elementum. Rhoncus aliquam cras.
-															</h6>
-															<span className="color_gray">25 Jan 2019</span>
-														</div>
-													</a>
-												</li>
-												<li className="mb_30">
-													<a href="#">
-														<div className="post_img">
-															<img
-																src="images/recent-post/04.jpg"
-																alt="image"
-															/>
-														</div>
-														<div className="recent_post_content">
-															<h6>
-																Turpis eleifend dis platea lectus nam eleifen
-																etiam.
-															</h6>
-															<span className="color_gray">24 Jan 2019</span>
-														</div>
-													</a>
-												</li>
+												   )
+												})}
 											</ul>
 										</div>
+										:
+										<p style={{color:'red',fontSize:'1.3rem'}}>No recent post</p>
+										}
+										
 									</div>
+
 									<div
 										className="widget mb_60 d-inline-block p_30 bg_white primary_link full_row wow animated slideInUp"
 									>

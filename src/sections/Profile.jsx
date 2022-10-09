@@ -1,6 +1,7 @@
 import React,{useContext,useState,useEffect} from 'react'
 import { useForm } from "react-hook-form";
 import { BarLoader,BeatLoader } from 'react-spinners';
+import DatePicker from "react-datepicker";
 import {FaEdit} from 'react-icons/fa'
 import { AuthContext } from '../components/context/Auth.Context';
 import notFoundImage from '../assets/R.jpg'
@@ -14,7 +15,10 @@ function Profile() {
     const [file,setFile] = useState(null)
     const [profileControlData,setProfileControlData] = useState({
         firstName : '',
+        bloodGroup:'',
         lastName : '',
+        title:'',
+        cvLink : '',
         phone : '',
         website : '',
         address : '',
@@ -25,7 +29,6 @@ function Profile() {
         instagramAccount : '',
         linkdinAccount : ''
     })
-    
     
     const singleProfile = multipleProfileData?.find((profile) => {
         if(profile?.userId === user?.id){
@@ -40,6 +43,9 @@ function Profile() {
 
    const defaultValue = {
     firstName:profileAllData?.firstName || '',
+    bloodGroup:profileAllData?.bloodGroup || '',
+    title:profileAllData?.title || '',
+    cvLink : profileAllData?.cvLink || '',
     lastName:profileAllData?.lastName || '',
     phone:profileAllData?.phone ||  '',
     website:profileAllData?.website ||  '',
@@ -51,7 +57,7 @@ function Profile() {
     googleAccount:profileAllData?.googleAccount ||  '',
     linkdinAccount:profileAllData?.linkdinAccount || '',
    }
-   const {firstName,lastName,phone,website,address,profilePicture,facebookAccount,twitterAccount,instagramAccount,googleAccount,linkdinAccount} = defaultValue
+   const {firstName,lastName,bloodGroup,title,cvLink,phone,website,address,profilePicture,facebookAccount,twitterAccount,instagramAccount,googleAccount,linkdinAccount} = defaultValue
    const now = percentage
 
   useEffect(() => {
@@ -80,7 +86,7 @@ function Profile() {
     setFile(evt?.target?.files[0])
  }
 
- const handleProfileSubmit = async (evt) => {
+ const handleProfileUpdate = async (evt) => {
    evt.preventDefault()
    const {firstName,lastName,address,phone,website,facebookAccount,googleAccount,twitterAccount,instagramAccount,linkdinAccount} = profileControlData
    const data = {
@@ -96,13 +102,14 @@ function Profile() {
        instagramAccount ,
        linkdinAccount ,
    }
+   const formData = new FormData()
+   formData.append('files.profilePicture',file,file?.name)
+   formData.append('data',JSON.stringify(data))
 
    try {
         setLoadedProfile(true)
         const response = await axiosPrivateInstance(token).put(`/profiles/${singleProfile?.profileId}`,
-        {
-          data:data
-        }
+          formData
         )
         setLoadedProfile(false)
         console.log('response',response.data)
@@ -111,6 +118,11 @@ function Profile() {
        console.log(err.response)
    }
  }
+
+ const [birthDate,setBirthDate] = useState(new Date())
+ useEffect(() =>{
+    setValue('dateOfBirth',birthDate)
+ },[birthDate])
 
   return (
     <>
@@ -122,6 +134,31 @@ function Profile() {
         onSubmit={handleSubmit(onSubmit)}
     >
         <div className="row">
+        <div className="col-md-6 col-lg-6">
+            <div className="form-group">
+                <DatePicker
+                    showYearDropdown
+                    selected={birthDate} 
+                    maxDate={birthDate}
+                    onChange={(date) => setBirthDate(date)} 
+                />
+                <span style={{color:'red'}}>{errors?.blog_date?.message}</span>
+            </div>
+        </div>
+
+        <div className="col-md-6 col-lg-6">
+                <div className="form-group">
+                    <input
+                        className="form-control"
+                        type="text"
+                        {...register("bloodGroup",{required:'bloodGroup is required'})}
+                        placeholder="Enter Your BloodGroup"
+                        defaultValue={bloodGroup}
+                    />
+                    <span style={{color:'red'}}>{errors?.bloodGroup?.message}</span>
+                </div>
+            </div>
+
             <div className="col-md-6 col-lg-6">
                 <div className="form-group">
                     <input
@@ -259,6 +296,32 @@ function Profile() {
                     <span style={{color:'red'}}>{errors?.linkdinAccount?.message}</span>
                 </div>
             </div>
+
+            <div className="col-md-6 col-lg-6">
+                <div className="form-group">
+                    <input
+                        className="form-control"
+                        type="text"
+                        {...register("title",{required:'title is required'})}
+                        placeholder="Enter Your User Title"
+                        defaultValue={title}
+                    />
+                    <span style={{color:'red'}}>{errors?.title?.message}</span>
+                </div>
+            </div>
+
+            <div className="col-md-6 col-lg-6">
+                <div className="form-group">
+                    <input
+                        className="form-control"
+                        type="text"
+                        {...register("cvLink",{required:'cvLink is required'})}
+                        placeholder="Enter Your User Cv Link"
+                        defaultValue={cvLink}
+                    />
+                    <span style={{color:'red'}}>{errors?.cvLink?.message}</span>
+                </div>
+            </div>
             
             <div className="col-md-12 col-lg-12">
                 <div className="form-group">
@@ -329,7 +392,7 @@ function Profile() {
                 </div>
                 <div className="modal-body">
                     <form className="form contact_message wow animated fadeInRight"
-                     id="contact-form" onSubmit={handleProfileSubmit}>
+                     id="contact-form" onSubmit={handleProfileUpdate}>
                         <div className="form-group">
                             <input type="text" onChange={handleChange} defaultValue={singleProfile?.firstName} name="firstName" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Your FirstName" />
                         </div>

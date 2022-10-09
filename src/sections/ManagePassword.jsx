@@ -7,7 +7,7 @@ import { AuthContext } from '../components/context/Auth.Context';
 // validation rules for all input fields
 const schema = yup.object({
   currentPassword : yup.string().required('current password is required').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{6,})/,'Must Contain 6 character,One Uppercase,One Lowercase,One Number and One special case character'),
-  password: yup.string().required('password is required').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{6,})/,'Must Contain 6 character,One Uppercase,One Lowercase,One Number and One special case character'),
+  password: yup.string().required('new password is required').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{6,})/,'Must Contain 6 character,One Uppercase,One Lowercase,One Number and One special case character'),
   passwordConfirmation : yup.string().required('confirm password is required').oneOf([yup.ref('password')],'confirm password does"t match')
 })
 
