@@ -1,6 +1,18 @@
-import React,{ useState,useEffect } from 'react';
+import React,{ useState,useEffect,useContext } from 'react';
+import { AuthContext } from '../components/context/Auth.Context';
+import { axiosPrivateInstance } from '../Utils/axios';
 
 function Skills() {
+	const {user,token} = useContext(AuthContext)
+	const [allSkill,setAllSkill] = useState({})
+	const featureSkill = allSkill?.SkillFeature?.map((skill) => {
+        return({
+			id : skill?.id,
+			name : skill?.name,
+			percent:skill?.percent
+		})
+	})
+
 	const skillsData = [
 		{
 			id:1,
@@ -33,33 +45,7 @@ function Skills() {
    const handleEvent = () => {
 	const value = window.scrollY  
 	if(value >= 1140){
-		setSkills([
-			{
-				id:1,
-				name:'HTML',
-				percent : 50,
-			},
-			{
-				id:2,
-				name:'CSS',
-				percent : 40,
-			},
-			{
-				id:3,
-				name:'PHP',
-				percent : 20,
-			},
-			{
-				id:4,
-				name:'JQUERY',
-				percent : 50,
-			},
-			{
-				id:5,
-				name:'WORDPRESS',
-				percent : 80,
-			},
-		])
+		setSkills(featureSkill)
 	}
    }
 
@@ -69,6 +55,28 @@ function Skills() {
 			document.removeEventListener('scroll',handleEvent)
 		}
 	})
+
+	useEffect(() => {
+		if(user && token){
+			(async () => {
+				loadSkillSection()
+			})()
+		}
+	  },[user,token])
+
+	const loadSkillSection = async () => {
+		try {
+			const response = await axiosPrivateInstance(token).get('/skill?populate=*')
+			setAllSkill({
+				short_skill : response.data?.data?.attributes?.short_skill,
+				skill_title : response.data?.data?.attributes?.skill_title,
+				skill_details : response.data?.data?.attributes?.skill_details,
+				SkillFeature : response.data?.data?.attributes?.SkillFeature,
+			})
+		} catch (err) {
+			console.log(err.response)
+		}
+	}
 	
   return (
     <>
@@ -83,11 +91,10 @@ function Skills() {
 										<span className="line_double mx-auto color_default">skill</span
 										>Design skill
 									</h2>
-									<span className="sub_title"
-										>Interdum a etiam sagittis vehicula porta. Massa felis eros
-										quam blandit nulla dolor habitant. Ullamcorper quis ornare
-										et proin pellentesque.</span
-									>
+									<span className="sub_title">
+										{allSkill?.short_skill}
+									</span>
+									
 								</div>
 							</div>
 						</div>
@@ -98,22 +105,10 @@ function Skills() {
 										className="about_myskill color_secondery wow animated slideInLeft"
 									>
 										<h2 className="color_primary">
-											Some talk about my professional design skill
+										  {allSkill?.skill_title}
 										</h2>
 										<p className="pt_15">
-											At mattis condimentum leo cubilia dictumst purus cubilia
-											nisl quisque lacus ultricies proin massa fermentum
-											placerat sociosqu ornare felis ultricies taciti mauris.
-											Tempor mi, cum a condimentum commodo bibendum risus mauris
-											natoque molestie tellus. In iaculis ad augue gravida
-											posuere.
-										</p>
-										<p className="pt_15">
-											Lectus neque fames lacinia magnis primis. Dictumst
-											torquent dictumst. Bibendum et rutrum feugiat fames
-											interdum purus feugiat praesent Nunc vivamus habitant nam
-											ultricies est. Massa amet cubilia, vitae nonummy nisl.
-											Rutrum mus velit vivamus sapien est.
+											{allSkill?.skill_details}
 										</p>
 									</div>
 								</div>
@@ -121,8 +116,8 @@ function Skills() {
 									<div className="skill-progress wow animated slideInRight">
 										{skills?.map((skill) => {
 											return (
-												<div key={skill.id} className="prgs-bar fact-counter">
-											<span>{skill.name}</span>
+												<div key={skill?.id} className="prgs-bar fact-counter">
+											<span>{skill?.name}</span>
 											<div
 												className="progress count wow"
 												data-wow-duration="0ms"
@@ -131,18 +126,18 @@ function Skills() {
 												<span
 													className="count-num"
 													data-speed="3000"
-													data-stop={skill.percent}
+													data-stop={skill?.percent}
 												>
-													{skill.percent}
+													{skill?.percent}
 												</span>
 												%
 												</div>
 												<div
 												className="progress-bar"
 												role="progressbar"
-												aria-valuenow={skill.percent}
+												aria-valuenow={skill?.percent}
 												aria-valuemax="100"
-												style={{ width: `${skill.percent}%` }}
+												style={{ width: `${skill?.percent}%` }}
 												></div>
 											</div>
 											</div>

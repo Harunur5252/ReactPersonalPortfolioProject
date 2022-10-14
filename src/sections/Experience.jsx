@@ -1,10 +1,30 @@
-import React from 'react'
+import React,{useContext,useState,useEffect} from 'react'
 import CountUp from 'react-countup';
 import VisibilitySensor from "react-visibility-sensor";
+import { AuthContext } from '../components/context/Auth.Context';
+import { axiosPrivateInstance } from '../Utils/axios';
 
 function Experience() {
+    const {user,token} = useContext(AuthContext)
+	const [experience,setExperience] = useState({})
+	useEffect(() => {
+		if(user && token){
+			(async () => {
+				loadExperienceSection()
+			})()
+		}
+	},[user,token])
 	
-
+  const loadExperienceSection = async () => {
+      try {
+		const response = await axiosPrivateInstance(token).get('/experience')
+		setExperience({
+			data : response.data?.data?.attributes
+		})
+	  } catch (err) {
+		 console.log(err)
+	  }
+  }
 	
   return (
     <>
@@ -23,7 +43,7 @@ function Experience() {
 													className="flaticon-man-working-on-a-laptop-from-side-view"
 												></span>
 												<div className="counting_digit color_default mt_15">
-													<CountUp start={0} end={7} duration={5}>
+													<CountUp start={experience?.data?.start} end={experience?.data?.ex_end} duration={5}>
 														{({ countUpRef,start }) => (
 															<VisibilitySensor onChange={start} delayedCall>
 															    <span ref={countUpRef} style={{fontSize:'2rem',fontWeight:'600'}} /> 
@@ -42,7 +62,7 @@ function Experience() {
 											>
 												<span className="flaticon-half-time-work"></span>
 												<div className="counting_digit color_default mt_15">
-												    <CountUp start={0} end={145} duration={5}>
+												    <CountUp start={experience?.data?.start} end={experience?.data?.pr_end} duration={5}>
 														{({ countUpRef,start }) => (
 															<VisibilitySensor onChange={start} delayedCall>
 															    <span ref={countUpRef} style={{fontSize:'2rem',fontWeight:'600'}} /> 
@@ -61,7 +81,7 @@ function Experience() {
 											>
 												<span className="flaticon-happy"></span>
 												<div className="counting_digit color_default mt_15">
-												    <CountUp start={0} end={137} duration={5}>
+												    <CountUp start={experience?.data?.start} end={experience?.data?.cl_end} duration={5}>
 														{({ countUpRef,start }) => (
 															<VisibilitySensor onChange={start} delayedCall>
 															    <span ref={countUpRef} style={{fontSize:'2rem',fontWeight:'600'}} /> 
