@@ -20,7 +20,7 @@ function Testimonial() {
 	};
 	const {user,token} = useContext(AuthContext)
 	const [testimonialData,setTestimonialData] = useState({})
-   console.log(testimonialData)
+
 	useEffect(() => {
 		if(user && token){
 			(async () => {
@@ -35,10 +35,10 @@ function Testimonial() {
 			'testimonialFeature.FeatureFeedback'
 		]
 	})
+
 	const loadTestimonialSection = async () => {
 		try {
 			const response = await axiosPrivateInstance(token).get(`/testimonial?${query}`)
-			console.log(response.data)
 			setTestimonialData({
 				tes_sub_title : response.data?.data?.attributes?.tes_sub_title,
 				feedBackFeature : response.data?.data?.attributes?.feedBackFeature,
@@ -58,9 +58,9 @@ function Testimonial() {
 			onClick={onClick}
 		  />
 		);
-	  }
+	}
 	  
-	  function SamplePrevArrow(props) {
+	function SamplePrevArrow(props) {
 		const { className, style, onClick } = props;
 		return (
 		  <div
@@ -69,7 +69,7 @@ function Testimonial() {
 			onClick={onClick}
 		  />
 		);
-	  }
+	}
 
   return (
     <>
@@ -106,7 +106,7 @@ function Testimonial() {
 													<ul>
 														{testimonial?.FeatureFeedback?.map((feedback) => {
 															return (
-																<li><i className="fa fa-star" aria-hidden="true"></i></li>
+																<li key={feedback?.id}><i className="fa fa-star" aria-hidden="true"></i></li>
 															)
 														})}
 													</ul>

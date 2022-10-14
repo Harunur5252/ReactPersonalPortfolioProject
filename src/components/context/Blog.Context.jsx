@@ -136,7 +136,7 @@ export function BlogProvider({children}) {
     } catch (err) {
       toast.error(err.response?.data?.error?.message)
     }
-}
+  }
 
   const query = qs.stringify({
     populate: {

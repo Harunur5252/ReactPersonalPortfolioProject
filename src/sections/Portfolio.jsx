@@ -184,24 +184,24 @@ function Portfolio() {
 											<div className="row">
 												{
 													projects.map((project) => {
-														<div  key={project.image}
+														<div  key={project?.image}
 														className="column mix mix_all graphic development wordpress mb_30 col-md-4 col-lg-4"
 													>
 														<div className="default-portfolio-item">
 															<a
-																href={`/images/portfolio/${project.image}`}
+																href={`/images/portfolio/${project?.image}`}
 																data-gall="myGallery"
 																className='venobox'
 															>
-																<img src={`./images/portfolio/${project.image}`} alt="image" />
+																<img src={`/images/portfolio/${project?.image}`} alt="image" />
 																<div className="overlay-box">
 																	<span
 																		><i className="fa fa-eye" aria-hidden="true"></i
 																	></span>
 																	<div className="tag">
 																		<ul>
-																			<li>{project.tag_one},</li>
-																			<li>{project.tag_two}</li>
+																			<li>{project?.tag_one},</li>
+																			<li>{project?.tag_two}</li>
 																		</ul>
 																	</div>
 																</div>

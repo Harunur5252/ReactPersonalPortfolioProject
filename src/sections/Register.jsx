@@ -18,7 +18,7 @@ const schema = yup.object({
 function Register() {
     const { register, formState: { errors,isSubmitting,isSubmitSuccessful }, handleSubmit, watch } = useForm({
         resolver: yupResolver(schema)
-      });
+    });
       
       const {registerUser,registerSubmit} = useContext(AuthContext)
       const onSubmit = (data) => {
