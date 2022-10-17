@@ -9,13 +9,14 @@ function Blog() {
 	const {blogs,loaded} = useContext(BlogContext)
 	const {user} = useContext(AuthContext)
 	let ThreeBlogsData = []
-
-	if(blogs?.slice(0,3)){
-		ThreeBlogsData = blogs?.slice(0,3)
+    const latestBlogs = blogs?.map((blog) => {
+		return blog
+	})
+	latestBlogs?.reverse()
+	if(latestBlogs?.slice(0,3)){
+		ThreeBlogsData = latestBlogs?.slice(0,3)
 	}
 
-
-	// const ThreeBlogsData = blogs?.slice(0,3)
 	
   return (
     <>  
