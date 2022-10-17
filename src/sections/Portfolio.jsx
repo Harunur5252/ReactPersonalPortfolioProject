@@ -163,36 +163,37 @@ function Portfolio() {
                     {projects.map((project) => {
                       return (
                         <div
-                          key={project.image}
-                          className="column mix mix_all graphic development wordpress mb_30 col-md-4 col-lg-4"
-                        >
-                          <div className="default-portfolio-item">
-                            <a
-                              href={`/images/portfolio/${project.image}`}
-                              data-fancybox="gallery"
-							                // className='venobox'
-                            >
-                              <img
-                                src={`/images/portfolio/${project.image}`}
-                                alt="image"
-                              />
-                              <div className="overlay-box">
-                                <span>
-                                  <i
-                                    className="fa fa-eye"
-                                    aria-hidden="true"
-                                  ></i>
-                                </span>
-                                <div className="tag">
-                                  <ul>
-                                    <li>{project.tag_one},</li>
-                                    <li>{project.tag_two}</li>
-                                  </ul>
-                                </div>
+                        key={project.image}
+                        className="mb_30 col-md-4 col-lg-4"
+                      >
+                        <div className="default-portfolio-item">
+                          <a
+                            href={`/images/portfolio/${project.image}`}
+                            data-gall="myGallery"
+                            data-maxwidth="600px"
+                            className='venobox'
+                          >
+                            <img
+                              src={`/images/portfolio/${project.image}`}
+                              alt="image"
+                            />
+                            <div className="overlay-box">
+                              <span>
+                                <i
+                                  className="fa fa-eye"
+                                  aria-hidden="true"
+                                ></i>
+                              </span>
+                              <div className="tag">
+                                <ul>
+                                  <li>{project.tag_one},</li>
+                                  <li>{project.tag_two}</li>
+                                </ul>
                               </div>
-                            </a>
-                          </div>
+                            </div>
+                          </a>
                         </div>
+                      </div>
                       );
                     })}
                   </div>

@@ -16,7 +16,7 @@ function AllBlog() {
 		return recentBlog
 	})
 	recentBlogArrSort?.reverse()
-	// console.log(recentBlogArrSort)
+	const sliceRecentBlogArr = recentBlogArrSort?.slice(0,4)
 
     useEffect(()=>{
 		window.scroll(0,0);
@@ -127,27 +127,27 @@ function AllBlog() {
 										<div className="socal_media">
 											<ul>
 												<li>
-													<a href={blog?.facebookAccount}
+													<a target='_blank' href={blog?.facebookAccount}
 														><i className="fa fa-facebook" aria-hidden="true"></i
 													></a>
 												</li>
 												<li>
-													<a href={blog?.twitterAccount}
+													<a target='_blank' href={blog?.twitterAccount}
 														><i className="fa fa-twitter" aria-hidden="true"></i
 													></a>
 												</li>
 												<li>
-													<a href={blog?.googleAccount}
+													<a target='_blank' href={blog?.googleAccount}
 														><i className="fa fa-google-plus" aria-hidden="true"></i
 													></a>
 												</li>
 												<li>
-													<a href={blog?.linkdinAccount}
+													<a target='_blank' href={blog?.linkdinAccount}
 														><i className="fa fa-linkedin" aria-hidden="true"></i
 													></a>
 												</li>
 												<li>
-													<a href={blog?.instagramAccount}
+													<a target='_blank' href={blog?.instagramAccount}
 														><i className="fa fa-instagram" aria-hidden="true"></i
 													></a>
 												</li>
@@ -173,10 +173,10 @@ function AllBlog() {
 											Recent Post
 										</h3>
 										{
-											recentBlogArrSort?.length >=1 ? 
+											sliceRecentBlogArr?.length >=1 ? 
 											<div className="recent_post">
 											<ul>
-												{recentBlogArrSort?.map((recentPost) => {
+												{sliceRecentBlogArr?.map((recentPost) => {
                                                    return (
 													<li className="mb_30" key={recentPost?.blogId}>
 													<Link to={`/blog-details/${recentPost?.blogId}`}>

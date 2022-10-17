@@ -8,18 +8,43 @@ import { BlogContext } from '../components/context/Blog.Context';
 
 
 function CreateBlog() {
-    const { register,setValue, formState: { errors,isSubmitting,isSubmitSuccessful }, handleSubmit } = useForm();
-      
+      const { register,setValue, reset,formState: { errors,isSubmitting,isSubmitSuccessful }, handleSubmit } = useForm();
+      // tracking date 
+      const [blogDate,setBlogDate] = useState(new Date())
       const {createBlog,blogSubmit,percentage,loadedCategory} = useContext(BlogContext)
+	  const [createBlogData,setCreateBlogData] = useState({
+		title:'',
+		description:'',
+		blog_image:null,
+        category:''
+	  })
 
 	  // creating a new blog
       const onSubmit = (data) => {
+		setCreateBlogData(data)
         createBlog(data)
       }
 	  const now = percentage
 
-    // tracking date 
-    const [blogDate,setBlogDate] = useState(new Date())
+	  const defaultValue = {
+		title:createBlogData?.title ||'',
+		description:createBlogData?.description ||'',
+		blog_image:createBlogData?.blog_image || null,
+		category:createBlogData?.category ||'',
+	  }
+	  const {title,description,blog_image,category} = defaultValue
+
+    useEffect(() =>{
+       if(blogSubmit){
+		 reset({
+			title:'',
+			description:'',
+			blog_image:null,
+			category:''
+		 })
+	   }
+    },[blogSubmit])
+
     useEffect(() =>{
        setValue('blog_date',blogDate)
     },[blogDate])
@@ -77,6 +102,7 @@ function CreateBlog() {
 															type="text"
 															{...register("title", { required: 'title is required',minLength:{value:10,message:'title at least 10 or more character'},maxLength:{value:200,message:'title must be equal or less than 200 character'} })}
 															placeholder="Title"
+															defaultValue={title}
 														/>
                                                         <span style={{color:'red'}}>{errors?.title?.message}</span>
 													</div>
@@ -88,6 +114,7 @@ function CreateBlog() {
 															type="text"
 															{...register("description", { required: 'description is required',minLength:{value:100,message:'description at least 100 or more character'},maxLength:{value:50000,message:'description must be equal or less than 50,000 character'} })}
 															placeholder="Description"
+															defaultValue={description}
 														/>
                                                         <span style={{color:'red'}}>{errors?.description?.message}</span>
 													</div>
@@ -109,6 +136,7 @@ function CreateBlog() {
 															className="form-control"
 															type="file"
                                                             accept='image/*'
+															defaultValue={blog_image}
 															{...register("blog_image", { required: 'image is required' })}
 														/>
                                                         <span style={{color:'red'}}>{errors?.blog_image?.message}</span>
@@ -122,8 +150,8 @@ function CreateBlog() {
 													    <select
 															className="form-control"
 															type="select"
-															{...register("category", { required: 'category is required' })}
-															
+															defaultValue={category}
+															{...register("category", { required: 'category is required' })}														
 														>
 														 <option value=""  selected>choose a category</option>
 														 {loadedCategory.map((category)=>{

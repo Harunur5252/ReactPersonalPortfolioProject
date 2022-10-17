@@ -8,7 +8,7 @@ export const blogReducer = (state,action) => {
       const newBlog = {
         ...payload
       }
-      return [newBlog,...state]
+      return [...state,newBlog]
 
      case LOAD_ALL_BLOGS:
         return [...payload]
