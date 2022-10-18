@@ -23,6 +23,10 @@ export function BlogProvider({children}) {
   const [loadedUnLike,setLoadedUnLike] = useState(false)
   const navigate = useNavigate()
   const [percentage,setPercentage] = useState(0)
+  const [pageNumber,setPageNumber] = useState(1)
+  const [pageCount,setPageCount] = useState(null)
+
+
 
   useEffect(() => {
     if(user && token){
@@ -30,7 +34,7 @@ export function BlogProvider({children}) {
           loadAllBlog()
         })()
     }
-  },[user,token,loadedLike,loadedUnLike])
+  },[user,token,loadedLike,loadedUnLike,pageNumber])
 
   useEffect(() => {
     if(user && token){
@@ -139,6 +143,7 @@ export function BlogProvider({children}) {
   }
 
   const query = qs.stringify({
+    sort:['id:desc'],
     populate: {
       blog_image:{
         populate: ['attributes']
@@ -163,6 +168,10 @@ export function BlogProvider({children}) {
           }
         },
       }
+    },
+    pagination:{
+      page:pageNumber,
+      pageSize:5
     }
   }, {
     encodeValuesOnly: true, 
@@ -172,6 +181,7 @@ export function BlogProvider({children}) {
     try {
       setLoaded(true)
       const response = await axiosPrivateInstance(token).get(`/blog-posts?${query}`)
+      console.log(response.data)
       const blogArray = response.data?.data?.map((data) =>{
           return (
             {
@@ -198,8 +208,9 @@ export function BlogProvider({children}) {
               profilePicture :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.attributes?.url,
             }
           )
-        })
+      })
       dispatch({type:LOAD_ALL_BLOGS,payload : blogArray})
+      setPageCount(response.data?.meta?.pagination?.pageCount)
       setLoaded(false)
      } catch (err) {
       setLoaded(false)
@@ -337,7 +348,10 @@ export function BlogProvider({children}) {
     handleUnLike,
     comment,
     commentSubmit,
-    commentLoadedArr
+    commentLoadedArr,
+    pageCount,
+    pageNumber,
+    setPageNumber
   }
   return (
     <BlogContext.Provider value={value}>

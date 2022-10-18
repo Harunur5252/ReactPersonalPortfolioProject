@@ -7,20 +7,34 @@ import Menu from '../components/shared/Menu/Menu';
 import MenuFooter from '../components/shared/Menu/MenuFooter';
 import { AuthContext } from '../components/context/Auth.Context';
 
-function AllBlog() {
-	const {blogs,loaded,loadedCategory} = useContext(BlogContext)
-	const {user} = useContext(AuthContext)
-	const blog = blogs && blogs?.find(blog=>blog?.authorId === user?.id)
+const generateArr = (num) => {
+	const arr = []
+	for (let i = 1; i <= num; i++) {
+		arr.push(i)
+	}
+	return arr
+}
 
-	const recentBlogArrSort = blogs?.map((recentBlog) => {
-		return recentBlog
-	})
-	recentBlogArrSort?.reverse()
-	const sliceRecentBlogArr = recentBlogArrSort?.slice(0,4)
+function AllBlog() {
+	const {blogs,loaded,loadedCategory,pageCount,pageNumber,setPageNumber} = useContext(BlogContext)
+	const {user} = useContext(AuthContext)
+	const pageCountArray = generateArr(pageCount)
+	console.log(pageCountArray)
+	const blog = blogs && blogs?.find(blog=>blog?.authorId === user?.id)
+	const sliceRecentBlogArr = blogs?.slice(0,4)
+
+	const handlePageClick = (evt) => {
+		setPageNumber(+evt.target.dataset.count)
+		console.log(+evt.target.dataset.count)
+	}
 
     useEffect(()=>{
 		window.scroll(0,0);
 	},[])
+
+	useEffect(()=>{
+		window.scroll(0,0);
+	},[pageNumber])
 
   return (
     <>
@@ -95,20 +109,14 @@ function AllBlog() {
 								       </div>
 										<nav>
 											<ul className="pagination wow animated slideInUp full_row">
-										<li className="page-item active">
-											<a className="page-link" href="#">1</a>
-										</li>
-										<li className="page-item">
-											<a className="page-link" href="#">2</a>
-										</li>
-										<li className="page-item">
-											<a className="page-link" href="#">3</a>
-										</li>
-										<li className="page-item">
-											<a className="page-link" href="#"
-												><i className="fa fa-angle-right" aria-hidden="true"></i
-											></a>
-										</li>
+												{pageCountArray?.map((count,index)=>{
+													return (
+                                                        <li key={index} className={`page-item ${count === pageNumber ? 'active' : ''}`}>
+													      <a className="page-link" data-count={count} onClick={handlePageClick}>{count}</a>
+												        </li> 
+													)
+												})}
+												
 											</ul>
 										</nav>
 									</>
@@ -158,13 +166,18 @@ function AllBlog() {
 										className="widget mb_60 d-inline-block p_30 primary_link bg_white full_row wow animated slideInUp"
 									>
 										<h3 className="widget_title mb_30 text-capitalize">Category</h3>
-										<div className="category_sidebar">
+										{loadedCategory?.length >=1 ? 
+										   <div className="category_sidebar">
 											<ul>
-												{loadedCategory.map((category)=> {
+												{loadedCategory?.map((category)=> {
 													return <li key={category?.categoryId}><Link to={`/category-wise-post/${category?.categoryId}`}>{category?.name}</Link><span>({category?.totalPostLength})</span></li>
 												})}
 											</ul>
-										</div>
+									       </div>
+									      :
+										  <p style={{color:'red',fontSize:'1.3rem'}}>No Category</p>
+									     }
+										
 									</div>
 									<div
 										className="widget mb_60 d-inline-block p_30 primary_link bg_white full_row wow animated slideInUp"

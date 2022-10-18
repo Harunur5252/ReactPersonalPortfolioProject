@@ -1,79 +1,87 @@
-import React, { useEffect,useState } from 'react'
+import React,{ useState,useEffect,useContext } from 'react';
+import { AuthContext } from '../components/context/Auth.Context';
+import { axiosPrivateInstance } from '../Utils/axios';
 import Venobox from 'venobox'
+import qs from 'qs'
 
-const projectsData = [
-	{
-	  image: "01.jpg",
-	  tag_one: "Web Development",
-	  tag_two: "Wordpress",
-	  tags: ["development", "wordpress"],
-	},
-	{
-	  image: "02.jpg",
-	  tag_one: "Branding",
-	  tag_two: "Wordpress",
-	  tags: ["branding", "wordpress"],
-	},
-	{
-	  image: "03.jpg",
-	  tag_one: "Web Design",
-	  tag_two: "Web Development",
-	  tags: ["design", "development"],
-	},
-	{
-	  image: "04.jpg",
-	  tag_one: "Branding",
-	  tag_two: "Wordpress",
-	  tags: ["branding", "wordpress"],
-	},
-	{
-	  image: "05.jpg",
-	  tag_one: "Web Design",
-	  tag_two: "Wordpress",
-	  tags: ["design", "wordpress"],
-	},
-	{
-	  image: "06.jpg",
-	  tag_one: "Web Design",
-	  tag_two: "Web Development",
-	  tags: ["design", "development"],
-	},
-  ];
+// const projectsData = [
+// 	{
+// 	  image: "/images/portfolio/01.jpg",
+// 	  tag_one: "Web Development",
+// 	  tag_two: "Wordpress",
+// 	  tags: ["development", "wordpress"],
+// 	},
+// 	{
+// 	  image: "/images/portfolio/02.jpg",
+// 	  tag_one: "Branding",
+// 	  tag_two: "Wordpress",
+// 	  tags: ["branding", "wordpress"],
+// 	},
+// 	{
+// 	  image: "/images/portfolio/03.jpg",
+// 	  tag_one: "Web Design",
+// 	  tag_two: "Web Development",
+// 	  tags: ["design", "development"],
+// 	},
+// 	{
+// 	  image: "/images/portfolio/04.jpg",
+// 	  tag_one: "Branding",
+// 	  tag_two: "Wordpress",
+// 	  tags: ["branding", "wordpress"],
+// 	},
+// 	{
+// 	  image: "/images/portfolio/05.jpg",
+// 	  tag_one: "Web Design",
+// 	  tag_two: "Wordpress",
+// 	  tags: ["design", "wordpress"],
+// 	},
+// 	{
+// 	  image: "/images/portfolio/06.jpg",
+// 	  tag_one: "Web Design",
+// 	  tag_two: "Web Development",
+// 	  tags: ["design", "development"],
+// 	},
+//   ];
   
-  const menusData = [
-	{
-	  id: 1,
-	  name: "all",
-	  isActive: true,
-	  tag: "all",
-	},
-	{
-	  id: 2,
-	  name: "web design",
-	  isActive: false,
-	  tag: "design",
-	},
-	{
-	  id: 3,
-	  name: "wordpress",
-	  isActive: false,
-	  tag: "wordpress",
-	},
-	{
-	  id: 4,
-	  name: "web development",
-	  isActive: false,
-	  tag: "development",
-	},
-	{
-	  id: 5,
-	  name: "branding",
-	  isActive: false,
-	  tag: "branding",
-	},
-  ]; 
+//   const menusData = [
+// 	{
+// 	  id: 1,
+// 	  name: "all",
+// 	  isActive: true,
+// 	  tag: "all",
+// 	},
+// 	{
+// 	  id: 2,
+// 	  name: "web design",
+// 	  isActive: false,
+// 	  tag: "design",
+// 	},
+// 	{
+// 	  id: 3,
+// 	  name: "wordpress",
+// 	  isActive: false,
+// 	  tag: "wordpress",
+// 	},
+// 	{
+// 	  id: 4,
+// 	  name: "web development",
+// 	  isActive: false,
+// 	  tag: "development",
+// 	},
+// 	{
+// 	  id: 5,
+// 	  name: "branding",
+// 	  isActive: false,
+// 	  tag: "branding",
+// 	},
+//   ]; 
 
 function Portfolio() {
+  const {user,token} = useContext(AuthContext)
+  const [portfolioData,setPortfolioData] = useState({})
+  const [menus, setMenus] = useState([]);
+  const [projects, setProjects] = useState([]);
+
 	useEffect(() => {
 		new Venobox({
 		  autoplay: false,
@@ -81,30 +89,63 @@ function Portfolio() {
 		})
 	  },[])
 
-	  const [projects, setProjects] = useState(projectsData);
-	  const [menus, setMenus] = useState(menusData);
+    useEffect(() => {
+      if(user && token){
+        (async () => {
+          loadPortfolioSection()
+        })()
+      }
+      },[user,token])
+
+    const query = qs.stringify({
+       populate : [
+         'MenusFeature',
+         'ProjectsFeature',
+         'ProjectsFeature.TagsFeature ',
+       ]
+    })
+    const loadPortfolioSection = async () => {
+      try {
+        const response = await axiosPrivateInstance(token).get(`/portfolio?${query}`)
+        setPortfolioData({
+           sub_title : response.data?.data?.attributes?.sub_title,
+        })
+        const tagsArr = response.data?.data?.attributes?.ProjectsFeature?.map((data) => {
+           return ({
+              id:data?.id,
+              image : data?.image,
+              tag_one : data?.tag_one,
+              tag_two : data?.tag_two,
+              tags : data?.TagsFeature?.map((tag) => tag?.tags)
+           })
+        })
+        setMenus(response.data?.data?.attributes?.MenusFeature)
+        setProjects(tagsArr)
+      } catch (err) {
+        console.log(err.response)
+      }
+    }
+
 
 	  const handleClick = (menu) => {
-		// add active and remove active 
-		const modifiedArr = menusData.map((singleMenu) => {
-		  if (singleMenu.id === menu.id) {
-			singleMenu.isActive = true;
-			return singleMenu;
+		const modifiedArr = menus?.map((singleMenu) => {
+		  if (singleMenu?.id === menu?.id) {
+        singleMenu.isActive = true;
+        return singleMenu;
 		  } else {
-			singleMenu.isActive = false;
-			return singleMenu;
+        singleMenu.isActive = false;
+        return singleMenu;
 		  }
 		});
 		setMenus(modifiedArr);
-	
-		// filtered data
-		const filteredArr = projectsData.filter((project) =>
-		  menu.tag === "all" ? project : project.tags.includes(menu.tag)
-		);
-		setProjects(filteredArr);
-	  };
 
-// console.log(projects)
+		const filteredArr = projects?.filter((project) => 
+       menu?.tag === "all" ? project : project?.tags?.includes(menu?.tag)
+    )
+		  setProjects(filteredArr)
+	  }
+
+
   return (
     <>
          <section
@@ -123,9 +164,7 @@ function Portfolio() {
                   Recent Projects
                 </h2>
                 <span className="sub_title">
-                  Interdum a etiam sagittis vehicula porta. Massa felis eros
-                  quam blandit nulla dolor habitant. Ullamcorper quis ornare et
-                  proin pellentesque.
+                  {portfolioData?.sub_title}
                 </span>
               </div>
             </div>
@@ -137,18 +176,18 @@ function Portfolio() {
                     <ul
                       className="filter-tabs mx-auto d-inline-block"
                     >
-                      {menus.map((menu) => {
+                      {menus?.map((menu) => {
                         return (
                           <li
-                            key={menu.id}
+                            key={menu?.id}
                             className={`filter ${
-                              menu.isActive ? "active" : ""
+                              menu?.isActive ? "active" : ""
                             }`}
                             data-role="button"
                             data-filter="all"
                             onClick={() => handleClick(menu)}
                           >
-                            {menu.name}
+                            {menu?.name}
                           </li>
                         );
                       })}
@@ -160,21 +199,21 @@ function Portfolio() {
               <div className="filter-list">
                 <div className="portfolio-items">
                   <div className="row">
-                    {projects.map((project) => {
+                    {projects?.map((project) => {
                       return (
                         <div
-                        key={project.image}
+                        key={project?.id}
                         className="mb_30 col-md-4 col-lg-4"
                       >
                         <div className="default-portfolio-item">
                           <a
-                            href={`/images/portfolio/${project.image}`}
+                            href={project?.image}
                             data-gall="myGallery"
                             data-maxwidth="600px"
                             className='venobox'
                           >
                             <img
-                              src={`/images/portfolio/${project.image}`}
+                              src={project?.image}
                               alt="image"
                             />
                             <div className="overlay-box">
@@ -186,8 +225,8 @@ function Portfolio() {
                               </span>
                               <div className="tag">
                                 <ul>
-                                  <li>{project.tag_one},</li>
-                                  <li>{project.tag_two}</li>
+                                  <li>{project?.tag_one},</li>
+                                  <li>{project?.tag_two}</li>
                                 </ul>
                               </div>
                             </div>
