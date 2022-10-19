@@ -19,13 +19,11 @@ function AllBlog() {
 	const {blogs,loaded,loadedCategory,pageCount,pageNumber,setPageNumber} = useContext(BlogContext)
 	const {user} = useContext(AuthContext)
 	const pageCountArray = generateArr(pageCount)
-	console.log(pageCountArray)
 	const blog = blogs && blogs?.find(blog=>blog?.authorId === user?.id)
 	const sliceRecentBlogArr = blogs?.slice(0,4)
 
 	const handlePageClick = (evt) => {
 		setPageNumber(+evt.target.dataset.count)
-		console.log(+evt.target.dataset.count)
 	}
 
     useEffect(()=>{
@@ -116,7 +114,6 @@ function AllBlog() {
 												        </li> 
 													)
 												})}
-												
 											</ul>
 										</nav>
 									</>

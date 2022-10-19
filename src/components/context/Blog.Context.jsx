@@ -17,6 +17,7 @@ export function BlogProvider({children}) {
   const [blogSubmit,setBlogSubmit] = useState(false)
   const [commentSubmit,setCommentSubmit] = useState(false)
   const [loaded,setLoaded] = useState(false)
+  const [isLoadedCategory,setIsLoadedCategory] = useState(false)
   const [loadedCategory,setLoadedCategory] = useState([])
   const [commentLoadedArr,setCommentLoadedArr] = useState([])
   const [loadedLike,setLoadedLike] = useState(false)
@@ -25,7 +26,6 @@ export function BlogProvider({children}) {
   const [percentage,setPercentage] = useState(0)
   const [pageNumber,setPageNumber] = useState(1)
   const [pageCount,setPageCount] = useState(null)
-
 
 
   useEffect(() => {
@@ -181,7 +181,6 @@ export function BlogProvider({children}) {
     try {
       setLoaded(true)
       const response = await axiosPrivateInstance(token).get(`/blog-posts?${query}`)
-      console.log(response.data)
       const blogArray = response.data?.data?.map((data) =>{
           return (
             {
@@ -246,7 +245,6 @@ export function BlogProvider({children}) {
             categoryId:category?.id,
             name : category?.attributes?.name,
             totalPostLength : category?.attributes?.blog_posts.data.length,
-            categoryWisePostData : category?.attributes?.blog_posts
            })
         })
         setLoadedCategory(categoryArr)
@@ -351,7 +349,7 @@ export function BlogProvider({children}) {
     commentLoadedArr,
     pageCount,
     pageNumber,
-    setPageNumber
+    setPageNumber,
   }
   return (
     <BlogContext.Provider value={value}>

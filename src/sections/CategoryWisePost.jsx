@@ -1,22 +1,66 @@
-import React, { useContext,useEffect } from 'react'
+import React, { useContext,useEffect,useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import format from 'date-fns/format'
+import qs from 'qs'
+import BeatLoader  from "react-spinners/BeatLoader ";
 import Menu from '../components/shared/Menu/Menu'
 import MenuFooter from '../components/shared/Menu/MenuFooter'
 import { BlogContext } from '../components/context/Blog.Context'
 import { AuthContext } from '../components/context/Auth.Context'
+import { axiosPrivateInstance } from '../Utils/axios'
 
 function CategoryWisePost() {
 	const {id:categoryId} = useParams()
 	const {loadedCategory,blogs} = useContext(BlogContext)
-	const {user} = useContext(AuthContext)
+	const {user,token} = useContext(AuthContext)
+	const [postArr,setPostArr] = useState([])
+	const [loadedCategoryPost,setLoadedCategoryPost] = useState(false)
 	const blog = blogs && blogs?.find(blog=>blog?.authorId === user?.id)
 
 	useEffect(()=>{
 		window.scroll(0,0);
 	},[])
 
-	const singleCategory = loadedCategory?.find((category) => {
+	useEffect(() => {
+		if(user && token){
+			(async () => {
+				loadedCategoryWisePost()
+			})()
+		}
+	  },[user,token])
+	
+	const query = qs.stringify({
+		populate : [
+			 'blog_posts',
+			 'blog_posts.likes',
+			 'blog_posts.comments',
+			 'blog_posts.blog_image',
+			 'blog_posts.author',
+			 'blog_posts.author.profile',
+			 'blog_posts.author.profile.profilePicture',
+		]
+	})
+
+	const loadedCategoryWisePost = async () => {
+        try {
+			setLoadedCategoryPost(true)
+			const response = await axiosPrivateInstance(token).get(`/categories?${query}`)
+			// console.log(response.data)
+			const categoryPostArr = response.data.data?.map((categoryPost) => {
+				return ({
+				 categoryId:categoryPost?.id,
+				 categoryWisePostData : categoryPost?.attributes?.blog_posts
+				})
+			 })
+			 setLoadedCategoryPost(false)
+			 setPostArr(categoryPostArr)
+		} catch (err) {
+			setLoadedCategoryPost(false)
+			console.log(err.response)
+		}
+	}
+
+	const singleCategory = postArr?.find((category) => {
 		if(category?.categoryId === +categoryId){
 			return category
 		}
@@ -75,7 +119,7 @@ function CategoryWisePost() {
 						</div>
 					</div>
 		</section>
-
+		{loadedCategoryPost && <BeatLoader  color="#36d7b7" size={25} margin={5} />}
 		 <section className="blog_area py_80 bg_secondery full_row">
 					<div className="container">
 						<div className="row">
@@ -120,20 +164,13 @@ function CategoryWisePost() {
 								   </div>
 								   <nav>
 									<ul className="pagination wow animated slideInUp full_row">
-										<li className="page-item active">
-											<a className="page-link" href="#">1</a>
-										</li>
-										<li className="page-item">
-											<a className="page-link" href="#">2</a>
-										</li>
-										<li className="page-item">
-											<a className="page-link" href="#">3</a>
-										</li>
-										<li className="page-item">
-											<a className="page-link" href="#"
-												><i className="fa fa-angle-right" aria-hidden="true"></i
-											></a>
-										</li>
+										{/* {pageCountArray?.map((count,index)=>{
+											return (
+												<li key={index} className={`page-item ${count === pageNumberCategory ? 'active' : ''}`}>
+													<a className="page-link" data-count={count} onClick={handlePageClick}>{count}</a>
+												</li> 
+											)
+										})} */}
 									</ul>
 								   </nav>
 								</>
