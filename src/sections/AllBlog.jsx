@@ -16,11 +16,15 @@ const generateArr = (num) => {
 }
 
 function AllBlog() {
-	const {blogs,loaded,loadedCategory,pageCount,pageNumber,setPageNumber} = useContext(BlogContext)
+	const {blogs,blogsWithoutPaginationData,loaded,loadedCategory,pageCount,pageNumber,setPageNumber} = useContext(BlogContext)
 	const {user} = useContext(AuthContext)
 	const pageCountArray = generateArr(pageCount)
+
 	const blog = blogs && blogs?.find(blog=>blog?.authorId === user?.id)
-	const sliceRecentBlogArr = blogs?.slice(0,4)
+
+	const BlogsData = blogsWithoutPaginationData?.map((post) => post)
+    const reverseBlogsData = BlogsData?.reverse()
+	const sliceRecentBlogArr = reverseBlogsData?.slice(0,4)
 
 	const handlePageClick = (evt) => {
 		setPageNumber(+evt.target.dataset.count)

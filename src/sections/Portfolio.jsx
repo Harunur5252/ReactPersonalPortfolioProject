@@ -1,8 +1,6 @@
-import React,{ useState,useEffect,useContext } from 'react';
-import { AuthContext } from '../components/context/Auth.Context';
-import { axiosPrivateInstance } from '../Utils/axios';
+import { useEffect,useContext } from 'react';
 import Venobox from 'venobox'
-import qs from 'qs'
+import { PageContext } from '../components/context/Page.Context';
 
 // const projectsData = [
 // 	{
@@ -77,74 +75,14 @@ import qs from 'qs'
 //   ]; 
 
 function Portfolio() {
-  const {user,token} = useContext(AuthContext)
-  const [portfolioData,setPortfolioData] = useState({})
-  const [menus, setMenus] = useState([]);
-  const [projects, setProjects] = useState([]);
+  const {menus,projects,handleClick,portfolioData} = useContext(PageContext)
 
-	useEffect(() => {
+	  useEffect(() => {
 		new Venobox({
-		  autoplay: false,
-		  spinner:'wave',
+      maxWidth:'600px',
+		  spinner:'flow',
 		})
 	  },[])
-
-    useEffect(() => {
-      if(user && token){
-        (async () => {
-          loadPortfolioSection()
-        })()
-      }
-      },[user,token])
-
-    const query = qs.stringify({
-       populate : [
-         'MenusFeature',
-         'ProjectsFeature',
-         'ProjectsFeature.TagsFeature ',
-       ]
-    })
-    const loadPortfolioSection = async () => {
-      try {
-        const response = await axiosPrivateInstance(token).get(`/portfolio?${query}`)
-        setPortfolioData({
-           sub_title : response.data?.data?.attributes?.sub_title,
-        })
-        const tagsArr = response.data?.data?.attributes?.ProjectsFeature?.map((data) => {
-           return ({
-              id:data?.id,
-              image : data?.image,
-              tag_one : data?.tag_one,
-              tag_two : data?.tag_two,
-              tags : data?.TagsFeature?.map((tag) => tag?.tags)
-           })
-        })
-        setMenus(response.data?.data?.attributes?.MenusFeature)
-        setProjects(tagsArr)
-      } catch (err) {
-        console.log(err.response)
-      }
-    }
-
-
-	  const handleClick = (menu) => {
-		const modifiedArr = menus?.map((singleMenu) => {
-		  if (singleMenu?.id === menu?.id) {
-        singleMenu.isActive = true;
-        return singleMenu;
-		  } else {
-        singleMenu.isActive = false;
-        return singleMenu;
-		  }
-		});
-		setMenus(modifiedArr);
-
-		const filteredArr = projects?.filter((project) => 
-       menu?.tag === "all" ? project : project?.tags?.includes(menu?.tag)
-    )
-		  setProjects(filteredArr)
-	  }
-
 
   return (
     <>
@@ -209,8 +147,7 @@ function Portfolio() {
                           <a
                             href={project?.image}
                             data-gall="myGallery"
-                            data-maxwidth="600px"
-                            className='venobox'
+                            className="venobox"
                           >
                             <img
                               src={project?.image}

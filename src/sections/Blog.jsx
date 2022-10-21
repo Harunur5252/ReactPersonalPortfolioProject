@@ -1,18 +1,14 @@
-import React ,{ useContext,useEffect } from 'react'
+import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import format from 'date-fns/format'
-import { BlogContext } from '../components/context/Blog.Context'
 import { BarLoader } from 'react-spinners'
 import { AuthContext } from '../components/context/Auth.Context'
+import { PageContext } from '../components/context/Page.Context'
 
 function Blog() {
-	const {blogs,loaded} = useContext(BlogContext)
+	const {ThreeBlogsData} = useContext(PageContext)
 	const {user} = useContext(AuthContext)
-	let ThreeBlogsData = []
-	if(blogs?.slice(0,3)){
-		ThreeBlogsData = blogs?.slice(0,3)
-	}
-
+	
 	
   return (
     <>  

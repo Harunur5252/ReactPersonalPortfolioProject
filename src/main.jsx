@@ -6,6 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import 'react-toastify/dist/ReactToastify.min.css';
 import { BlogProvider } from './components/context/Blog.Context';
 import { AuthProvider } from './components/context/Auth.Context';
+import { PageProvider } from './components/context/Page.Context';
  
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -13,7 +14,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <AuthProvider>
         <BlogProvider>
-          <App />
+          <PageProvider>
+              <App />
+          </PageProvider>
         </BlogProvider>
       </AuthProvider>
     </BrowserRouter>

@@ -1,4 +1,4 @@
-import React from 'react'
+import { useContext } from 'react'
 import Layout from '../components/layouts/Layout'
 import About from '../sections/About'
 import Skills from '../sections/Skills'
@@ -12,14 +12,22 @@ import Hero from '../sections/Hero'
 import ScrollToTop from '../components/shared/ScrollToTop'
 import Preloader from '../components/shared/Preloader'
 import ColorSetting from '../components/shared/ColorSetting'
+import { BlogContext } from '../components/context/Blog.Context'
+import { PageContext } from '../components/context/Page.Context'
 
 function Home() {
+  const {loaded} = useContext(BlogContext)
+  const {loadedHeroSection,loadedAboutSection,loadedSkillSection,loadExperienceSection,loadedServiceSection,loadTestimonialSection,loadPortfolioSection} = useContext(PageContext)
+
   return (
     <>
-        {/* <Preloader /> */}
-        <ScrollToTop />
-        <ColorSetting />
-        <Layout>
+    {loaded && loadedHeroSection && 
+    loadedAboutSection && loadedSkillSection 
+    && loadExperienceSection && loadedServiceSection 
+    && loadTestimonialSection && loadPortfolioSection ? 
+    <Preloader />
+     : 
+     <Layout>
           <Hero />
           <About />
           <Skills />
@@ -29,7 +37,10 @@ function Home() {
           <Testimonial />
           <Blog />
           <Contact />
+          <ScrollToTop />
+          <ColorSetting />
         </Layout>
+     }
     </>
   )
 }

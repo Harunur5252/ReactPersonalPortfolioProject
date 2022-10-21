@@ -110,7 +110,6 @@ export function AuthProvider({children}) {
                 }
             }
           )
-        //   console.log(response.data)
           setProfileSubmit(false)
           toast.success('profile created successfully!')
        } catch (err) {
@@ -171,7 +170,7 @@ export function AuthProvider({children}) {
                     googleAccount : profile?.attributes?.googleAccount,
                     instagramAccount : profile?.attributes?.instagramAccount,
                     linkdinAccount : profile?.attributes?.linkdinAccount,
-                    profilePicture : profile?.attributes?.profilePicture?.data?.attributes?.formats?.thumbnail?.url,
+                    profilePicture : profile?.attributes?.profilePicture?.data?.attributes?.url,
                 })
          })
          setMultipleProfileData(profileArr)

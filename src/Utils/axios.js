@@ -1,5 +1,7 @@
 import axios from "axios";
 
+//  const isProduction = import.meta.env.PROD
+
  export const axiosPrivateInstance = (token) => axios.create({
     baseURL: 'http://localhost:1337/api',
     headers: {
@@ -8,6 +10,7 @@ import axios from "axios";
  });
 
  export const axiosPublicInstance =  axios.create({
-    baseURL: 'http://localhost:1337/api',
+    baseURL: 'http://localhost:1337/api'
  });
+ 
 

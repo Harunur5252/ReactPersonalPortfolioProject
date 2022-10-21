@@ -10,17 +10,19 @@ import { AuthContext } from './Auth.Context'
 
 export const BlogContext = createContext()
 const initialBlogs = []
+const initialBlogsWithoutPaginationData = []
 
 export function BlogProvider({children}) {
   const [blogs,dispatch] = useReducer(blogReducer,initialBlogs)
+  const [blogsWithoutPaginationData,setBlogsWithoutPaginationData] = useState(initialBlogsWithoutPaginationData)
   const {user,token,loadUserBlog} = useContext(AuthContext)
   const [blogSubmit,setBlogSubmit] = useState(false)
   const [commentSubmit,setCommentSubmit] = useState(false)
   const [loaded,setLoaded] = useState(false)
-  const [isLoadedCategory,setIsLoadedCategory] = useState(false)
   const [loadedCategory,setLoadedCategory] = useState([])
   const [commentLoadedArr,setCommentLoadedArr] = useState([])
   const [loadedLike,setLoadedLike] = useState(false)
+  const [trigger,setTrigger] = useState(false)
   const [loadedUnLike,setLoadedUnLike] = useState(false)
   const navigate = useNavigate()
   const [percentage,setPercentage] = useState(0)
@@ -34,7 +36,15 @@ export function BlogProvider({children}) {
           loadAllBlog()
         })()
     }
-  },[user,token,loadedLike,loadedUnLike,pageNumber])
+  },[user,token,pageNumber,trigger])
+
+  useEffect(() => {
+    if(user && token){
+        (async () => {
+          loadAllBlogWithoutPagination()
+        })()
+    }
+  },[user,token,loadedLike,loadedUnLike])
 
   useEffect(() => {
     if(user && token){
@@ -71,7 +81,6 @@ export function BlogProvider({children}) {
   const loadAllComment = async () => {
      try {
         const response = await axiosPrivateInstance(token).get(`/comments?${query_three}`)
-        // console.log(response.data)
         const commentArr = response.data?.data?.map((comment) => {
             return ({
               cmtId : comment?.id,
@@ -224,6 +233,71 @@ export function BlogProvider({children}) {
       });
      }
   }
+
+  const loadAllBlogWithoutPagination = async () => {
+    const query = qs.stringify({
+      populate: {
+        blog_image:{
+          populate: ['attributes']
+        },
+        comments:{
+          populate: ['data']
+        },
+        likes:{
+          populate:['user']
+        },
+        categories:{
+          populate: {
+            blog_posts:{
+                populate:['data']
+            }
+          }
+        },
+        author: {
+          populate: {
+            profile:{
+              populate:['profilePicture']
+            }
+          },
+        }
+      }
+    }, {
+      encodeValuesOnly: true, 
+    });
+    try {
+      const response = await axiosPrivateInstance(token).get(`/blog-posts?${query}`)
+      const blogArray = response.data?.data?.map((data) =>{
+          return (
+            {
+              blogId:data?.id,
+              imgId:data?.attributes?.blog_image?.data?.id,
+              authorId :data?.attributes?.author?.data?.id,
+              profileId :data?.attributes?.author?.data?.attributes?.profile?.data?.id,
+              categories : data?.attributes?.categories?.data,
+              likes : data?.attributes?.likes?.data,
+              profilePictureId :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.id,
+              title : data?.attributes?.title,
+              description:data?.attributes?.description,
+              blog_image:data?.attributes?.blog_image?.data?.attributes?.url,
+              blog_date:data?.attributes?.blog_date,
+              firstName :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.firstName,
+              lastName :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.lastName,
+              address :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.address,
+              facebookAccount :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.facebookAccount,
+              googleAccount :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.googleAccount,
+              instagramAccount :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.instagramAccount,
+              linkdinAccount :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.linkdinAccount,
+              twitterAccount :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.twitterAccount,
+              website :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.website,
+              profilePicture :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.attributes?.url,
+            }
+          )
+      })
+      setBlogsWithoutPaginationData(blogArray)
+    } catch (err) {
+       console.log(err.response)
+    }
+  }
   
   const query_two = qs.stringify({
     populate : [
@@ -245,6 +319,7 @@ export function BlogProvider({children}) {
             categoryId:category?.id,
             name : category?.attributes?.name,
             totalPostLength : category?.attributes?.blog_posts.data.length,
+            categoryWisePostData : category?.attributes?.blog_posts
            })
         })
         setLoadedCategory(categoryArr)
@@ -284,7 +359,6 @@ export function BlogProvider({children}) {
         }
       }
     )
-    // console.log(response.data)
       const blogs_data ={
         blogId:response.data.data?.id,
         imgId:response.data.data?.attributes?.blog_image?.data?.id,
@@ -308,6 +382,7 @@ export function BlogProvider({children}) {
         website :response.data.data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.website,
         profilePicture :response.data.data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.attributes?.url,
      }
+     setTrigger(!trigger)
       dispatch({type:ADD,payload : blogs_data})
         navigate('/all-blogs')
         toast.success('Blog created successfully!', {
@@ -340,6 +415,7 @@ export function BlogProvider({children}) {
     blogSubmit,
     percentage,
     blogs,
+    blogsWithoutPaginationData,
     loaded,
     loadedCategory,
     handleLike,

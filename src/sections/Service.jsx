@@ -1,31 +1,9 @@
 import React,{ useEffect,useState,useContext } from 'react'
-import { AuthContext } from '../components/context/Auth.Context'
-import { axiosPrivateInstance } from '../Utils/axios'
+import * as FaIcons from "react-icons/fa";
+import { PageContext } from '../components/context/Page.Context';
  
 function Service() {
-	const {user,token} = useContext(AuthContext)
-	const [servicesData,setServicesData] = useState({})
-
-	useEffect(() => {
-        if(user && token){
-			(async () => {
-				loadServiceSection()
-			})()
-		}
-	},[user,token])
-
-	const loadServiceSection = async () => {
-		try {
-			const response = await axiosPrivateInstance(token).get('/service?populate=*')
-			setServicesData({
-				service_short_des : response.data?.data?.attributes?.service_short_des,
-				ServiceFeature : response.data?.data?.attributes?.ServiceFeature,
-			})
-		} catch (err) {
-			console.log(err.response)
-		}
-	}
-
+	const {servicesData} = useContext(PageContext)
   return (
     <>
          <section id="services" name="services" className="py_80 full_row bg_white">
@@ -50,6 +28,8 @@ function Service() {
 								<div className="col-md-12 col-lg-12">
 									<div className="row">
 									{servicesData?.ServiceFeature?.map((service) => {
+										let icon = service?.serviceIcon;
+										const DynamicIcon = FaIcons[icon];
 										return (
 										        <div key={service?.id} className="col-md-6 col-lg-4">
 													<div className="service_two text-center pt_15 mb_30 wow animated slideInUp">
@@ -59,8 +39,8 @@ function Service() {
 														<h3 className="p_20 text-uppercase color_primary">
 														{service?.serviceName}
 														</h3>
-														<div className="srv_icon color_white">
-															<img src='' />
+														<div className="srv_icon color_white d-flex align-items-center justify-content-center">
+														   <DynamicIcon size={40} />
 														</div>
 														<p>{service?.serviceDescription}</p>
 											        </div>

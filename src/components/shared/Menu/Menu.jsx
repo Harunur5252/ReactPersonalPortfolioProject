@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../../context/Auth.Context'
 
 function Menu() {
-	const {logout,user,token} = useContext(AuthContext)
+	 const {logout,user} = useContext(AuthContext)
 
-	const handleScroll = (evt) => {
+	 const handleScroll = (evt) => {
 		const scrollValue = window.scrollY
 		if(scrollValue >= 100){
 		   document.querySelector('.main_nav')?.classList?.add('nav-scroll')
@@ -29,9 +29,9 @@ function Menu() {
 							id="navbar-example2"
 							className="navbar navbar-expand-lg navbar-light w-100"
 						>
-							<Link className="navbar-brand" to="/"
+							<div className="navbar-brand" 
 								><img className="nav-logo" src="/images/logo/1.png" alt="logo"
-							/></Link>
+							/></div>
 							<button
 								className="navbar-toggler"
 								type="button"
@@ -45,11 +45,15 @@ function Menu() {
 							</button>
 							<div className="collapse navbar-collapse" id="navbarSupportedContent">
 								<ul className="navbar-nav ml-auto">
-									<li className="nav-item">
-										<Link className="nav-link"  to="/" data-scroll="top">
-											Home
-									   </Link>
-									</li>
+									{
+										user && 
+										<li className="nav-item">
+											<Link className="nav-link"  to="/" data-scroll="top">
+												Home
+										    </Link>
+										</li>
+									}
+									
 									{
                                         !user && <>
 										 <li className="nav-item">

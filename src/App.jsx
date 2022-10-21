@@ -19,7 +19,7 @@ import UserBlogList from './sections/UserBlogList'
 function App() {
   return (
     <>
-     <ToastContainer
+         <ToastContainer
             position="top-right"
             autoClose={1500}
             hideProgressBar={false}
@@ -29,7 +29,7 @@ function App() {
             pauseOnFocusLoss
             draggable
             pauseOnHover
-          />
+         />
       <Routes>
         <Route path="/" element={ <Home/> } />
         <Route path="/blog-details/:id" element={ <BlogDetails/> } />

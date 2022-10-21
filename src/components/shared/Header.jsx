@@ -7,16 +7,16 @@ function Header() {
 	const {logout,user} = useContext(AuthContext)
 	const handleScroll = (evt) => {
 		const scrollValue = window.scrollY
-		if(scrollValue >=400){
-			document.querySelector('.scrollToTopIcon').classList.add('visible')
+		if(scrollValue >= 400){
+			document.querySelector('#scroll')?.classList?.add('scrollVisible')
 		}else{
-			document.querySelector('.scrollToTopIcon').classList.remove('visible')
+			document.querySelector('#scroll')?.classList?.remove('scrollVisible')
 		}
 		
 		if(scrollValue >= 100){
-		   document.querySelector('.main_nav').classList.add('nav-scroll')
+		   document.querySelector('.main_nav')?.classList?.add('nav-scroll')
 		}else{
-		   document.querySelector('.main_nav').classList.remove('nav-scroll')
+		   document.querySelector('.main_nav')?.classList?.remove('nav-scroll')
 		}
 	 }
 	 useEffect(() => {
@@ -34,9 +34,9 @@ function Header() {
 							id="navbar-example2"
 							className="navbar navbar-expand-lg navbar-light w-100"
 						>
-							<Link className="navbar-brand" to="top" spy={true} smooth={true}
+							<div className="navbar-brand"
 								><img className="nav-logo" src="/images/logo/1.png" alt="logo"
-							/></Link>
+							/></div>
 							<button
 								className="navbar-toggler"
 								type="button"
@@ -50,38 +50,43 @@ function Header() {
 							</button>
 							<div className="collapse navbar-collapse" id="navbarSupportedContent">
 								<ul className="navbar-nav ml-auto">
-									<li className="nav-item">
-										<Link className="nav-link"  to="top" spy={true} smooth={true}>
-											Home
-										</Link>
-									</li>
-									<li className="nav-item">
-										<Link className="nav-link" activeClass="active" to="about" spy={true} smooth={true}>About</Link>
-									</li>
-									<li className="nav-item">
-										<Link className="nav-link" activeClass="active" to="skill" spy={true} smooth={true}>Skill</Link>
-									</li>
-									<li className="nav-item">
-										<Link className="nav-link" activeClass="active" to="services" spy={true} smooth={true}>Services</Link>
-									</li>
-									<li className="nav-item">
-										<Link className="nav-link" activeClass="active" to="portfolio" spy={true} smooth={true}>Portfolio</Link>
-									</li>
-									<li className="nav-item">
-										<Link className="nav-link" activeClass="active" to="testimonial" spy={true} smooth={true}>Testimonial</Link>
-									</li>
-									<li className="nav-item">
-										<Link className="nav-link" activeClass="active" to="blog" spy={true} smooth={true}>Blog</Link>
-									</li>
-									<li className="nav-item">
-										<Link className="nav-link" activeClass="active" to="contact" spy={true} smooth={true}>Contact</Link>
-									</li>
 									{
 										user && 
-										<li className="nav-item">
-											<a className="nav-link" onClick={logout}>Logout</a>
-										</li>
+										<>
+											<li className="nav-item">
+												<Link className="nav-link"  to="top" spy={true} smooth={true}>
+													Home
+												</Link>
+											</li>
+											<li className="nav-item">
+												<Link className="nav-link" activeClass="active" to="about" spy={true} smooth={true}>About</Link>
+											</li>
+											<li className="nav-item">
+												<Link className="nav-link" activeClass="active" to="skill" spy={true} smooth={true}>Skill</Link>
+											</li>
+											<li className="nav-item">
+												<Link className="nav-link" activeClass="active" to="services" spy={true} smooth={true}>Services</Link>
+											</li>
+											<li className="nav-item">
+												<Link className="nav-link" activeClass="active" to="portfolio" spy={true} smooth={true}>Portfolio</Link>
+											</li>
+											<li className="nav-item">
+												<Link className="nav-link" activeClass="active" to="testimonial" spy={true} smooth={true}>Testimonial</Link>
+											</li>
+											<li className="nav-item">
+												<Link className="nav-link" activeClass="active" to="blog" spy={true} smooth={true}>Blog</Link>
+											</li>
+											<li className="nav-item">
+												<Link className="nav-link" activeClass="active" to="contact" spy={true} smooth={true}>Contact</Link>
+											</li>
+											<li className="nav-item">
+												<a className="nav-link" onClick={logout}>Logout</a>
+											</li>
+										
+										</>
 									}
+									
+									
 									{
                                         !user && <>
 										 <li className="nav-item">

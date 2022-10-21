@@ -21,7 +21,7 @@ function BlogDetails() {
 		resolver: yupResolver(schema)
 	  });
 
-	const {blogs,handleLike,handleUnLike,loadedCategory,comment,commentSubmit,commentLoadedArr} = useContext(BlogContext)
+	const {blogs,blogsWithoutPaginationData,handleLike,handleUnLike,loadedCategory,comment,commentSubmit,commentLoadedArr} = useContext(BlogContext)
 	const {user,token,} = useContext(AuthContext)
 	const [blog,setBlog] = useState({})
 	const [likes,setLikes] = useState([])
@@ -29,8 +29,9 @@ function BlogDetails() {
 	const [isLike,setIsLike] = useState(false)
 	const [resetComment,setResetComment] = useState({description:''})
 	const {id} = useParams()
-	const findSingleBlog = blogs.find((blog) => blog.blogId === +id)
- 
+	const findSingleBlog = blogsWithoutPaginationData?.find((blog) => blog?.blogId === +id)
+    
+
 	useEffect(()=>{
 		window.scroll(0,0);
 	},[])
@@ -100,7 +101,7 @@ function BlogDetails() {
 								<h1 className="page_banner_title color_white text-uppercase">Blog Details</h1>
 								<div className="breadcrumbs m-auto d-inline-block">
 									<ul>
-										<li className="hover_gray"><a href="blog.html">Blog</a></li>
+										<li className="hover_gray"><Link to="/all-blogs">Blog</Link></li>
 										<li><i className="fa fa-angle-right" aria-hidden="true"></i></li>
 										<li className="color-default">Blog Details</li>
 									</ul>
@@ -116,7 +117,7 @@ function BlogDetails() {
 					<div className="row">
 						<div className="col-md-8 col-lg-8">
 							<div className="blog_details">
-								    {Object.keys(blog && blog).length === 0 ? <p style={{color:'red',fontSize:'1.5rem'}}>No blog show</p> : 
+								    {Object.keys(blog && blog)?.length === 0 ? <p style={{color:'red',fontSize:'1.5rem'}}>No blog show</p> : 
 									 <>
 							            <div className="blog_img overlay_one wow animated slideInUp"><img src={blog?.blog_image} alt="image" /></div>
 										<div className="blog_content bg_white">

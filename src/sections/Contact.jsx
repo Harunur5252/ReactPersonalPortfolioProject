@@ -3,9 +3,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { AuthContext } from '../components/context/Auth.Context'
-import {BlogContext} from '../components/context/Blog.Context'
-import { axiosPrivateInstance } from '../Utils/axios';
-import { toast } from 'react-toastify';
+import { PageContext } from '../components/context/Page.Context';
 
 // validation rules for all input fields
 const schema = yup.object({
@@ -20,10 +18,9 @@ function Contact() {
         resolver: yupResolver(schema)
     });
 
-	const {blogs} = useContext(BlogContext)
-	const {user,token,multipleProfileData} = useContext(AuthContext)
-	const [contactSubmit,setContactSubmit] = useState(false)
-	const [contactData,setContactData] = useState({})
+	const {contactAdd,contactData,contactSubmit} = useContext(PageContext)
+	const {user,multipleProfileData} = useContext(AuthContext)
+
 
 	const authenticateUserInfo = multipleProfileData?.find((singleUser) => {
 		if(singleUser?.userId === user?.id){
@@ -49,21 +46,7 @@ function Contact() {
 	},[contactData])
  
 	const onSubmit = async (data) => {
-		setContactData(data)
-		try {
-			setContactSubmit(true)
-			const response = await axiosPrivateInstance(token).post('/contacts',
-			 {
-				data : data
-			 }
-			)
-			setContactSubmit(false)
-		    console.log(response.data)
-			toast.success('contact added successfully')
-		} catch (err) {
-			console.log(err.response)
-			toast.error(err?.response?.data?.error?.message)
-		}
+		contactAdd(data)
     }
     
   return (

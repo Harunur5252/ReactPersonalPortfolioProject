@@ -1,31 +1,10 @@
-import React,{useContext,useState,useEffect} from 'react'
+import React,{useContext} from 'react'
 import CountUp from 'react-countup';
 import VisibilitySensor from "react-visibility-sensor";
-import { AuthContext } from '../components/context/Auth.Context';
-import { axiosPrivateInstance } from '../Utils/axios';
+import { PageContext } from '../components/context/Page.Context';
 
 function Experience() {
-    const {user,token} = useContext(AuthContext)
-	const [experience,setExperience] = useState({})
-	useEffect(() => {
-		if(user && token){
-			(async () => {
-				loadExperienceSection()
-			})()
-		}
-	},[user,token])
-	
-  const loadExperienceSection = async () => {
-      try {
-		const response = await axiosPrivateInstance(token).get('/experience')
-		setExperience({
-			data : response.data?.data?.attributes
-		})
-	  } catch (err) {
-		 console.log(err)
-	  }
-  }
-	
+    const {experience} = useContext(PageContext)
   return (
     <>
         <div className="experience background2 overlay_two py_60 full_row">

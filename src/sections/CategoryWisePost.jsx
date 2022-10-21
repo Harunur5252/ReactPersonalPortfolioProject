@@ -9,13 +9,27 @@ import { BlogContext } from '../components/context/Blog.Context'
 import { AuthContext } from '../components/context/Auth.Context'
 import { axiosPrivateInstance } from '../Utils/axios'
 
+
+const generateArr = (num) => {
+	const arr = []
+	for (let i = 1; i <= num; i++) {
+		arr.push(i)
+	}
+	return arr
+}
+
 function CategoryWisePost() {
 	const {id:categoryId} = useParams()
 	const {loadedCategory,blogs} = useContext(BlogContext)
 	const {user,token} = useContext(AuthContext)
 	const [postArr,setPostArr] = useState([])
 	const [loadedCategoryPost,setLoadedCategoryPost] = useState(false)
+	const [itemStart,setItemStart] = useState(0)
+	const [itemEnd,setItemEnd] = useState(1)
+	const [pageNumberCategory,setPageNumberCategory] = useState(1)
+	const [pageCountCategory,setPageCountCategory] = useState(1)
 	const blog = blogs && blogs?.find(blog=>blog?.authorId === user?.id)
+
 
 	useEffect(()=>{
 		window.scroll(0,0);
@@ -27,7 +41,7 @@ function CategoryWisePost() {
 				loadedCategoryWisePost()
 			})()
 		}
-	  },[user,token])
+	},[user,token])
 	
 	const query = qs.stringify({
 		populate : [
@@ -45,13 +59,12 @@ function CategoryWisePost() {
         try {
 			setLoadedCategoryPost(true)
 			const response = await axiosPrivateInstance(token).get(`/categories?${query}`)
-			// console.log(response.data)
 			const categoryPostArr = response.data.data?.map((categoryPost) => {
 				return ({
 				 categoryId:categoryPost?.id,
 				 categoryWisePostData : categoryPost?.attributes?.blog_posts
 				})
-			 })
+			})
 			 setLoadedCategoryPost(false)
 			 setPostArr(categoryPostArr)
 		} catch (err) {
@@ -91,6 +104,18 @@ function CategoryWisePost() {
               profilePicture :post?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.attributes?.url,
 		})
 	})
+      
+	const sliceArr = categoryWisePostArr?.slice(itemStart,itemEnd)
+
+	const pageCountArray = generateArr(categoryWisePostArr?.length)
+
+	const handlePageClick = (evt) => {
+		setPageNumberCategory(+evt.target.dataset.count)
+		if(itemStart < itemEnd){
+            setItemStart(itemStart + 1)
+			setItemEnd(itemEnd + 1)
+		}
+	}
 
   return (
     <>
@@ -106,7 +131,7 @@ function CategoryWisePost() {
 									<div className="breadcrumbs m-auto d-inline-block">
 										<ul>
 											<li className="hover_gray">
-												<a href="index-5.html">Home</a>
+												<Link to="/">Home</Link>
 											</li>
 											<li>
 												<i className="fa fa-angle-right" aria-hidden="true"></i>
@@ -125,10 +150,10 @@ function CategoryWisePost() {
 						<div className="row">
 							<div className="col-md-7 col-lg-8">
 							{
-								categoryWisePostArr?.length >=1 ?
+								sliceArr?.length >=1 ?
 								<>
 								   <div className="blog_list mb_60">
-								{categoryWisePostArr?.map((blog)=>{
+								{sliceArr?.map((blog)=>{
 							   return (
 							   <div key={blog?.blogId} className="blog_item mb_30 wow    animated slideInUp">
 							<div className="comments">
@@ -164,13 +189,13 @@ function CategoryWisePost() {
 								   </div>
 								   <nav>
 									<ul className="pagination wow animated slideInUp full_row">
-										{/* {pageCountArray?.map((count,index)=>{
+										{pageCountArray?.map((count,index)=>{
 											return (
 												<li key={index} className={`page-item ${count === pageNumberCategory ? 'active' : ''}`}>
 													<a className="page-link" data-count={count} onClick={handlePageClick}>{count}</a>
 												</li> 
 											)
-										})} */}
+										})}
 									</ul>
 								   </nav>
 								</>

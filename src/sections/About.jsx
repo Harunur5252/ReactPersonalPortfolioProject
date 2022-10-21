@@ -4,10 +4,13 @@ import format from 'date-fns/format'
 import Venobox from 'venobox'
 import { AuthContext } from '../components/context/Auth.Context'
 import { axiosPrivateInstance } from '../Utils/axios'
+import { PageContext } from '../components/context/Page.Context'
+
 
 function About() {
-	const {user,token,multipleProfileData} = useContext(AuthContext)
-	const [about,setAbout] = useState({})
+	const {user,multipleProfileData} = useContext(AuthContext)
+	const userEmail  = JSON.parse(localStorage?.getItem('user'))
+	const {about} = useContext(PageContext)
 	
 	const singleProfile = multipleProfileData?.find((profile) => {
         if(profile?.userId === user?.id){
@@ -18,36 +21,13 @@ function About() {
 	useEffect(() => {
 		new Venobox({
 		  autoplay: false,
-		  spinner:'wave',
+		  spinner:'flow',
 		  selector: ".video-popup",
 		  maxWidth:'600px'
 		})
-	  },[])
-
-	  useEffect(() => {
-		if(user && token){
-			(async () => {
-				loadAboutSection()
-			})()
-		}
-	  },[user,token])
-      
-	  const userEmail  = JSON.parse(localStorage?.getItem('user'))
-
-	  const loadAboutSection = async () => {
-		 try {
-			const response = await axiosPrivateInstance(token).get('/about')
-			// console.log(response.data)
-			setAbout({
-				broad_details :  response.data?.data?.attributes?.broad_details,
-				short_details :  response.data?.data?.attributes?.short_details,
-				video_link :  response.data?.data?.attributes?.video_link,
-				video_title :  response.data?.data?.attributes?.video_title,
-			})
-		 } catch (err) {
-			console.log(err.response)
-		 }
-	  }
+	},[])
+     
+	
 
   return (
     <>
@@ -120,10 +100,10 @@ function About() {
 									<div
 										className="profile_img personal_video wow animated fadeInRight"
 									>
-										<img src="images/about/03.png" alt="image" />
+										<img src={singleProfile?.profilePicture} className='aboutImage' alt="image" />
 										<div className="iconround">
 											<Link
-												className="video-popup"
+												className="video-popup round_shape"
 												data-vbtype="video"
 												to={about?.video_link}
 												title={about?.video_title}

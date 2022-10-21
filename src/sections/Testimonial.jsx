@@ -1,8 +1,6 @@
 import React,{ useState,useEffect,useContext } from 'react';
-import { AuthContext } from '../components/context/Auth.Context';
-import { axiosPrivateInstance } from '../Utils/axios';
 import Slider from 'react-slick'
-import qs from 'qs'
+import { PageContext } from '../components/context/Page.Context';
 
 function Testimonial() {
 	const settings = {
@@ -18,36 +16,7 @@ function Testimonial() {
 		nextArrow: <SampleNextArrow />,
 		prevArrow: <SamplePrevArrow />,
 	};
-	const {user,token} = useContext(AuthContext)
-	const [testimonialData,setTestimonialData] = useState({})
-
-	useEffect(() => {
-		if(user && token){
-			(async () => {
-				loadTestimonialSection()
-			})()
-		}
-	},[user,token])
-
-    const query = qs.stringify({
-		populate:[
-			'testimonialFeature',
-			'testimonialFeature.FeatureFeedback'
-		]
-	})
-
-	const loadTestimonialSection = async () => {
-		try {
-			const response = await axiosPrivateInstance(token).get(`/testimonial?${query}`)
-			setTestimonialData({
-				tes_sub_title : response.data?.data?.attributes?.tes_sub_title,
-				feedBackFeature : response.data?.data?.attributes?.feedBackFeature,
-				testimonialFeature : response.data?.data?.attributes?.testimonialFeature,
-			})
-		} catch (err) {
-			console.log(err.response)
-		}
-	}
+	const {testimonialData} = useContext(PageContext)
 
 	function SampleNextArrow(props) {
 		const { className, style, onClick } = props;

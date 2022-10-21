@@ -1,22 +1,13 @@
-import React,{ useContext,useEffect,useState } from 'react';
+import React,{ useContext } from 'react';
 import Typed from 'react-typed';
 import WaterWave from 'react-water-wave';
-import qs from 'qs'
 import { AuthContext } from '../components/context/Auth.Context';
-import { axiosPrivateInstance } from '../Utils/axios';
-import { Link } from 'react-router-dom';
+import { PageContext } from '../components/context/Page.Context';
 
 function Hero() {
-    const {user,token,multipleProfileData} = useContext(AuthContext)
-	const [professionData,setProfessionData] = useState([])
+    const {user,multipleProfileData} = useContext(AuthContext)
+    const {professionData} = useContext(PageContext)
 
-	useEffect(() => {
-		if(user && token){
-			(async () => {
-				loadHeroSection()
-			})()
-		}
-	},[user,token])
 
 	const singleProfile = multipleProfileData?.find((profile) => {
         if(profile?.userId === user?.id){
@@ -24,25 +15,9 @@ function Hero() {
         }
     })
 
-	const loadHeroSection = async () => {
-		try {
-			const response = await axiosPrivateInstance(token).get('/home?populate=*')
-			const heroArr = response.data?.data?.attributes?.homeFeatured?.map((hero) => {
-				return ({
-					homeFeatureId : hero?.id,
-					profession : hero?.profession,
-				})
-			})
-			setProfessionData(heroArr)
-		} catch (err) {
-			console.log(err.response)
-		}
-	}
-
 	const strings = professionData?.map((profession) => {
 		return profession?.profession
 	})
-	
 	
 	const options = {                    
 	  typeSpeed: 40,
@@ -54,13 +29,14 @@ function Hero() {
 	  contentType : 'html'
 	};
 
+
   return (
     <>
-	    <WaterWave dropRadius={20} interactive= {true} perturbance={0.03} resolution={500} imageUrl='images/slider/04.jpg' className='banner_water_effect overlay_one'>
+	    <WaterWave dropRadius={20} interactive= {true} perturbance={0.03} resolution={500} imageUrl={singleProfile?.profilePicture} className='banner_water_effect overlay_one'>
 			{() => (
 		        <section
 				id="main_banner" name="top"
-				className="banner_water_effect  overlay_one"
+				className="banner_water_effect overlay_one"
 			   >
 				<div className="container h-100">
 					<div className="row h-100 align-items-center">
