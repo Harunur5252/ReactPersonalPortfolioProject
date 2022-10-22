@@ -5,6 +5,9 @@ import notFoundImage from '../assets/R.jpg'
 
 function UserBlogList() {
   const {userBlogs} = useContext(AuthContext)
+  const userBlogsArr = userBlogs?.map((userBlog) => userBlog)
+  const reverseUserBlogArr = userBlogsArr?.reverse()
+  // console.log(reverseUserBlogArr)
   return (
     <>
       <table class="table table-striped table-dark table-hover table-borderless">
@@ -22,7 +25,7 @@ function UserBlogList() {
       </thead>
       <tbody>
         {
-          userBlogs && userBlogs?.map((blog) => {
+          reverseUserBlogArr && reverseUserBlogArr?.map((blog) => {
             return (
               <tr>
                 <th scope="row" key={blog?.id}>{blog?.id}</th>

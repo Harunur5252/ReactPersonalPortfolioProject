@@ -18,15 +18,15 @@ function Contact() {
         resolver: yupResolver(schema)
     });
 
-	const {contactAdd,contactData,contactSubmit} = useContext(PageContext)
+	const {contactAdd,contactData,contactSubmit,myProfileData} = useContext(PageContext)
 	const {user,multipleProfileData} = useContext(AuthContext)
 
 
-	const authenticateUserInfo = multipleProfileData?.find((singleUser) => {
-		if(singleUser?.userId === user?.id){
-			return user
-		}
-	})
+	// const authenticateUserInfo = multipleProfileData?.find((singleUser) => {
+	// 	if(singleUser?.userId === user?.id){
+	// 		return user
+	// 	}
+	// })
 	const defaultValue = {
 		fullName : contactData?.fullName || '',
 		email : contactData?.email || '',
@@ -81,7 +81,7 @@ function Contact() {
 															Email
 														</h6>
 														<span className="color_secondery">
-															{authenticateUserInfo?.userEmail}
+															{myProfileData?.email}
 														</span>
 														
 													</div>
@@ -91,7 +91,7 @@ function Contact() {
 														<h6 className="font-weight-bold color_primary">
 															Phone
 														</h6>
-														<span className="color_secondery">{authenticateUserInfo?.phone}</span>
+														<span className="color_secondery">{myProfileData?.phone}</span>
 													</div>
 												</li>
 												<li>
@@ -100,7 +100,7 @@ function Contact() {
 															Address
 														</h6>
 														<span className="color_secondery">
-															{authenticateUserInfo?.address}
+															{myProfileData?.address}
 														</span>
 														
 													</div>
@@ -111,7 +111,7 @@ function Contact() {
 															Website
 														</h6>
 														<span className="color_secondery">
-															{authenticateUserInfo?.website}
+															{myProfileData?.website}
 														</span>
 														
 													</div>
@@ -121,27 +121,27 @@ function Contact() {
 										<div className="socal_media_2 mt_15 d-inline-block">
 											<ul>
 												<li>
-													<a target='_blank' href={authenticateUserInfo?.facebookAccount}
+													<a target='_blank' href={myProfileData?.facebookAccount}
 														><i className="fa fa-facebook" aria-hidden="true"></i
 													></a>
 												</li>
 												<li>
-													<a target='_blank' href={authenticateUserInfo?.twitterAccount}
+													<a target='_blank' href={myProfileData?.twitterAccount}
 														><i className="fa fa-twitter" aria-hidden="true"></i
 													></a>
 												</li>
 												<li>
-													<a target='_blank' href={authenticateUserInfo?.googleAccount}
+													<a target='_blank' href={myProfileData?.googleAccount}
 														><i className="fa fa-google-plus" aria-hidden="true"></i
 													></a>
 												</li>
 												<li>
-													<a target='_blank' href={authenticateUserInfo?.linkdinAccount}
+													<a target='_blank' href={myProfileData?.linkedinAccount}
 														><i className="fa fa-linkedin" aria-hidden="true"></i
 													></a>
 												</li>
 												<li>
-													<a target='_blank' href={authenticateUserInfo?.instagramAccount}
+													<a target='_blank' href={myProfileData?.instagramAccount}
 														><i className="fa fa-instagram" aria-hidden="true"></i
 													></a>
 												</li>

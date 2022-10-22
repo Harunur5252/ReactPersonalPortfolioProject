@@ -118,17 +118,18 @@ export function AuthProvider({children}) {
        }
     }
     
-    const query = qs.stringify({
-        populate : [
-            'blog_posts',
-            'blog_posts.blog_image',
-            'profile',
-            'profile.profilePicture'
-        ]
-    })
     const loadUserBlog = async () => {
+        const query = qs.stringify({
+            populate : [
+                'blog_posts',
+                'blog_posts.blog_image',
+                'profile',
+                'profile.profilePicture'
+            ]
+        })
         try {
             const response = await axiosPrivateInstance(token).get(`/users/me?${query}`)
+            // console.log(response.data)
             const userBlogArr = response.data?.blog_posts?.map((blog) => {
                 return ({
                     title : blog?.title,

@@ -6,6 +6,7 @@ import { BlogContext } from '../components/context/Blog.Context';
 import Menu from '../components/shared/Menu/Menu';
 import MenuFooter from '../components/shared/Menu/MenuFooter';
 import { AuthContext } from '../components/context/Auth.Context';
+import Layout from '../components/layouts/Layout'
 
 const generateArr = (num) => {
 	const arr = []
@@ -40,7 +41,7 @@ function AllBlog() {
 
   return (
     <>
-       <Menu />
+      <Layout>
         <section className="banner background9 overlay_three full_row">
 					<div className="container">
 						<div className="row">
@@ -255,7 +256,7 @@ function AllBlog() {
 						</div>
 					</div>
 		</section>
-        <MenuFooter />
+        </Layout>
     </>
   )
 }

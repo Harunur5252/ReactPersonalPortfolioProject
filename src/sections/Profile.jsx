@@ -338,47 +338,47 @@ function Profile() {
 		</div>
         </form>
     }
-        
-        <table className="table table-striped table-dark table-hover table-borderless">
-            <thead>
+       
+        <table className="table table-responsive table-striped table-dark table-hover table-borderless">
+        <thead>
+            <tr>
+                <th scope="col">ProfileId</th>
+                <th scope="col">FirstName</th>
+                <th scope="col">LastName</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Email</th>
+                <th scope="col">Address</th>
+                <th scope="col">Image</th>
+                {
+                        singleProfile?.profileId && singleProfile?.userId && <th scope="col">Action</th>
+                }
+                
+            </tr>
+        </thead>
+        {
+            profileSubmit ? <BeatLoader size={20} color="#36d7b7" /> :
+            <tbody>
                 <tr>
-                    <th scope="col">ProfileId</th>
-                    <th scope="col">FirstName</th>
-                    <th scope="col">LastName</th>
-                    <th scope="col">Phone</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Address</th>
-                    <th scope="col">Image</th>
+                    <td>{singleProfile?.profileId ? singleProfile?.profileId : <span style={{color:'rgba(208, 213, 17, 0.8)',fontSize:'1rem'}}>no id</span>}</td>
+                    <td>{singleProfile?.firstName ? singleProfile?.firstName : <span style={{color:'rgba(208, 213, 17, 0.8)',fontSize:'1rem'}}>no firstName</span>}</td>
+                    <td>{singleProfile?.lastName ? singleProfile?.lastName :<span style={{color:'rgba(208, 213, 17, 0.8)',fontSize:'1rem'}}>no lastName</span>}</td>
+                    <td>{singleProfile?.phone ? singleProfile?.phone : <span style={{color:'rgba(208, 213, 17, 0.8)',fontSize:'1rem'}}>no mobile number</span>}</td>
+                    <td>{singleProfile?.userEmail ? singleProfile?.userEmail : <span style={{color:'rgba(208, 213, 17, 0.8)',fontSize:'1rem'}}>no email</span>}</td>
+                    <td>{singleProfile?.address ? singleProfile?.address : <span style={{color:'rgba(208, 213, 17, 0.8)',fontSize:'1rem'}}>no address</span>}</td>
+                    <td><img src={singleProfile?.profilePicture ? singleProfile?.profilePicture : notFoundImage} height={40} width={40} alt='notFoundImage' /></td>
                     {
-                         singleProfile?.profileId && singleProfile?.userId && <th scope="col">Action</th>
+                            singleProfile?.profileId && singleProfile?.userId && 
+                            <td>
+                            <button type='button' class="btn btn-success" data-toggle="modal" data-target="#exampleModal" title="Edit Profile">
+                                <FaEdit />
+                            </button>
+                        </td>
                     }
                     
                 </tr>
-            </thead>
-            {
-                profileSubmit ? <BeatLoader size={20} color="#36d7b7" /> :
-                <tbody>
-                    <tr>
-                        <td>{singleProfile?.profileId ? singleProfile?.profileId : <span style={{color:'rgba(208, 213, 17, 0.8)',fontSize:'1rem'}}>no id</span>}</td>
-                        <td>{singleProfile?.firstName ? singleProfile?.firstName : <span style={{color:'rgba(208, 213, 17, 0.8)',fontSize:'1rem'}}>no firstName</span>}</td>
-                        <td>{singleProfile?.lastName ? singleProfile?.lastName :<span style={{color:'rgba(208, 213, 17, 0.8)',fontSize:'1rem'}}>no lastName</span>}</td>
-                        <td>{singleProfile?.phone ? singleProfile?.phone : <span style={{color:'rgba(208, 213, 17, 0.8)',fontSize:'1rem'}}>no mobile number</span>}</td>
-                        <td>{singleProfile?.userEmail ? singleProfile?.userEmail : <span style={{color:'rgba(208, 213, 17, 0.8)',fontSize:'1rem'}}>no email</span>}</td>
-                        <td>{singleProfile?.address ? singleProfile?.address : <span style={{color:'rgba(208, 213, 17, 0.8)',fontSize:'1rem'}}>no address</span>}</td>
-                        <td><img src={singleProfile?.profilePicture ? singleProfile?.profilePicture : notFoundImage} height={40} width={40} alt='notFoundImage' /></td>
-                        {
-                             singleProfile?.profileId && singleProfile?.userId && 
-                             <td>
-                                <button type='button' class="btn btn-success" data-toggle="modal" data-target="#exampleModal" title="Edit Profile">
-                                    <FaEdit />
-                                </button>
-                            </td>
-                        }
-                        
-                    </tr>
-                </tbody>
-            }
-           
+            </tbody>
+        }
+        
         </table>
 
         <div className="modal fade" id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

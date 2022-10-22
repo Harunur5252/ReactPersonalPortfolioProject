@@ -1,4 +1,6 @@
-import { useContext } from 'react'
+import { useContext,useEffect } from 'react'
+import { scroller } from "react-scroll";
+import { useLocation } from "react-router-dom";
 import Layout from '../components/layouts/Layout'
 import About from '../sections/About'
 import Skills from '../sections/Skills'
@@ -14,17 +16,29 @@ import Preloader from '../components/shared/Preloader'
 import ColorSetting from '../components/shared/ColorSetting'
 import { BlogContext } from '../components/context/Blog.Context'
 import { PageContext } from '../components/context/Page.Context'
+import { AuthContext } from '../components/context/Auth.Context';
 
 function Home() {
   const {loaded} = useContext(BlogContext)
-  const {loadedHeroSection,loadedAboutSection,loadedSkillSection,loadExperienceSection,loadedServiceSection,loadTestimonialSection,loadPortfolioSection} = useContext(PageContext)
+  const {user} = useContext(AuthContext)
+  const {loadedMyProfileSection,loadedHeroSection,loadedAboutSection,loadedSkillSection,loadedExperienceSection,loadedServiceSection,loadedTestimonialSection,loadedPortfolioSection} = useContext(PageContext)
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state) {
+      scroller.scrollTo(`${location.state}`, {
+        smooth: true,
+      });
+      location.state = null;
+    }
+  }, [location.state]);
 
   return (
     <>
-    {loaded && loadedHeroSection && 
+    {(loaded && user) || loadedHeroSection && 
     loadedAboutSection && loadedSkillSection 
-    && loadExperienceSection && loadedServiceSection 
-    && loadTestimonialSection && loadPortfolioSection ? 
+    && loadedExperienceSection && loadedServiceSection 
+    && loadedTestimonialSection && loadedPortfolioSection && loadedMyProfileSection ? 
     <Preloader />
      : 
      <Layout>
@@ -39,7 +53,7 @@ function Home() {
           <Contact />
           <ScrollToTop />
           <ColorSetting />
-        </Layout>
+     </Layout>
      }
     </>
   )

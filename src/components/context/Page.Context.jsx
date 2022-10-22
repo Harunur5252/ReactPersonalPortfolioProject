@@ -2,7 +2,7 @@ import { useContext,useState,useEffect } from 'react'
 import { createContext } from 'react'
 import qs from 'qs'
 import { toast } from 'react-toastify';
-import { axiosPrivateInstance } from '../../Utils/axios'
+import { axiosPrivateInstance, axiosPublicInstance } from '../../Utils/axios'
 import { AuthContext } from './Auth.Context'
 import { BlogContext } from './Blog.Context'
 
@@ -39,7 +39,8 @@ const skillsData = [
 export function PageProvider({children}) {
     const {user,token} = useContext(AuthContext)
     const {blogsWithoutPaginationData} = useContext(BlogContext)
-    const [professionData,setProfessionData] = useState([])
+
+    const [loadedMyProfileSection,setLoadedMyProfileSection] = useState(false)
     const [loadedHeroSection,setLoadedHeroSection] = useState(false)
     const [loadedAboutSection,setLoadedAboutSection] = useState(false)
     const [loadedSkillSection,setLoadedSkillSection] = useState(false)
@@ -47,6 +48,10 @@ export function PageProvider({children}) {
     const [loadedServiceSection,setLoadedServiceSection] = useState(false)
     const [loadedPortfolioSection,setLoadedPortfolioSection] = useState(false)
     const [loadedTestimonialSection,setLoadedTestimonialSection] = useState(false)
+   
+    const [professionData,setProfessionData] = useState([])
+    const [heroSectionData,setHeroSectionData] = useState({})
+    const [myProfileData,setMyProfileData] = useState({})
     const [about,setAbout] = useState({})
     const [allSkill,setAllSkill] = useState({})
     const [skills , setSkills] = useState(skillsData)
@@ -101,73 +106,78 @@ export function PageProvider({children}) {
 	}
 
     useEffect(() => {
-		if(user && token){
-			(async () => {
-				loadHeroSection()
-			})()
-		}
-	},[user,token])
+        (async () => {
+            loadMyProfile()
+        })()
+	},[])
 
     useEffect(() => {
-		if(user && token){
-			(async () => {
-				loadAboutSection()
-			})()
-		}
-	},[user,token])
+        (async () => {
+            loadHeroSection()
+        })()
+	},[])
 
     useEffect(() => {
-		if(user && token){
-			(async () => {
-				loadSkillSection()
-			})()
-		}
-	},[user,token])
+        (async () => {
+            loadAboutSection()
+        })()
+	},[])
 
     useEffect(() => {
-		if(user && token){
-			(async () => {
-				loadExperienceSection()
-			})()
-		}
-	},[user,token])
+        (async () => {
+            loadSkillSection()
+        })()
+	},[])
 
     useEffect(() => {
-        if(user && token){
-			(async () => {
-				loadServiceSection()
-			})()
-		}
-	},[user,token])
+        (async () => {
+            loadExperienceSection()
+        })()
+	},[])
 
     useEffect(() => {
-        if(user && token){
-          (async () => {
-            loadPortfolioSection()
-          })()
-        }
-    },[user,token])
+        (async () => {
+            loadServiceSection()
+        })()
+	},[])
 
     useEffect(() => {
-		if(user && token){
-			(async () => {
-				loadTestimonialSection()
-			})()
+        (async () => {
+        loadPortfolioSection()
+        })()
+    },[])
+
+    useEffect(() => {
+        (async () => {
+            loadTestimonialSection()
+        })()
+	},[])
+
+    const loadMyProfile = async () => {
+        try {
+            setLoadedMyProfileSection(true)
+			const response = await axiosPublicInstance.get('/my-profile?populate=*')
+            setMyProfileData(response.data?.data?.attributes)
+            setLoadedMyProfileSection(false)
+		} catch (err) {
+            setLoadedMyProfileSection(false)
+			console.log(err.response)
 		}
-	},[user,token])
+    }
 
     const loadHeroSection = async () => {
 		try {
             setLoadedHeroSection(true)
-			const response = await axiosPrivateInstance(token).get('/home?populate=*')
+			const response = await axiosPublicInstance.get('/home?populate=*')
 			const heroArr = response.data?.data?.attributes?.homeFeatured?.map((hero) => {
 				return ({
 					homeFeatureId : hero?.id,
-					profession : hero?.profession,
+					profession : hero?.profession
 				})
 			})
             setLoadedHeroSection(false)
 			setProfessionData(heroArr)
+            setHeroSectionData(response.data?.data?.attributes)
 		} catch (err) {
             setLoadedHeroSection(false)
 			console.log(err.response)
@@ -177,7 +187,7 @@ export function PageProvider({children}) {
     const loadAboutSection = async () => {
         try {
             setLoadedAboutSection(true)
-           const response = await axiosPrivateInstance(token).get('/about')
+           const response = await axiosPublicInstance.get('/about')
            setAbout({
                broad_details :  response.data?.data?.attributes?.broad_details,
                short_details :  response.data?.data?.attributes?.short_details,
@@ -194,7 +204,7 @@ export function PageProvider({children}) {
     const loadSkillSection = async () => {
 		try {
             setLoadedSkillSection(true)
-			const response = await axiosPrivateInstance(token).get('/skill?populate=*')
+			const response = await axiosPublicInstance.get('/skill?populate=*')
 			setAllSkill({
 				short_skill : response.data?.data?.attributes?.short_skill,
 				skill_title : response.data?.data?.attributes?.skill_title,
@@ -211,7 +221,7 @@ export function PageProvider({children}) {
     const loadExperienceSection = async () => {
         try {
             setLoadedExperienceSection(true)
-          const response = await axiosPrivateInstance(token).get('/experience')
+          const response = await axiosPublicInstance.get('/experience')
           setExperience({
               data : response.data?.data?.attributes
           })
@@ -225,7 +235,7 @@ export function PageProvider({children}) {
     const loadServiceSection = async () => {
 		try {
             setLoadedServiceSection(true)
-			const response = await axiosPrivateInstance(token).get('/service?populate=*')
+			const response = await axiosPublicInstance.get('/service?populate=*')
 			setServicesData({
 				service_short_des : response.data?.data?.attributes?.service_short_des,
 				ServiceFeature : response.data?.data?.attributes?.ServiceFeature,
@@ -247,7 +257,7 @@ export function PageProvider({children}) {
        })
         try {
             setLoadedPortfolioSection(true)
-          const response = await axiosPrivateInstance(token).get(`/portfolio?${query}`)
+          const response = await axiosPublicInstance.get(`/portfolio?${query}`)
           setPortfolioData({
              sub_title : response.data?.data?.attributes?.sub_title,
           })
@@ -279,7 +289,7 @@ export function PageProvider({children}) {
 		})
 		try {
             setLoadedTestimonialSection(true)
-			const response = await axiosPrivateInstance(token).get(`/testimonial?${query}`)
+			const response = await axiosPublicInstance.get(`/testimonial?${query}`)
 			setTestimonialData({
 				tes_sub_title : response.data?.data?.attributes?.tes_sub_title,
 				feedBackFeature : response.data?.data?.attributes?.feedBackFeature,
@@ -296,16 +306,14 @@ export function PageProvider({children}) {
         setContactData(data)
 		try {
 			setContactSubmit(true)
-			const response = await axiosPrivateInstance(token).post('/contacts',
+			const response = await axiosPublicInstance.post('/contacts',
 			 {
 				data : data
 			 }
 			)
 			setContactSubmit(false)
-		    console.log(response.data)
 			toast.success('contact added successfully')
 		} catch (err) {
-			console.log(err.response)
 			toast.error(err?.response?.data?.error?.message)
 		}
     }
@@ -313,6 +321,7 @@ export function PageProvider({children}) {
     const value = {
         professionData,
         loadedHeroSection,
+        heroSectionData,
         about,
         loadedAboutSection,
         allSkill,
@@ -330,10 +339,12 @@ export function PageProvider({children}) {
         contactData,
         contactSubmit,
         loadedSkillSection,
-        loadExperienceSection,
+        loadedExperienceSection,
         loadedServiceSection,
-        loadTestimonialSection,
-        loadPortfolioSection
+        loadedTestimonialSection,
+        loadedPortfolioSection,
+        loadedMyProfileSection,
+        myProfileData
     }
   return (
     <PageContext.Provider value={value} >{children}</PageContext.Provider>

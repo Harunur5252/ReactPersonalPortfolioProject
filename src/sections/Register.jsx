@@ -6,6 +6,7 @@ import Menu from '../components/shared/Menu/Menu'
 import MenuFooter from '../components/shared/Menu/MenuFooter'
 import { useContext } from 'react';
 import { AuthContext } from '../components/context/Auth.Context';
+import Layout from '../components/layouts/Layout';
 
 // validation rules for all input fields
 const schema = yup.object({
@@ -27,7 +28,7 @@ function Register() {
 
   return (
     <>
-        <Menu />
+        <Layout>
         <section className="banner background9 py_80 overlay_three full_row">
 				<div className="container">
 					<div className="row">
@@ -140,8 +141,7 @@ function Register() {
 						</div>
 					</div>
 		</section> 
-           
-        <MenuFooter />
+        </Layout>
     </>
   )
 }

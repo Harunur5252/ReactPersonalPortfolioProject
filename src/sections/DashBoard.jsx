@@ -1,13 +1,18 @@
-import React from 'react'
+import {useEffect} from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
+import Layout from '../components/layouts/Layout'
 import Menu from '../components/shared/Menu/Menu'
 import MenuFooter from '../components/shared/Menu/MenuFooter'
 
 
 function DashBoard() {
+    useEffect(() => {
+        window.scroll(0,0)
+     },[])
+
   return (
     <>
-        <Menu />
+        <Layout>
         <section className="banner background9 overlay_three full_row">
 					<div className="container">
 						<div className="row">
@@ -41,12 +46,18 @@ function DashBoard() {
                     }} id="v-pills-home-tab" data-toggle="pill" to="profile" role="tab" aria-controls="v-pills-home" aria-selected="true">
                         Profile
                     </NavLink>
+
                     <NavLink className="nav-link" id="v-pills-profile-tab" data-toggle="pill" style={({isActive}) => {
                        isActive ? 'active'  : ''
-                    }} to="manage-password" role="tab" aria-controls="v-pills-profile" aria-selected="false">Manage Password</NavLink>
+                    }} to="manage-password" role="tab" aria-controls="v-pills-profile" aria-selected="false">
+                        Manage Password
+                    </NavLink>
+
                     <NavLink className="nav-link" style={({isActive}) => {
                        isActive ? 'active'  : ''
-                    }} id="v-pills-messages-tab" data-toggle="pill" to="blog-list" role="tab" aria-controls="v-pills-messages" aria-selected="false">User Blog List</NavLink>
+                    }} id="v-pills-messages-tab" data-toggle="pill" to="blog-list" role="tab" aria-controls="v-pills-messages" aria-selected="false">
+                        User Blog List
+                    </NavLink>
                 </div>
             </div>
             <div className="col-9">
@@ -56,7 +67,7 @@ function DashBoard() {
             </div>
             
         </div>
-        <MenuFooter />
+        </Layout>
     </>
   )
 }

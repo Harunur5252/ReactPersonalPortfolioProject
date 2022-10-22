@@ -2,21 +2,11 @@ import React, { useEffect,useContext,useState } from 'react'
 import { Link } from 'react-router-dom'
 import format from 'date-fns/format'
 import Venobox from 'venobox'
-import { AuthContext } from '../components/context/Auth.Context'
-import { axiosPrivateInstance } from '../Utils/axios'
 import { PageContext } from '../components/context/Page.Context'
 
 
 function About() {
-	const {user,multipleProfileData} = useContext(AuthContext)
-	const userEmail  = JSON.parse(localStorage?.getItem('user'))
-	const {about} = useContext(PageContext)
-	
-	const singleProfile = multipleProfileData?.find((profile) => {
-        if(profile?.userId === user?.id){
-            return profile
-        }
-    })
+	const {about,myProfileData} = useContext(PageContext)
 
 	useEffect(() => {
 		new Venobox({
@@ -27,8 +17,6 @@ function About() {
 		})
 	},[])
      
-	
-
   return (
     <>
          <section id="about" name="about" className="py_80 full_row bg_white">
@@ -66,14 +54,14 @@ function About() {
 											<div className="col-md-12 col-lg-6">
 												<ul>
 													<li>
-														<span className="color_secondery">Name :</span> {singleProfile?.firstName} {singleProfile?.lastName}
+														<span className="color_secondery">Name :</span> {myProfileData?.fullName}
 													</li>
 													<li>
 														<span className="color_secondery">Email :</span>
-														{userEmail?.email}
+														{myProfileData?.email}
 													</li>
 													<li>
-														<span className="color_secondery">Phone :</span> {singleProfile?.phone}
+														<span className="color_secondery">Phone :</span> {myProfileData?.phone}
 													</li>
 												</ul>
 											</div>
@@ -81,15 +69,15 @@ function About() {
 												<ul>
 													<li>
 														<span className="color_secondery">Date of Birth :</span>
-														{singleProfile?.dateOfBirth && format(new Date(singleProfile?.dateOfBirth), 'dd MMMM yyyy')}
+														{myProfileData?.dateOfBirth && format(new Date(myProfileData?.dateOfBirth), 'dd MMMM yyyy')}
 													</li>
 													<li>
 														<span className="color_secondery">Blood Group :</span>
-														{singleProfile?.bloodGroup}
+														{myProfileData?.bloodGroup}
 													</li>
 													<li>
 														<span className="color_secondery">Address :</span>
-														{singleProfile?.address}
+														{myProfileData?.address}
 													</li>
 												</ul>
 											</div>
@@ -100,7 +88,7 @@ function About() {
 									<div
 										className="profile_img personal_video wow animated fadeInRight"
 									>
-										<img src={singleProfile?.profilePicture} className='aboutImage' alt="image" />
+										<img src={myProfileData?.profilePicture?.data?.attributes?.url} className='aboutImage' alt="image" />
 										<div className="iconround">
 											<Link
 												className="video-popup round_shape"

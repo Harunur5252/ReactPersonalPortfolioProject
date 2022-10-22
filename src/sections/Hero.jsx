@@ -1,19 +1,10 @@
 import React,{ useContext } from 'react';
 import Typed from 'react-typed';
 import WaterWave from 'react-water-wave';
-import { AuthContext } from '../components/context/Auth.Context';
 import { PageContext } from '../components/context/Page.Context';
 
 function Hero() {
-    const {user,multipleProfileData} = useContext(AuthContext)
-    const {professionData} = useContext(PageContext)
-
-
-	const singleProfile = multipleProfileData?.find((profile) => {
-        if(profile?.userId === user?.id){
-            return profile
-        }
-    })
+    const {professionData,heroSectionData,myProfileData} = useContext(PageContext)
 
 	const strings = professionData?.map((profession) => {
 		return profession?.profession
@@ -32,7 +23,7 @@ function Hero() {
 
   return (
     <>
-	    <WaterWave dropRadius={20} interactive= {true} perturbance={0.03} resolution={500} imageUrl={singleProfile?.profilePicture} className='banner_water_effect overlay_one'>
+	    <WaterWave dropRadius={20} interactive= {true} perturbance={0.03} resolution={500} imageUrl={myProfileData?.profilePicture?.data?.attributes?.url} className='banner_water_effect overlay_one'>
 			{() => (
 		        <section
 				id="main_banner" name="top"
@@ -43,7 +34,7 @@ function Hero() {
 						<div className="col-md-12 col-lg-12 home-content text-left">
 							<div className="mainbanner_content">
 								<span className="pb_5 banner_title color_white">
-									I Am {singleProfile?.firstName} {singleProfile?.lastName}!
+									I Am {myProfileData?.fullName}!
 								</span>
 								
 								<h1 className="cd-headline clip is-full-width text-uppercase">
@@ -58,9 +49,9 @@ function Hero() {
 									</span>
 								</h1>
 								<p className="color_white mb_30">
-									{singleProfile?.title}
+									{heroSectionData?.short_des}
 								</p>
-								<a className="btn btn-default" target='_blank' href={singleProfile?.cvLink}>Download CV</a>
+								<a className="btn btn-default" target='_blank' href={myProfileData?.cvLink}>Download CV</a>
 							</div>
 						</div>
 					</div>

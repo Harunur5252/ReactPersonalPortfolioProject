@@ -40,7 +40,7 @@ function ManagePassword() {
           <span style={{color:'red'}}>{errors?.passwordConfirmation?.message}</span>
         </div>
         <button type="submit" className="btn btn-success" disabled={passwordSubmit}>
-          {passwordSubmit ? 'Loading...' : 'Current Password'} 
+          {passwordSubmit ? 'Loading...' : 'Manage Password'} 
         </button>
       </form>
     </>

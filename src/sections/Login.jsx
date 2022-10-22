@@ -5,6 +5,7 @@ import * as yup from "yup";
 import Menu from '../components/shared/Menu/Menu'
 import MenuFooter from '../components/shared/Menu/MenuFooter'
 import { AuthContext } from '../components/context/Auth.Context';
+import Layout from '../components/layouts/Layout';
 
 // validation rules for all input fields
 const schema = yup.object({
@@ -28,7 +29,7 @@ function Login() {
 
   return (
     <>
-        <Menu />
+        <Layout>
         <section className="banner background9 py_80 overlay_three full_row">
 				<div className="container">
 					<div className="row">
@@ -116,7 +117,7 @@ function Login() {
 					</div>
 		</section> 
            
-        <MenuFooter />
+        </Layout>
     </>
   )
 }
