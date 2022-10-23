@@ -4,6 +4,7 @@ import DatePicker from "react-datepicker";
 import BarLoader from "react-spinners/BarLoader";
 import { BlogContext } from '../components/context/Blog.Context';
 import Layout from '../components/layouts/Layout';
+import ScrollToTop from '../components/shared/ScrollToTop';
 
 
 function CreateBlog() {
@@ -55,6 +56,7 @@ function CreateBlog() {
   return (
     <>
         <Layout>
+		    <ScrollToTop />
 			<section className="banner background9 py_80 overlay_three full_row">
 					<div className="container">
 						<div className="row">

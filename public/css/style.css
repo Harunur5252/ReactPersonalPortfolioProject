@@ -2761,3 +2761,12 @@ label.radios {
   }
   
 }
+
+/* Custom replied Design */
+.custom_replied_none {
+  display: none;
+}
+.custom_replied_block {
+  display: block;
+  margin-bottom: 30px;
+}

@@ -7,6 +7,7 @@ import MenuFooter from '../components/shared/Menu/MenuFooter'
 import { useContext } from 'react';
 import { AuthContext } from '../components/context/Auth.Context';
 import Layout from '../components/layouts/Layout';
+import ScrollToTop from '../components/shared/ScrollToTop';
 
 // validation rules for all input fields
 const schema = yup.object({
@@ -29,6 +30,7 @@ function Register() {
   return (
     <>
         <Layout>
+		<ScrollToTop />
         <section className="banner background9 py_80 overlay_three full_row">
 				<div className="container">
 					<div className="row">
@@ -79,7 +81,6 @@ function Register() {
 															type="text"
                                                             {...register("username")}
 															placeholder="Username"
-                                                            defaultValue='jamal'
 														/>
                                                         <span style={{color:'red'}}>{errors?.username?.message}</span>
 													</div>
@@ -91,7 +92,6 @@ function Register() {
 															type="email"
                                                             {...register("email")}
 															placeholder="Email Address"
-                                                            defaultValue='jamal@gmail.com'
 														/>
                                                         <span style={{color:'red'}}>{errors?.email?.message}</span>
 													</div>
@@ -102,7 +102,6 @@ function Register() {
 															className="form-control"
 															type="password"
                                                             {...register("password")}
-                                                            defaultValue='abcdefF#1'
 															placeholder="Password"
 														/>
                                                         <span style={{color:'red'}}>{errors?.password?.message}</span>
@@ -115,7 +114,6 @@ function Register() {
 															type="password"
                                                             {...register("confirmPassword")}
 															placeholder="confirmPassword"
-                                                            defaultValue='abcdefF#1'
 														/>
                                                         <span style={{color:'red'}}>{errors?.confirmPassword?.message}</span>
 													</div>

@@ -6,24 +6,22 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { BlogContext } from '../components/context/Blog.Context'
-import Menu from '../components/shared/Menu/Menu'
-import MenuFooter from '../components/shared/Menu/MenuFooter'
 import { AuthContext } from '../components/context/Auth.Context';
-import ReplayComments from '../components/ReplayComments';
 import Layout from '../components/layouts/Layout'
+import Comment from '../components/Comment';
 
 
     // validation rules for all input fields
 	const schema = yup.object({
 		description: yup.string().required('description is required').min(5,'userName must be 5 or more').max(5000,'userName must be equal or less than 5000'),
-	  })
+	})
 
 function BlogDetails() {
 	const { register,reset, formState: { errors,isSubmitting,isSubmitSuccessful }, handleSubmit, watch } = useForm({
 		resolver: yupResolver(schema)
 	  });
 
-	const {blogs,blogsWithoutPaginationData,handleLike,handleUnLike,loadedCategory,comment,commentSubmit,commentLoadedArr} = useContext(BlogContext)
+	const {blogs,blogsWithoutPaginationData,setShowForm,handleLike,handleUnLike,loadedCategory,comment,commentSubmit,commentLoadedArr} = useContext(BlogContext)
 	const {user,token,} = useContext(AuthContext)
 	const [blog,setBlog] = useState({})
 	const [likes,setLikes] = useState([])
@@ -31,7 +29,6 @@ function BlogDetails() {
 	const [isLike,setIsLike] = useState(false)
 	const [resetComment,setResetComment] = useState({description:''})
 	const {id} = useParams()
-	const [cmtTrue,setCmtTrue] = useState(false)
 
 	const findSingleBlog = blogsWithoutPaginationData?.find((blog) => blog?.blogId === +id)
     
@@ -44,6 +41,7 @@ function BlogDetails() {
        if(findSingleBlog && id){
 		  setBlog(findSingleBlog)
 		  setLikes(findSingleBlog?.likes)
+		  setShowForm(false)
 	   }
 	},[findSingleBlog,id])
 
@@ -94,9 +92,6 @@ function BlogDetails() {
 		}
 	})
 
-	const replayCmt = () => {
-		setCmtTrue(true)
-	}
   
   return (
     <>
@@ -175,26 +170,7 @@ function BlogDetails() {
 										<ul className="user_comments">
 											{comments?.map((comment) => {
 												return (
-													<>
-													<li className="mb_20 wow animated slideInUp" key={comment?.cmtId}>
-														<div className="comment_description bg_white p_20">
-															<div className="author_img">
-																<img src={comment?.profilePicture} alt="images" />
-															</div>
-															<div className="author_text">
-																<div className="author_info">
-																	<h5 className="author_name color_primary">{comment?.firstName} {comment?.lastName} </h5>
-																	<span>{comment?.commentDate && format(new Date(comment?.commentDate), 'dd MMMM, yyyy p')}</span>
-																</div>
-																<p>{comment?.description}</p>
-																<button onClick={replayCmt} className="btn btn_info mt_15">Replay</button>
-															</div>
-														</div>
-													</li>
-													{
-														cmtTrue && <ReplayComments />
-													}
-													</>
+													<Comment key={comment.cmtId} comment={comment} blogId={blogId} />
 												)
 											})}
 

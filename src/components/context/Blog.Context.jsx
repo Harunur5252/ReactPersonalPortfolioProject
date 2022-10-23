@@ -15,9 +15,14 @@ const initialBlogsWithoutPaginationData = []
 export function BlogProvider({children}) {
   const [blogs,dispatch] = useReducer(blogReducer,initialBlogs)
   const [blogsWithoutPaginationData,setBlogsWithoutPaginationData] = useState(initialBlogsWithoutPaginationData)
-  const {user,token,loadUserBlog} = useContext(AuthContext)
+  const {user,token,loadUserBlog,loginSubmit,registerSubmit} = useContext(AuthContext)
   const [blogSubmit,setBlogSubmit] = useState(false)
+
   const [commentSubmit,setCommentSubmit] = useState(false)
+  const [repliedCommentSubmit,setRepliedCommentSubmit] = useState(false)
+  const [repliedArr, setRepliedArr] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+
   const [loaded,setLoaded] = useState(false)
   const [loadedCategory,setLoadedCategory] = useState([])
   const [commentLoadedArr,setCommentLoadedArr] = useState([])
@@ -29,6 +34,12 @@ export function BlogProvider({children}) {
   const [pageNumber,setPageNumber] = useState(1)
   const [pageCount,setPageCount] = useState(null)
 
+  useEffect(() => {
+    if(loginSubmit || registerSubmit){
+      setPageNumber(1)
+      setShowForm(false)
+    }
+  },[loginSubmit,registerSubmit])
 
   useEffect(() => {
     if(user && token){
@@ -63,24 +74,86 @@ export function BlogProvider({children}) {
   },[user,token,commentSubmit])
 
   useEffect(() => {
+    if(user && token){
+        (async () => {
+          loadAllRepliedComment()
+        })()
+    }
+  },[user,token,repliedCommentSubmit])
+
+  useEffect(() => {
     (async () => {
         if(user && token){
             loadUserBlog()
         }
     })()
 },[user,token,blogSubmit])
-  
-  const query_three = qs.stringify({
-     populate : [
-        'blog_post',
-        'user',
-        'user.profile',
-        'user.profile.profilePicture'
-     ]
-  })
-  const loadAllComment = async () => {
+
+  const loadAllRepliedComment = async () => {
+    const query = qs.stringify({
+      populate : [
+         'comment',
+         'comment.blog_post',
+         'user',
+         'user.profile',
+         'user.profile.profilePicture'
+      ]
+   })
      try {
-        const response = await axiosPrivateInstance(token).get(`/comments?${query_three}`)
+       const response = await axiosPrivateInstance(token).get(`/replay-comments?${query}`)
+       const repliedArr = response.data?.data?.map((replay) => {
+          return ({
+             replayId : replay?.id,
+             description : replay?.attributes?.description,
+             replayDate  : replay?.attributes?.replayDate,
+             cmtId  : replay?.attributes?.comment?.data?.id,
+             userId : replay?.attributes?.user?.data?.id,
+             blogId     : replay?.attributes?.comment?.data?.attributes?.blog_post?.data?.id,
+             firstName  : replay?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.firstName,
+             lastName  : replay?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.lastName,
+             profilePicture  : replay?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.attributes?.url,
+          })
+       })
+       setRepliedArr(repliedArr)
+     } catch (err) {
+       console.log(err.response)
+     }
+  }
+  
+  const createRepliedComment = async (repliedCmt) => {
+    const data = {
+       description : repliedCmt?.description,
+       comment : repliedCmt?.comment,
+       replayDate : new Date(),
+       user : user?.id
+    }
+     try {
+        setRepliedCommentSubmit(true)
+        const response = await axiosPrivateInstance(token).post('/replay-comments?populate=*',
+         {
+          data : data
+         }
+        )
+        setRepliedCommentSubmit(false)
+        setShowForm(false)
+        toast.success('comment replied successfully!')
+     } catch (err) {
+        setRepliedCommentSubmit(false)
+        toast.error(err?.response?.data?.error?.message)
+     }
+  }
+
+  const loadAllComment = async () => {
+    const query = qs.stringify({
+      populate : [
+         'blog_post',
+         'user',
+         'user.profile',
+         'user.profile.profilePicture'
+      ]
+   })
+     try {
+        const response = await axiosPrivateInstance(token).get(`/comments?${query}`)
         const commentArr = response.data?.data?.map((comment) => {
             return ({
               cmtId : comment?.id,
@@ -151,42 +224,42 @@ export function BlogProvider({children}) {
     }
   }
 
-  const query = qs.stringify({
-    sort:['id:desc'],
-    populate: {
-      blog_image:{
-        populate: ['attributes']
-      },
-      comments:{
-        populate: ['data']
-      },
-      likes:{
-        populate:['user']
-      },
-      categories:{
-        populate: {
-          blog_posts:{
-              populate:['data']
-          }
-        }
-      },
-      author: {
-        populate: {
-          profile:{
-            populate:['profilePicture']
+  const loadAllBlog = async () => {
+    const query = qs.stringify({
+      sort:['id:desc'],
+      populate: {
+        blog_image:{
+          populate: ['attributes']
+        },
+        comments:{
+          populate: ['data']
+        },
+        likes:{
+          populate:['user']
+        },
+        categories:{
+          populate: {
+            blog_posts:{
+                populate:['data']
+            }
           }
         },
+        author: {
+          populate: {
+            profile:{
+              populate:['profilePicture']
+            }
+          },
+        }
+      },
+      pagination:{
+        page:pageNumber,
+        pageSize:5
       }
-    },
-    pagination:{
-      page:pageNumber,
-      pageSize:5
-    }
-  }, {
-    encodeValuesOnly: true, 
-  });
+    }, {
+      encodeValuesOnly: true, 
+    });
 
-  const loadAllBlog = async () => {
     try {
       setLoaded(true)
       const response = await axiosPrivateInstance(token).get(`/blog-posts?${query}`)
@@ -426,6 +499,11 @@ export function BlogProvider({children}) {
     pageCount,
     pageNumber,
     setPageNumber,
+    createRepliedComment,
+    repliedCommentSubmit,
+    showForm,
+    setShowForm,
+    repliedArr
   }
   return (
     <BlogContext.Provider value={value}>

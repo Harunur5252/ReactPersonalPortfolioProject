@@ -2,18 +2,18 @@ import React, { useContext,useEffect,useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import format from 'date-fns/format'
 import qs from 'qs'
+import { animateScroll as scroll } from 'react-scroll'
 import BeatLoader  from "react-spinners/BeatLoader ";
-import Menu from '../components/shared/Menu/Menu'
-import MenuFooter from '../components/shared/Menu/MenuFooter'
 import { BlogContext } from '../components/context/Blog.Context'
 import { AuthContext } from '../components/context/Auth.Context'
 import { axiosPrivateInstance } from '../Utils/axios'
 import Layout from '../components/layouts/Layout'
+import ScrollToTop from '../components/shared/ScrollToTop'
 
 
-const generateArr = (num) => {
+const generateArr = (totalPost,postPerPage) => {
 	const arr = []
-	for (let i = 1; i <= num; i++) {
+	for (let i = 1; i <= Math.ceil(totalPost/postPerPage); i++) {
 		arr.push(i)
 	}
 	return arr
@@ -25,16 +25,19 @@ function CategoryWisePost() {
 	const {user,token} = useContext(AuthContext)
 	const [postArr,setPostArr] = useState([])
 	const [loadedCategoryPost,setLoadedCategoryPost] = useState(false)
-	const [itemStart,setItemStart] = useState(0)
-	const [itemEnd,setItemEnd] = useState(1)
-	const [pageNumberCategory,setPageNumberCategory] = useState(1)
-	const [pageCountCategory,setPageCountCategory] = useState(1)
-	const blog = blogs && blogs?.find(blog=>blog?.authorId === user?.id)
+	// pagination
+	const [currentPage,setCurrentPage] = useState(1)
+	const [postPerPage,setPostPerPage] = useState(2)
 
+	const blog = blogs && blogs?.find(blog=>blog?.authorId === user?.id)
 
 	useEffect(()=>{
 		window.scroll(0,0);
 	},[])
+
+	useEffect(()=>{
+		scroll.scrollToTop()
+	},[currentPage])
 
 	useEffect(() => {
 		if(user && token){
@@ -44,19 +47,19 @@ function CategoryWisePost() {
 		}
 	},[user,token])
 	
-	const query = qs.stringify({
-		populate : [
-			 'blog_posts',
-			 'blog_posts.likes',
-			 'blog_posts.comments',
-			 'blog_posts.blog_image',
-			 'blog_posts.author',
-			 'blog_posts.author.profile',
-			 'blog_posts.author.profile.profilePicture',
-		]
-	})
 
 	const loadedCategoryWisePost = async () => {
+		const query = qs.stringify({
+			populate : [
+				 'blog_posts',
+				 'blog_posts.likes',
+				 'blog_posts.comments',
+				 'blog_posts.blog_image',
+				 'blog_posts.author',
+				 'blog_posts.author.profile',
+				 'blog_posts.author.profile.profilePicture',
+			]
+		})
         try {
 			setLoadedCategoryPost(true)
 			const response = await axiosPrivateInstance(token).get(`/categories?${query}`)
@@ -106,21 +109,22 @@ function CategoryWisePost() {
 		})
 	})
       
-	const sliceArr = categoryWisePostArr?.slice(itemStart,itemEnd)
+	const lastPostIndex = currentPage * postPerPage 
+	const firstPostIndex = lastPostIndex - postPerPage
+	const currentPosts = categoryWisePostArr?.slice(firstPostIndex,lastPostIndex)
+	const pageCountArray = generateArr(categoryWisePostArr?.length,postPerPage)
 
-	const pageCountArray = generateArr(categoryWisePostArr?.length)
-
-	const handlePageClick = (evt) => {
-		setPageNumberCategory(+evt.target.dataset.count)
-		if(itemStart < itemEnd){
-            setItemStart(itemStart + 1)
-			setItemEnd(itemEnd + 1)
-		}
+	if(currentPage === categoryWisePostArr?.length){
+		
+	}
+	if(currentPage > categoryWisePostArr?.length){
+		setCurrentPage(1)
 	}
 
-  return (
+  return ( 
     <>
         <Layout>
+		<ScrollToTop />
 			<section className="banner background9 overlay_three full_row">
 						<div className="container">
 							<div className="row">
@@ -151,10 +155,10 @@ function CategoryWisePost() {
 							<div className="row">
 								<div className="col-md-7 col-lg-8">
 								{
-									sliceArr?.length >=1 ?
+									currentPosts?.length >=1 ?
 									<>
 									<div className="blog_list mb_60">
-									{sliceArr?.map((blog)=>{
+									{currentPosts?.map((blog)=>{
 								return (
 								<div key={blog?.blogId} className="blog_item mb_30 wow    animated slideInUp">
 								<div className="comments">
@@ -192,8 +196,8 @@ function CategoryWisePost() {
 										<ul className="pagination wow animated slideInUp full_row">
 											{pageCountArray?.map((count,index)=>{
 												return (
-													<li key={index} className={`page-item ${count === pageNumberCategory ? 'active' : ''}`}>
-														<a className="page-link" data-count={count} onClick={handlePageClick}>{count}</a>
+													<li key={index} className={`page-item ${count === currentPage ? 'active' : ''}`}>
+														<a className="page-link" onClick={() => setCurrentPage(count)}>{count}</a>
 													</li> 
 												)
 											})}

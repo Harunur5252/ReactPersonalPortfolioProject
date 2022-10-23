@@ -6,6 +6,7 @@ import Menu from '../components/shared/Menu/Menu'
 import MenuFooter from '../components/shared/Menu/MenuFooter'
 import { AuthContext } from '../components/context/Auth.Context';
 import Layout from '../components/layouts/Layout';
+import ScrollToTop from '../components/shared/ScrollToTop';
 
 // validation rules for all input fields
 const schema = yup.object({
@@ -30,6 +31,7 @@ function Login() {
   return (
     <>
         <Layout>
+		<ScrollToTop />
         <section className="banner background9 py_80 overlay_three full_row">
 				<div className="container">
 					<div className="row">

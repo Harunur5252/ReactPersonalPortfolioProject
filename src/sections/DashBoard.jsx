@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet } from 'react-router-dom'
 import Layout from '../components/layouts/Layout'
 import Menu from '../components/shared/Menu/Menu'
 import MenuFooter from '../components/shared/Menu/MenuFooter'
+import ScrollToTop from '../components/shared/ScrollToTop'
 
 
 function DashBoard() {
@@ -13,6 +14,7 @@ function DashBoard() {
   return (
     <>
         <Layout>
+        <ScrollToTop />
         <section className="banner background9 overlay_three full_row">
 					<div className="container">
 						<div className="row">
