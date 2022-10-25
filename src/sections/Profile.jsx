@@ -9,7 +9,7 @@ import { axiosPrivateInstance } from '../Utils/axios';
 import { toast } from 'react-toastify';
 
 function Profile() {
-    const { register,setValue, reset, formState: { errors,isSubmitting,isSubmitSuccessful }, handleSubmit, watch } = useForm();
+    const { register, reset, formState: { errors,isSubmitting,isSubmitSuccessful }, handleSubmit, watch } = useForm();
     const {profile,profileSubmit,percentage,user,token,multipleProfileData,loadAllProfile} = useContext(AuthContext)
     const [profileAllData,setProfileAllData] = useState({})
     const [file,setFile] = useState(null)
@@ -91,11 +91,7 @@ function Profile() {
         console.log(response.data)
         toast.success('Before profile image is deleted successfully,now update with new image!')
         setProfileDeleteImg(false)
-        // setImageError({
-        //     error : ''
-        // })
     } catch (err) {
-        console.log(err.response)
         setProfileDeleteImg(false)
         toast.error(err?.response?.data?.error?.message)
     }

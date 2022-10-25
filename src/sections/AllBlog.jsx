@@ -42,6 +42,7 @@ function AllBlog() {
 	useEffect(()=>{
 		window.scroll(0,0);
 	},[pageNumber])
+	
 
   return (
     <>

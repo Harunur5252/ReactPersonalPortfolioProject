@@ -16,8 +16,8 @@ const loadedToken = JSON.parse(localStorage.getItem('token'))
 export function AuthProvider({children}) {
     const initialUserBlogs =[]
     const [userBlogs,dispatch] = useReducer(authReducer,initialUserBlogs)
-    const [user,setUser] = useState(loadedUser?loadedUser : null)
-    const [token,setToken] = useState(loadedToken?loadedToken : null)
+    const [user,setUser] = useState(loadedUser?loadedUser : {})
+    const [token,setToken] = useState(loadedToken?loadedToken : {})
     const [registerSubmit,setRegisterSubmit] = useState(false)
     const [loginSubmit,setLoginSubmit] = useState(false)
     const [profileSubmit,setProfileSubmit] = useState(false)
