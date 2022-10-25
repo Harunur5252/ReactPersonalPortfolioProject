@@ -3,11 +3,10 @@ import { Link } from 'react-router-dom';
 import format from 'date-fns/format'
 import BeatLoader  from "react-spinners/BeatLoader ";
 import { BlogContext } from '../components/context/Blog.Context';
-import Menu from '../components/shared/Menu/Menu';
-import MenuFooter from '../components/shared/Menu/MenuFooter';
 import { AuthContext } from '../components/context/Auth.Context';
 import Layout from '../components/layouts/Layout'
 
+// make array based on pageCount
 const generateArr = (num) => {
 	const arr = []
 	for (let i = 1; i <= num; i++) {
@@ -17,31 +16,36 @@ const generateArr = (num) => {
 }
 
 function AllBlog() {
-	const {blogs,blogsWithoutPaginationData,loaded,loadedCategory,pageCount,pageNumber,setPageNumber} = useContext(BlogContext)
+	const {blogs,blogsWithoutPaginationData,loaded,loadedCategory,tags,pageCount,pageNumber,setPageNumber} = useContext(BlogContext)
 	const {user} = useContext(AuthContext)
 	const pageCountArray = generateArr(pageCount)
 
+	// finding single post for user socials link
 	const blog = blogs && blogs?.find(blog=>blog?.authorId === user?.id)
 
+	// latest posts
 	const BlogsData = blogsWithoutPaginationData?.map((post) => post)
     const reverseBlogsData = BlogsData?.reverse()
 	const sliceRecentBlogArr = reverseBlogsData?.slice(0,4)
 
+	// setting page number for pagination
 	const handlePageClick = (evt) => {
 		setPageNumber(+evt.target.dataset.count)
 	}
 
+	// initial scroll top
     useEffect(()=>{
 		window.scroll(0,0);
 	},[])
 
+	// pageNumber changed then scroll to top
 	useEffect(()=>{
 		window.scroll(0,0);
 	},[pageNumber])
 
   return (
     <>
-      <Layout>
+       <Layout>
         <section className="banner background9 overlay_three full_row">
 					<div className="container">
 						<div className="row">
@@ -147,12 +151,12 @@ function AllBlog() {
 													></a>
 												</li>
 												<li>
-													<a target='_blank' href={blog?.googleAccount}
+													<a target='_blank' href={blog?.googlePlusAccount}
 														><i className="fa fa-google-plus" aria-hidden="true"></i
 													></a>
 												</li>
 												<li>
-													<a target='_blank' href={blog?.linkdinAccount}
+													<a target='_blank' href={blog?.linkedinAccount}
 														><i className="fa fa-linkedin" aria-hidden="true"></i
 													></a>
 												</li>
@@ -218,36 +222,17 @@ function AllBlog() {
 										}
 										
 									</div>
-
-									<div
-										className="widget mb_60 d-inline-block p_30 bg_white primary_link full_row wow animated slideInUp"
-									>
-										<h3 className="widget_title mb_30 text-capitalize">Archives</h3>
-										<div className="archives">
-											<ul>
-												<li><a href="#">December 2018</a></li>
-												<li><a href="#">November 2018</a></li>
-												<li><a href="#">October 2018</a></li>
-												<li><a href="#">September 2018</a></li>
-												<li><a href="#">August 2018</a></li>
-												<li><a href="#">July 2018</a></li>
-											</ul>
-										</div>
-									</div>
 									<div
 										className="widget mb_60 d-inline-block p_30 bg_white full_row wow animated slideInUp"
 									>
 										<h3 className="widget_title mb_30 text-capitalize">Archives</h3>
 										<div className="tags">
 											<ul>
-												<li><a href="#">Design</a></li>
-												<li><a href="#">Photographer</a></li>
-												<li><a href="#">Developer</a></li>
-												<li><a href="#">Fashion</a></li>
-												<li><a href="#">Coder</a></li>
-												<li><a href="#">Articles</a></li>
-												<li><a href="#">Mordan</a></li>
-												<li><a href="#">Web</a></li>
+												{tags?.map((tag) => {
+													return (
+														<li key={tag?.tagId}><Link to={`/tag-wise-post/${tag?.tagId}`}>{tag?.name}</Link></li>
+													)
+												})}
 											</ul>
 										</div>
 									</div>

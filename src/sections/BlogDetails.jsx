@@ -21,7 +21,7 @@ function BlogDetails() {
 		resolver: yupResolver(schema)
 	  });
 
-	const {blogs,blogsWithoutPaginationData,setShowForm,handleLike,handleUnLike,loadedCategory,comment,commentSubmit,commentLoadedArr} = useContext(BlogContext)
+	const {blogs,tags,blogsWithoutPaginationData,setShowForm,handleLike,handleUnLike,loadedCategory,comment,commentSubmit,commentLoadedArr} = useContext(BlogContext)
 	const {user,token,} = useContext(AuthContext)
 	const [blog,setBlog] = useState({})
 	const [likes,setLikes] = useState([])
@@ -31,7 +31,12 @@ function BlogDetails() {
 	const {id} = useParams()
 
 	const findSingleBlog = blogsWithoutPaginationData?.find((blog) => blog?.blogId === +id)
-    
+    const checkAuthorProfile = blogsWithoutPaginationData?.find(blog => blog?.authorId === user?.id)
+
+	// latest posts
+	const BlogsData = blogsWithoutPaginationData?.map((post) => post)
+	const reverseBlogsData = BlogsData?.reverse()
+	const sliceRecentBlogArr = reverseBlogsData?.slice(0,4)
 
 	useEffect(()=>{
 		window.scroll(0,0);
@@ -173,26 +178,6 @@ function BlogDetails() {
 													<Comment key={comment.cmtId} comment={comment} blogId={blogId} />
 												)
 											})}
-
-											
-											
-											{/* <li className="mb_20 wow animated slideInUp">
-												<div className="comment_description replied bg_white p_20">
-													<div className="author_img">
-														<img src="images/comments/02.png" alt="images" />
-													</div>
-													<div className="author_text">
-														<div className="author_info">
-															<h5 className="author_name color_primary">Malina James</h5>
-															<span>15 January, 2019 at 5.33 pm</span>
-														</div>
-														<p>Nec platea penatibus nisi ridiculus feugiat justo torquent hymenaeos suscipit platea montes. Metus porttitor fusce lectus tincidunt ornare.</p>
-													</div>
-												</div>
-											</li> */}
-
-											
-											
 										</ul>
 									</div>
 									<div className="replay mt_60 wow animated slideInUp">
@@ -219,11 +204,11 @@ function BlogDetails() {
 										<h3 className="widget_title mb_30 text-capitalize">Follow Me</h3>
 										<div className="socal_media">
 											<ul>
-												<li><a href={blog.facebookAccount}><i className="fa fa-facebook" aria-hidden="true"></i></a></li>
-												<li><a href={blog.twitterAccount}><i className="fa fa-twitter" aria-hidden="true"></i></a></li>
-												<li><a href={blog.googleAccount}><i className="fa fa-google-plus" aria-hidden="true"></i></a></li>
-												<li><a href={blog.linkdinAccount}><i className="fa fa-linkedin" aria-hidden="true"></i></a></li>
-												<li><a href={blog.instagramAccount}><i className="fa fa-instagram" aria-hidden="true"></i></a></li>
+												<li><a target='_blank' href={checkAuthorProfile?.facebookAccount}><i className="fa fa-facebook" aria-hidden="true"></i></a></li>
+												<li><a target='_blank' href={checkAuthorProfile?.twitterAccount}><i className="fa fa-twitter" aria-hidden="true"></i></a></li>
+												<li><a target='_blank' href={checkAuthorProfile?.googlePlusAccount}><i className="fa fa-google-plus" aria-hidden="true"></i></a></li>
+												<li><a target='_blank' href={checkAuthorProfile?.linkedinAccount}><i className="fa fa-linkedin" aria-hidden="true"></i></a></li>
+												<li><a target='_blank' href={checkAuthorProfile?.instagramAccount}><i className="fa fa-instagram" aria-hidden="true"></i></a></li>
 											</ul>
 										</div>
 									</div>
@@ -237,7 +222,58 @@ function BlogDetails() {
 												</ul>
 										</div>
 									</div>
-									
+
+									<div
+										className="widget mb_60 d-inline-block p_30 primary_link bg_white full_row wow animated slideInUp"
+									>
+										<h3 className="widget_title mb_30 text-capitalize">
+											Recent Post
+										</h3>
+										{
+											sliceRecentBlogArr?.length >=1 ? 
+											<div className="recent_post">
+											<ul>
+												{sliceRecentBlogArr?.map((recentPost) => {
+                                                   return (
+													<li className="mb_30" key={recentPost?.blogId}>
+													<Link to={`/blog-details/${recentPost?.blogId}`}>
+														<div className="post_img">
+															<img
+																src={recentPost?.blog_image}
+																alt="image"
+															/>
+														</div>
+														<div className="recent_post_content">
+															<h6>
+																{recentPost?.title}
+															</h6>
+															<span className="color_gray">{recentPost?.blog_date && format(new Date(recentPost?.blog_date), 'dd MMM yyyy')}</span>
+														</div>
+													</Link>
+												</li>
+												   )
+												})}
+											</ul>
+										</div>
+										:
+										<p style={{color:'red',fontSize:'1.3rem'}}>No recent post</p>
+										}
+										
+									</div>
+									<div
+										className="widget mb_60 d-inline-block p_30 bg_white full_row wow animated slideInUp"
+									>
+										<h3 className="widget_title mb_30 text-capitalize">Archives</h3>
+										<div className="tags">
+											<ul>
+												{tags?.map((tag) => {
+													return (
+														<li key={tag?.tagId}><Link to={`/tag-wise-post/${tag?.tagId}`}>{tag?.name}</Link></li>
+													)
+												})}
+											</ul>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>

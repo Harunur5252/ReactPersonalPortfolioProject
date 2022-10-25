@@ -11,7 +11,6 @@ function Header() {
 
 	const handleScroll = (evt) => {
 		const scrollValue = window.scrollY
-		console.log(scrollValue)
 		if(scrollValue >= 100){
 			document.querySelector('#scroll')?.classList?.add('scrollVisible')
 		}else{

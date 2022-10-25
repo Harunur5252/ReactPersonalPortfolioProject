@@ -25,6 +25,8 @@ export function BlogProvider({children}) {
 
   const [loaded,setLoaded] = useState(false)
   const [loadedCategory,setLoadedCategory] = useState([])
+  const [tags,setTags] = useState([])
+
   const [commentLoadedArr,setCommentLoadedArr] = useState([])
   const [loadedLike,setLoadedLike] = useState(false)
   const [trigger,setTrigger] = useState(false)
@@ -48,6 +50,14 @@ export function BlogProvider({children}) {
         })()
     }
   },[user,token,pageNumber,trigger])
+
+  useEffect(() => {
+    if(user && token){
+        (async () => {
+          loadAllTag()
+        })()
+    }
+  },[user,token])
 
   useEffect(() => {
     if(user && token){
@@ -281,9 +291,9 @@ export function BlogProvider({children}) {
               lastName :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.lastName,
               address :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.address,
               facebookAccount :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.facebookAccount,
-              googleAccount :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.googleAccount,
+              googlePlusAccount :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.googlePlusAccount,
               instagramAccount :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.instagramAccount,
-              linkdinAccount :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.linkdinAccount,
+              linkedinAccount :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.linkedinAccount,
               twitterAccount :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.twitterAccount,
               website :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.website,
               profilePicture :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.attributes?.url,
@@ -357,9 +367,9 @@ export function BlogProvider({children}) {
               lastName :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.lastName,
               address :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.address,
               facebookAccount :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.facebookAccount,
-              googleAccount :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.googleAccount,
+              googlePlusAccount :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.googlePlusAccount,
               instagramAccount :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.instagramAccount,
-              linkdinAccount :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.linkdinAccount,
+              linkedinAccount :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.linkedinAccount,
               twitterAccount :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.twitterAccount,
               website :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.website,
               profilePicture :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.attributes?.url,
@@ -371,22 +381,48 @@ export function BlogProvider({children}) {
        console.log(err.response)
     }
   }
-  
-  const query_two = qs.stringify({
-    populate : [
-         'blog_posts',
-         'blog_posts.likes',
-         'blog_posts.comments',
-         'blog_posts.blog_image',
-         'blog_posts.author',
-         'blog_posts.author.profile',
-         'blog_posts.author.profile.profilePicture',
-    ]
-  })
+
+  const loadAllTag = async () => {
+    const query = qs.stringify({
+      populate : [
+           'blog_posts',
+           'blog_posts.likes',
+           'blog_posts.comments',
+           'blog_posts.blog_image',
+           'blog_posts.author',
+           'blog_posts.author.profile',
+           'blog_posts.author.profile.profilePicture',
+      ]
+    })
+    try {
+      const response = await axiosPrivateInstance(token).get(`/tags?${query}`)
+      const tagArr = response.data.data?.map((tag) => {
+        return ({
+         tagId:tag?.id,
+         name : tag?.attributes?.name,
+         tagWisePostData : tag?.attributes?.blog_posts
+        })
+     })
+     setTags(tagArr)
+    } catch (err) {
+      console.log(err.response)
+    }
+  }
 
   const loadAllCategory = async () => {
+    const query = qs.stringify({
+      populate : [
+           'blog_posts',
+           'blog_posts.likes',
+           'blog_posts.comments',
+           'blog_posts.blog_image',
+           'blog_posts.author',
+           'blog_posts.author.profile',
+           'blog_posts.author.profile.profilePicture',
+      ]
+    })
      try {
-        const response = await axiosPrivateInstance(token).get(`/categories?${query_two}`)
+        const response = await axiosPrivateInstance(token).get(`/categories?${query}`)
         const categoryArr = response.data.data?.map((category) => {
            return ({
             categoryId:category?.id,
@@ -411,13 +447,45 @@ export function BlogProvider({children}) {
 
   const uploadPercentage = (total,loaded) => Math.floor((total/loaded)*100)
   const createBlog = async (data) => {
+      const query = qs.stringify({
+        populate: {
+          blog_image:{
+            populate: ['attributes']
+          },
+          comments:{
+            populate: ['data']
+          },
+          likes:{
+            populate:['user']
+          },
+          categories:{
+            populate: {
+              blog_posts:{
+                  populate:['data']
+              }
+            }
+          },
+          author: {
+            populate: {
+              profile:{
+                populate:['profilePicture']
+              }
+            },
+          }
+        }
+      }, {
+        encodeValuesOnly: true, 
+      });
+
      const blogData = {
         blog_date : data.blog_date,
         title : data.title,
         description : data.description,
         author:user.id,
-        categories : Number(data.category)
+        categories : data.category,
+        tags:data.tag
      }
+
      try {
       setBlogSubmit(true)
       const formData = new FormData()
@@ -448,9 +516,9 @@ export function BlogProvider({children}) {
         lastName :response.data.data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.lastName,
         address :response.data.data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.address,
         facebookAccount :response.data.data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.facebookAccount,
-        googleAccount :response.data.data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.googleAccount,
+        googlePlusAccount :response.data.data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.googlePlusAccount,
         instagramAccount :response.data.data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.instagramAccount,
-        linkdinAccount :response.data.data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.linkdinAccount,
+        linkedinAccount :response.data.data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.linkedinAccount,
         twitterAccount :response.data.data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.twitterAccount,
         website :response.data.data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.website,
         profilePicture :response.data.data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.attributes?.url,
@@ -469,6 +537,7 @@ export function BlogProvider({children}) {
         });
         setBlogSubmit(false)
      } catch (err) {
+      console.log(err.response)
       setBlogSubmit(false)
       toast.error(err.response?.data?.error?.message, {
         position: "top-right",
@@ -488,6 +557,7 @@ export function BlogProvider({children}) {
     blogSubmit,
     percentage,
     blogs,
+    tags,
     blogsWithoutPaginationData,
     loaded,
     loadedCategory,
@@ -505,6 +575,7 @@ export function BlogProvider({children}) {
     setShowForm,
     repliedArr
   }
+
   return (
     <BlogContext.Provider value={value}>
           {children}

@@ -1,8 +1,7 @@
-import React,{useContext,useState,useEffect} from 'react'
+import React,{useContext,useEffect} from 'react'
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import { AuthContext } from '../components/context/Auth.Context'
 import { PageContext } from '../components/context/Page.Context';
 
 // validation rules for all input fields
@@ -19,14 +18,7 @@ function Contact() {
     });
 
 	const {contactAdd,contactData,contactSubmit,myProfileData} = useContext(PageContext)
-	const {user,multipleProfileData} = useContext(AuthContext)
 
-
-	// const authenticateUserInfo = multipleProfileData?.find((singleUser) => {
-	// 	if(singleUser?.userId === user?.id){
-	// 		return user
-	// 	}
-	// })
 	const defaultValue = {
 		fullName : contactData?.fullName || '',
 		email : contactData?.email || '',
@@ -131,12 +123,12 @@ function Contact() {
 													></a>
 												</li>
 												<li>
-													<a target='_blank' href={myProfileData?.googleAccount}
+													<a target='_blank' href={myProfileData?.googlePlusAccount}
 														><i className="fa fa-google-plus" aria-hidden="true"></i
 													></a>
 												</li>
 												<li>
-													<a target='_blank' href={myProfileData?.linkedinAccount}
+													<a target='_blank' href={myProfileData?.LinkedInAccount}
 														><i className="fa fa-linkedin" aria-hidden="true"></i
 													></a>
 												</li>

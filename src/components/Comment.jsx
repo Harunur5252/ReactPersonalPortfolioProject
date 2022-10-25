@@ -10,7 +10,6 @@ function Comment({comment,blogId}) {
     const {user} = useContext(AuthContext)
 
     const repliedComments = repliedArr?.filter((replay) => {
-        console.log(replay?.userId === user?.id)
         if(replay?.blogId === blogId && replay?.cmtId === comment?.cmtId && (replay?.userId !== user?.id || replay?.userId === user?.id)){
             return replay
         }

@@ -1441,6 +1441,7 @@ nav ul li.page-item{
     height: 45px;
     font-size: 16px;
     text-align: center;
+    text-decoration: none !important;
 }
 .page-item:first-child .page-link,
 .page-item:last-child .page-link{
@@ -2768,5 +2769,4 @@ label.radios {
 }
 .custom_replied_block {
   display: block;
-  margin-bottom: 30px;
 }

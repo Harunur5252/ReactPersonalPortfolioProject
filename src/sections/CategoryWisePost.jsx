@@ -21,15 +21,20 @@ const generateArr = (totalPost,postPerPage) => {
 
 function CategoryWisePost() {
 	const {id:categoryId} = useParams()
-	const {loadedCategory,blogs} = useContext(BlogContext)
+	const {loadedCategory,blogs,tags,blogsWithoutPaginationData} = useContext(BlogContext)
 	const {user,token} = useContext(AuthContext)
 	const [postArr,setPostArr] = useState([])
 	const [loadedCategoryPost,setLoadedCategoryPost] = useState(false)
 	// pagination
 	const [currentPage,setCurrentPage] = useState(1)
-	const [postPerPage,setPostPerPage] = useState(2)
+	const postPerPage = import.meta.env.VITE_CATEGORY_PAGE_SIZE
 
-	const blog = blogs && blogs?.find(blog=>blog?.authorId === user?.id)
+	const blog = blogs?.find(blog=>blog?.authorId === user?.id)
+
+	// latest posts
+	const BlogsData = blogsWithoutPaginationData?.map((post) => post)
+	const reverseBlogsData = BlogsData?.reverse()
+	const sliceRecentBlogArr = reverseBlogsData?.slice(0,4)
 
 	useEffect(()=>{
 		window.scroll(0,0);
@@ -100,9 +105,9 @@ function CategoryWisePost() {
               lastName :post?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.lastName,
               address :post?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.address,
               facebookAccount :post?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.facebookAccount,
-              googleAccount :post?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.googleAccount,
+              googlePlusAccount :post?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.googlePlusAccount,
               instagramAccount :post?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.instagramAccount,
-              linkdinAccount :post?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.linkdinAccount,
+              linkedinAccount :post?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.linkedinAccount,
               twitterAccount :post?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.twitterAccount,
               website :post?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.website,
               profilePicture :post?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.attributes?.url,
@@ -114,13 +119,15 @@ function CategoryWisePost() {
 	const currentPosts = categoryWisePostArr?.slice(firstPostIndex,lastPostIndex)
 	const pageCountArray = generateArr(categoryWisePostArr?.length,postPerPage)
 
-	if(currentPage === categoryWisePostArr?.length){
-		
-	}
-	if(currentPage > categoryWisePostArr?.length){
-		setCurrentPage(1)
-	}
-
+	useEffect(() => {
+		if(currentPage !== categoryWisePostArr?.length){
+			setCurrentPage(currentPage)
+		}
+		if(currentPage > categoryWisePostArr?.length){
+			setCurrentPage(1)
+		}
+	},[currentPage,categoryWisePostArr?.length])
+	
   return ( 
     <>
         <Layout>
@@ -220,29 +227,29 @@ function CategoryWisePost() {
 											<div className="socal_media">
 												<ul>
 													<li>
-														<Link to={blog?.facebookAccount}
+														<a target='_blank' href={blog?.facebookAccount}
 															><i className="fa fa-facebook" aria-hidden="true"></i
-														></Link>
+														></a>
 													</li>
 													<li>
-														<Link to={blog?.twitterAccount}
+														<a target='_blank' href={blog?.twitterAccount}
 															><i className="fa fa-twitter" aria-hidden="true"></i
-														></Link>
+														></a>
 													</li>
 													<li>
-														<Link to={blog?.googleAccount}
+														<a target='_blank' href={blog?.googlePlusAccount}
 															><i className="fa fa-google-plus" aria-hidden="true"></i
-														></Link>
+														></a>
 													</li>
 													<li>
-														<Link to={blog?.linkdinAccount}
+														<a target='_blank' href={blog?.linkedinAccount}
 															><i className="fa fa-linkedin" aria-hidden="true"></i
-														></Link>
+														></a>
 													</li>
 													<li>
-														<Link to={blog?.instagramAccount}
+														<a target='_blank' href={blog?.instagramAccount}
 															><i className="fa fa-instagram" aria-hidden="true"></i
-														></Link>
+														></a>
 													</li>
 												</ul>
 											</div>
@@ -259,7 +266,58 @@ function CategoryWisePost() {
 												</ul>
 											</div>
 										</div>
+
+										<div
+										className="widget mb_60 d-inline-block p_30 primary_link bg_white full_row wow animated slideInUp"
+									>
+										<h3 className="widget_title mb_30 text-capitalize">
+											Recent Post
+										</h3>
+										{
+											sliceRecentBlogArr?.length >=1 ? 
+											<div className="recent_post">
+											<ul>
+												{sliceRecentBlogArr?.map((recentPost) => {
+                                                   return (
+													<li className="mb_30" key={recentPost?.blogId}>
+													<Link to={`/blog-details/${recentPost?.blogId}`}>
+														<div className="post_img">
+															<img
+																src={recentPost?.blog_image}
+																alt="image"
+															/>
+														</div>
+														<div className="recent_post_content">
+															<h6>
+																{recentPost?.title}
+															</h6>
+															<span className="color_gray">{recentPost?.blog_date && format(new Date(recentPost?.blog_date), 'dd MMM yyyy')}</span>
+														</div>
+													</Link>
+												</li>
+												   )
+												})}
+											</ul>
+										</div>
+										:
+										<p style={{color:'red',fontSize:'1.3rem'}}>No recent post</p>
+										}
 										
+									    </div>
+									    <div
+										className="widget mb_60 d-inline-block p_30 bg_white full_row wow animated slideInUp"
+									>
+										<h3 className="widget_title mb_30 text-capitalize">Archives</h3>
+										<div className="tags">
+											<ul>
+												{tags?.map((tag) => {
+													return (
+														<li key={tag?.tagId}><Link to={`/tag-wise-post/${tag?.tagId}`}>{tag?.name}</Link></li>
+													)
+												})}
+											</ul>
+										</div>
+									</div>
 									</div>
 								</div>
 							</div>

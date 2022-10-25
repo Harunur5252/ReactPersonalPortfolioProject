@@ -86,7 +86,7 @@ export function PageProvider({children}) {
         }
     }
     
-    // portfolio page
+    // filter projects for portfolio page
     const handleClick = (menu) => {
 		const modifiedArr = menus?.map((singleMenu) => {
 		  if (singleMenu?.id === menu?.id) {

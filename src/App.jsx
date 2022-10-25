@@ -13,6 +13,7 @@ import DashBoard from './sections/DashBoard'
 import Profile from './sections/Profile'
 import ManagePassword from './sections/ManagePassword'
 import UserBlogList from './sections/UserBlogList'
+import TagWisePost from './sections/TagWisePost'
 
 
 
@@ -38,6 +39,7 @@ function App() {
         <Route path="/register" element={ <Register/> } />
         <Route path="/create-blog" element={ <CreateBlog/> } />
         <Route path="/category-wise-post/:id" element={ <CategoryWisePost/> } />
+        <Route path="/tag-wise-post/:id" element={ <TagWisePost/> } />
         <Route path="*" element={ <NotFound/> } />
         <Route path="/user-dashboard" element={ <DashBoard/> }>
             <Route path="profile" element={<Profile />} />

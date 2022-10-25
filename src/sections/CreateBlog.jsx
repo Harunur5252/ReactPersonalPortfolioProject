@@ -11,12 +11,13 @@ function CreateBlog() {
       const { register,setValue, reset,formState: { errors,isSubmitting,isSubmitSuccessful }, handleSubmit } = useForm();
       // tracking date 
       const [blogDate,setBlogDate] = useState(new Date())
-      const {createBlog,blogSubmit,percentage,loadedCategory} = useContext(BlogContext)
+      const {createBlog,blogSubmit,percentage,loadedCategory,tags} = useContext(BlogContext)
 	  const [createBlogData,setCreateBlogData] = useState({
 		title:'',
 		description:'',
 		blog_image:null,
-        category:''
+        category:'',
+		tag:''
 	  })
 
 	  // creating a new blog
@@ -31,8 +32,9 @@ function CreateBlog() {
 		description:createBlogData?.description ||'',
 		blog_image:createBlogData?.blog_image || null,
 		category:createBlogData?.category ||'',
+		tag:createBlogData?.tag || '',
 	  }
-	  const {title,description,blog_image,category} = defaultValue
+	  const {title,description,blog_image,category,tag} = defaultValue
 
     useEffect(() =>{
        if(blogSubmit){
@@ -40,7 +42,8 @@ function CreateBlog() {
 			title:'',
 			description:'',
 			blog_image:null,
-			category:''
+			category:'',
+			tag:''
 		 })
 	   }
     },[blogSubmit])
@@ -165,7 +168,25 @@ function CreateBlog() {
 															</select>
 															<span style={{color:'red'}}>{errors?.category?.message}</span>
 														</div>
-													</div>								 
+													</div>	
+
+													<div className="col-md-6 col-lg-6">
+														<div className="form-group">
+															<select
+																className="form-control"
+																type="select"
+																defaultValue={tag}
+																{...register("tag", { required: 'tag is required' })}														
+															>
+															<option value=""  selected>choose a tag</option>
+															{tags.map((tag)=>{
+																return <option key={tag.tagId} value={tag.tagId}>{tag.name}</option>
+															})}
+															</select>
+															<span style={{color:'red'}}>{errors?.tag?.message}</span>
+														</div>
+													</div>	
+
 													<div className="col-md-12 col-lg-12">
 														<div className="form-group">
 															<button

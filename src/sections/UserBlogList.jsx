@@ -1,16 +1,43 @@
-import React,{ useContext } from 'react'
+import { useContext,useEffect,useState } from 'react'
 import format from 'date-fns/format'
 import { AuthContext } from '../components/context/Auth.Context'
 import notFoundImage from '../assets/R.jpg'
 
+const generateArr = (totalPost,postPerPage) => {
+	const arr = []
+	for (let i = 1; i <= Math.ceil(totalPost/postPerPage); i++) {
+		arr.push(i)
+	}
+	return arr
+}
+
 function UserBlogList() {
   const {userBlogs} = useContext(AuthContext)
+  	// pagination
+    const [currentPage,setCurrentPage] = useState(1)
+    const postPerPage = import.meta.env.VITE_USER_BLOGS_PAGE_SIZE
+
+  // latest userBlogPosts 
   const userBlogsArr = userBlogs?.map((userBlog) => userBlog)
   const reverseUserBlogArr = userBlogsArr?.reverse()
-  // console.log(reverseUserBlogArr)
+
+  const lastPostIndex = currentPage * postPerPage 
+	const firstPostIndex = lastPostIndex - postPerPage
+	const currentPosts = reverseUserBlogArr?.slice(firstPostIndex,lastPostIndex)
+	const pageCountArray = generateArr(reverseUserBlogArr?.length,postPerPage)
+
+	useEffect(() => {
+		if(currentPage !== reverseUserBlogArr?.length){
+			setCurrentPage(currentPage)
+		}
+		if(currentPage > reverseUserBlogArr?.length){
+			setCurrentPage(1)
+		}
+	},[currentPage,reverseUserBlogArr?.length])
+
   return (
     <>
-      <table class="table table-striped table-dark table-hover table-borderless">
+      <table className="table table-striped table-dark table-hover table-borderless">
       <thead>
         <tr>
           <th scope="col">SI.NO</th>
@@ -25,10 +52,10 @@ function UserBlogList() {
       </thead>
       <tbody>
         {
-          reverseUserBlogArr && reverseUserBlogArr?.map((blog) => {
+          currentPosts && currentPosts?.map((blog) => {
             return (
-              <tr>
-                <th scope="row" key={blog?.id}>{blog?.id}</th>
+              <tr key={blog?.id}>
+                <th scope="row">{blog?.id}</th>
                 <td>{blog?.firstName}</td>
                 <td>{blog?.lastName}</td>
                 <td><img src={blog?.profilePicture ? blog?.profilePicture : notFoundImage} /></td>
@@ -40,8 +67,24 @@ function UserBlogList() {
             )
           })
         }
+        <tr>
+            <td colSpan={8}>
+              <nav>
+                  <ul className="pagination wow animated slideInUp full_row">
+                    {pageCountArray?.map((count,index)=>{
+                      return (
+                        <li key={index} className={`page-item ${count === currentPage ? 'active' : ''}`}>
+                          <a className="page-link" onClick={() => setCurrentPage(count)}>{count}</a>
+                        </li> 
+                      )
+                    })}
+                  </ul>
+              </nav>
+            </td>
+        </tr>
        
       </tbody>
+      
 </table>
     </>
   )

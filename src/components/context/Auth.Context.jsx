@@ -24,7 +24,7 @@ export function AuthProvider({children}) {
     const [passwordSubmit,setPasswordSubmit] = useState(false)
     const [multipleProfileData,setMultipleProfileData] = useState([])
     const [percentage,setPercentage] = useState(0)
-    const [loadedProfile,setLoadedProfile] = useState(false)
+
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -33,7 +33,7 @@ export function AuthProvider({children}) {
                 loadAllProfile()
             }
         })()
-    },[user,token,profileSubmit,loadedProfile])
+    },[user,token,profileSubmit])
 
     useEffect(() => {
         (async () => {
@@ -81,23 +81,16 @@ export function AuthProvider({children}) {
     const profile = async (data) => {
         const profileData= {
             user:user.id,
-            title:data.title,
-            cvLink:data.cvLink,
-            firstName:data.firstName,
-            lastName:data.lastName,
-            phone:data.phone,
-            address:data.address,
-            website:data.website,
-            facebookAccount:data.facebookAccount,
-            googleAccount:data.googleAccount,
-            instagramAccount:data.instagramAccount,
-            linkdinAccount:data.linkdinAccount,
-            twitterAccount:data.twitterAccount,
-            dateOfBirth : data.dateOfBirth,
-            bloodGroup : data.bloodGroup
+            firstName:data?.firstName,
+            lastName:data?.lastName,
+            facebookAccount:data?.facebookAccount,
+            googlePlusAccount:data?.googlePlusAccount,
+            instagramAccount:data?.instagramAccount,
+            linkedinAccount:data?.linkedinAccount,
+            twitterAccount:data?.twitterAccount,
         }
         const formData = new FormData()
-        formData.append('files.profilePicture',data.profilePicture[0],data.profilePicture[0].name)
+        formData.append('files.profilePicture',data?.profilePicture[0],data?.profilePicture[0]?.name)
         formData.append('data',JSON.stringify(profileData))
        try {
           setProfileSubmit(true)
@@ -157,21 +150,15 @@ export function AuthProvider({children}) {
                     userId : profile?.attributes?.user?.data?.id,
                     profilePictureId : profile?.attributes?.profilePicture?.data?.id,
                     userEmail : profile?.attributes?.user?.data?.attributes?.email,
-                    address : profile?.attributes?.address,
                     firstName : profile?.attributes?.firstName,
-                    bloodGroup : profile?.attributes?.bloodGroup,
-                    dateOfBirth : profile?.attributes?.dateOfBirth,
-                    title:profile?.attributes?.title,
-                    cvLink:profile?.attributes?.cvLink,
                     lastName : profile?.attributes?.lastName,
-                    phone : profile?.attributes?.phone,
-                    website : profile?.attributes?.website,
                     facebookAccount : profile?.attributes?.facebookAccount,
                     twitterAccount : profile?.attributes?.twitterAccount,
-                    googleAccount : profile?.attributes?.googleAccount,
+                    googlePlusAccount : profile?.attributes?.googlePlusAccount,
                     instagramAccount : profile?.attributes?.instagramAccount,
-                    linkdinAccount : profile?.attributes?.linkdinAccount,
-                    profilePicture : profile?.attributes?.profilePicture?.data?.attributes?.url,
+                    linkedinAccount : profile?.attributes?.linkedinAccount,
+                    profilePicture : profile?.attributes?.profilePicture?.data?.attributes?.formats?.thumbnail?.url ? profile?.attributes?.profilePicture?.data?.attributes?.formats?.thumbnail?.url : profile?.attributes?.profilePicture?.data?.attributes?.url,
+                    imgId : profile?.attributes?.profilePicture?.data?.id,
                 })
          })
          setMultipleProfileData(profileArr)
@@ -265,12 +252,11 @@ export function AuthProvider({children}) {
         profile,
         percentage,
         multipleProfileData,
-        setLoadedProfile,
         loadAllProfile,
         userBlogs,
         passwordChange,
         passwordSubmit,
-        loadUserBlog
+        loadUserBlog,
     }
   return (
     <AuthContext.Provider value={value}>
