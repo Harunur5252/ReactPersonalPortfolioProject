@@ -49,7 +49,7 @@ export function BlogProvider({children}) {
           loadAllBlog()
         })()
     }
-  },[user,token,pageNumber,trigger])
+  },[user,token,pageNumber,trigger,blogSubmit])
 
   useEffect(() => {
     if(user && token){
@@ -57,7 +57,7 @@ export function BlogProvider({children}) {
           loadAllTag()
         })()
     }
-  },[user,token])
+  },[user,token,blogSubmit])
 
   useEffect(() => {
     if(user && token){
@@ -65,7 +65,7 @@ export function BlogProvider({children}) {
           loadAllBlogWithoutPagination()
         })()
     }
-  },[user,token,loadedLike,loadedUnLike])
+  },[user,token,loadedLike,loadedUnLike,blogSubmit])
 
   useEffect(() => {
     if(user && token){
@@ -73,7 +73,7 @@ export function BlogProvider({children}) {
           loadAllCategory()
         })()
     }
-  },[user,token])
+  },[user,token,blogSubmit])
 
   useEffect(() => {
     if(user && token){
