@@ -307,7 +307,7 @@ function Profile() {
                     <td>{singleProfile?.profileId ? singleProfile?.profileId : <span style={{color:'rgba(208, 213, 17, 0.8)',fontSize:'1rem'}}>no id</span>}</td>
                     <td>{singleProfile?.firstName ? singleProfile?.firstName : <span style={{color:'rgba(208, 213, 17, 0.8)',fontSize:'1rem'}}>no firstName</span>}</td>
                     <td>{singleProfile?.lastName ? singleProfile?.lastName :<span style={{color:'rgba(208, 213, 17, 0.8)',fontSize:'1rem'}}>no lastName</span>}</td>
-                    <td>{singleProfile?.userEmail ? singleProfile?.userEmail : <span style={{color:'rgba(208, 213, 17, 0.8)',fontSize:'1rem'}}>no email</span>}</td>
+                    <td>{user?.email ? user?.email : <span style={{color:'rgba(208, 213, 17, 0.8)',fontSize:'1rem'}}>no email</span>}</td>
                     <td><img src={singleProfile?.profilePicture ? singleProfile?.profilePicture : notFoundImage} style={{height:'107px',width:'156px'}} alt='notFoundImage' /></td>
                     {
                             singleProfile?.profileId && singleProfile?.userId && 

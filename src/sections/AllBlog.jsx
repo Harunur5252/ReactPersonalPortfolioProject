@@ -5,6 +5,7 @@ import BeatLoader  from "react-spinners/BeatLoader ";
 import { BlogContext } from '../components/context/Blog.Context';
 import { AuthContext } from '../components/context/Auth.Context';
 import Layout from '../components/layouts/Layout'
+import notFoundImage from '../assets/R.jpg'
 
 // make array based on pageCount
 const generateArr = (num) => {
@@ -104,8 +105,8 @@ function AllBlog() {
 													</p>
 
 													<div className="admin">
-														<img src={blog?.profilePicture} alt="image" />
-														<span className="color_white">{`by - `} {blog?.firstName} {blog?.lastName}</span>
+														<img src={blog?.profilePicture ? blog?.profilePicture : notFoundImage} alt="image" />
+														<span className="color_white">{`by - `} {blog?.firstName ? blog?.firstName : <span style={{color:'rgba(208, 213, 17, 0.8)'}}>no author name</span>} {blog?.lastName} </span>
 													</div>
 													<div className="date float-right color_primary">
 													   {blog?.blog_date && format(new Date(blog?.blog_date), 'dd MMM yyyy')}

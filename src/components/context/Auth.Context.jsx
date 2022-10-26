@@ -16,8 +16,8 @@ const loadedToken = JSON.parse(localStorage.getItem('token'))
 export function AuthProvider({children}) {
     const initialUserBlogs =[]
     const [userBlogs,dispatch] = useReducer(authReducer,initialUserBlogs)
-    const [user,setUser] = useState(loadedUser?loadedUser : {})
-    const [token,setToken] = useState(loadedToken?loadedToken : {})
+    const [user,setUser] = useState(loadedUser?loadedUser : null)
+    const [token,setToken] = useState(loadedToken?loadedToken : null)
     const [registerSubmit,setRegisterSubmit] = useState(false)
     const [loginSubmit,setLoginSubmit] = useState(false)
     const [profileSubmit,setProfileSubmit] = useState(false)
@@ -41,7 +41,7 @@ export function AuthProvider({children}) {
                 loadUserBlog()
             }
         })()
-    },[user,token])
+    },[user,token,profileSubmit])
 
     const passwordChange = async (data) => {
         try {
@@ -149,7 +149,7 @@ export function AuthProvider({children}) {
                     profileId : profile?.id,
                     userId : profile?.attributes?.user?.data?.id,
                     profilePictureId : profile?.attributes?.profilePicture?.data?.id,
-                    userEmail : profile?.attributes?.user?.data?.attributes?.email,
+                    // userEmail : profile?.attributes?.user?.data?.attributes?.email,
                     firstName : profile?.attributes?.firstName,
                     lastName : profile?.attributes?.lastName,
                     facebookAccount : profile?.attributes?.facebookAccount,
