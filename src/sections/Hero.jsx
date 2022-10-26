@@ -34,7 +34,7 @@ function Hero() {
 						<div className="col-md-12 col-lg-12 home-content text-left">
 							<div className="mainbanner_content">
 								<span className="pb_5 banner_title color_white">
-									I Am {myProfileData?.fullName}!
+									I Am {myProfileData?.fullName ? myProfileData?.fullName : <p style={{color:'rgba(208, 213, 17, 0.8)'}}>No name is available to show</p>}!
 								</span>
 								
 								<h1 className="cd-headline clip is-full-width text-uppercase">
@@ -43,15 +43,15 @@ function Hero() {
 									</span>
 									<span className="color_default">
 									<Typed 
-											strings={strings}
+											strings={strings ? strings : <p style={{color:'rgba(208, 213, 17, 0.8)'}}>No profession is available to show</p>}
 											{...options}
 										/>
 									</span>
 								</h1>
 								<p className="color_white mb_30">
-									{heroSectionData?.short_des}
+									{heroSectionData?.short_des ? heroSectionData?.short_des : <p style={{color:'rgba(208, 213, 17, 0.8)'}}>No short description is available to show</p>}
 								</p>
-								<a className="btn btn-default" target='_blank' href={myProfileData?.cvLink}>Download CV</a>
+								<a className="btn btn-default" target='_blank' disabled={myProfileData?.cvLink ? '' : 'disabled'} href={myProfileData?.cvLink}>Download CV</a>
 							</div>
 						</div>
 					</div>
