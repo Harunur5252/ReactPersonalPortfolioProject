@@ -55,7 +55,7 @@ function Testimonial() {
 										>What Client Say’s
 									</h2>
 									<span className="sub_title">
-										{testimonialData?.tes_sub_title}
+										{testimonialData?.tes_sub_title ? testimonialData?.tes_sub_title : <p style={{color:'red',fontSize:'1.5rem'}}>testimonial data is not available to show</p>}
 									</span>
 									
 								</div>

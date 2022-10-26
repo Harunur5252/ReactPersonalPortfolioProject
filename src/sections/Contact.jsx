@@ -73,7 +73,7 @@ function Contact() {
 															Email
 														</h6>
 														<span className="color_secondery">
-															{myProfileData?.email}
+															{myProfileData?.email ? myProfileData?.email : <span style={{color:'red',fontSize:'1rem'}}>email is not available to show</span>}
 														</span>
 														
 													</div>
@@ -83,7 +83,7 @@ function Contact() {
 														<h6 className="font-weight-bold color_primary">
 															Phone
 														</h6>
-														<span className="color_secondery">{myProfileData?.phone}</span>
+														<span className="color_secondery">{myProfileData?.phone ? myProfileData?.phone : <span style={{color:'red',fontSize:'1rem'}}>phone number is not available to show</span>}</span>
 													</div>
 												</li>
 												<li>
@@ -92,7 +92,7 @@ function Contact() {
 															Address
 														</h6>
 														<span className="color_secondery">
-															{myProfileData?.address}
+															{myProfileData?.address ? myProfileData?.address :  <span style={{color:'red',fontSize:'1rem'}}>address is not available to show</span>}
 														</span>
 														
 													</div>
@@ -103,7 +103,7 @@ function Contact() {
 															Website
 														</h6>
 														<span className="color_secondery">
-															{myProfileData?.website}
+															{myProfileData?.website ? myProfileData?.website : <span style={{color:'red',fontSize:'1rem'}}>website link is not available to show</span>}
 														</span>
 														
 													</div>
@@ -208,17 +208,6 @@ function Contact() {
 														</button>
 													</div>
 												</div>
-												{/* <div className="col-md-12 col-lg-12">
-													<div className="error-handel">
-														<div id="success">
-															Your email sent Successfully, Thank you.
-														</div>
-														<div id="error">
-															Error occurred while sending email. Please try
-															again later.
-														</div>
-													</div>
-												</div> */}
 											</div>
 										</form>
 									</div>

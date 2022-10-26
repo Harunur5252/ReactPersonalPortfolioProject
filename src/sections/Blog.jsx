@@ -16,6 +16,7 @@ function Blog() {
          <section id="blog" name="blog" className="py_80 bg_secondery full_row">
 					<div className="container">
 						<div className="row">
+							
 							<div className="col-md-12 col-lg-12">
 								<div
 									className="section_title_1 text-center mx-auto pb_60 wow animated slideInUp"
@@ -31,6 +32,9 @@ function Blog() {
 									>
 								</div>
 							</div>
+							{
+								!user && <p className='text-center' style={{color:'red',fontSize:'1.4rem',fontWeight:'600'}}>please login or register to see blogs</p>
+							}
 							{
 								user && 
 								<div className="col-md-12 col-lg-12">

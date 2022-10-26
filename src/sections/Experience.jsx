@@ -21,7 +21,10 @@ function Experience() {
 												<span
 													className="flaticon-man-working-on-a-laptop-from-side-view"
 												></span>
-												<div className="counting_digit color_default mt_15">
+												{
+													(experience?.data?.start || experience?.data?.ex_end) ?
+													<>
+													  <div className="counting_digit color_default mt_15">
 													<CountUp start={experience?.data?.start} end={experience?.data?.ex_end} duration={5}>
 														{({ countUpRef,start }) => (
 															<VisibilitySensor onChange={start} delayedCall>
@@ -31,6 +34,11 @@ function Experience() {
 													</CountUp>
 													<span>+</span>
 												</div>
+													</>
+													:
+													<p style={{color:'red',fontSize:'1.5rem',marginTop:'0.6rem'}}>No Years of Experience is available to show</p>
+												}
+												
 												<h3 className="color_white mt_15">Years of Experience</h3>
 											</div>
 										</div>
@@ -40,17 +48,25 @@ function Experience() {
 												data-wow-duration="300ms"
 											>
 												<span className="flaticon-half-time-work"></span>
-												<div className="counting_digit color_default mt_15">
-												    <CountUp start={experience?.data?.start} end={experience?.data?.pr_end} duration={5}>
-														{({ countUpRef,start }) => (
-															<VisibilitySensor onChange={start} delayedCall>
-															    <span ref={countUpRef} style={{fontSize:'2rem',fontWeight:'600'}} /> 
-															</VisibilitySensor>
-														)}
-													</CountUp>
-													<span>+</span>
-												</div>
-												<h3 className="color_white mt_15">Porjects Done</h3>
+												{
+													(experience?.data?.start || experience?.data?.pr_end) ?
+													<>
+													  <div className="counting_digit color_default mt_15">
+														<CountUp start={experience?.data?.start} end={experience?.data?.pr_end} duration={5}>
+															{({ countUpRef,start }) => (
+																<VisibilitySensor onChange={start} delayedCall>
+																	<span ref={countUpRef} style={{fontSize:'2rem',fontWeight:'600'}} /> 
+																</VisibilitySensor>
+															)}
+														</CountUp>
+														<span>+</span>
+												      </div>
+													</>
+													:
+                                                   <p style={{color:'red',fontSize:'1.5rem',marginTop:'0.6rem'}}>No Projects is available to show</p>
+												}
+												
+												<h3 className="color_white mt_15">Projects Done</h3>
 											</div>
 										</div>
 										<div className="col-md-4 col-lg-4">
@@ -59,16 +75,24 @@ function Experience() {
 												data-wow-duration="300ms"
 											>
 												<span className="flaticon-happy"></span>
-												<div className="counting_digit color_default mt_15">
-												    <CountUp start={experience?.data?.start} end={experience?.data?.cl_end} duration={5}>
-														{({ countUpRef,start }) => (
-															<VisibilitySensor onChange={start} delayedCall>
-															    <span ref={countUpRef} style={{fontSize:'2rem',fontWeight:'600'}} /> 
-															</VisibilitySensor>
-														)}
-													</CountUp>
-													<span>+</span>
-												</div>
+												{
+													(experience?.data?.start || experience?.data?.cl_end) ?
+													<>
+													  <div className="counting_digit color_default mt_15">
+														<CountUp start={experience?.data?.start} end={experience?.data?.cl_end} duration={5}>
+															{({ countUpRef,start }) => (
+																<VisibilitySensor onChange={start} delayedCall>
+																	<span ref={countUpRef} style={{fontSize:'2rem',fontWeight:'600'}} /> 
+																</VisibilitySensor>
+															)}
+														</CountUp>
+														<span>+</span>
+												       </div>
+													</>
+													:
+													<p style={{color:'red',fontSize:'1.5rem',marginTop:'0.6rem'}}>No Happy Clients count is available to show</p>
+												}
+												
 												<h3 className="color_white mt_15">Happy Clients</h3>
 											</div>
 										</div>

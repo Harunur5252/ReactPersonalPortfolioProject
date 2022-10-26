@@ -9,9 +9,7 @@ function Footer() {
 							<div className="col-md-12 col-lg-12">
 								<div className="copyright">
 									<p>
-										<a href="https://www.templateshub.net" target="_blank"
-											>Templates Hub</a
-										>
+										<div style={{color:'rgba(132, 10, 241, 0.8)',fontSize:'1rem',fontWeight:'600'}}>Developed By Harunur Roshid</div>
 									</p>
 								</div>
 							</div>

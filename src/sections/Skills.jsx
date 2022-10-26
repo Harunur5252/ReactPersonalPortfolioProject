@@ -25,7 +25,7 @@ function Skills() {
 										>Design skill
 									</h2>
 									<span className="sub_title">
-										{allSkill?.short_skill}
+										{allSkill?.short_skill?allSkill?.short_skill:<span style={{color:'red',fontSize:'1.5rem'}}>No short skill description is available to show</span>}
 									</span>
 									
 								</div>
@@ -38,45 +38,50 @@ function Skills() {
 										className="about_myskill color_secondery wow animated slideInLeft"
 									>
 										<h2 className="color_primary">
-										  {allSkill?.skill_title}
+										  {allSkill?.skill_title ? allSkill?.skill_title :<span style={{color:'red',fontSize:'1.5rem'}}>No short skill title is available to show</span>}
 										</h2>
 										<p className="pt_15">
-											{allSkill?.skill_details}
+											{allSkill?.skill_details ? allSkill?.skill_details :<span style={{color:'red',fontSize:'1.5rem'}}>No short skill details is available to show</span>}
 										</p>
 									</div>
 								</div>
 								<div className="col-md-12 col-lg-6">
-									<div className="skill-progress wow animated slideInRight">
-										{skills?.map((skill) => {
-											return (
-												<div key={skill?.id} className="prgs-bar fact-counter">
-											<span>{skill?.name}</span>
-											<div
-												className="progress count wow"
-												data-wow-duration="0ms"
-											>
-												<div className="skill-percent">
-												<span
-													className="count-num"
-													data-speed="3000"
-													data-stop={skill?.percent}
-												>
-													{skill?.percent}
-												</span>
-												%
-												</div>
+									{
+										skills?.length >=1 ?
+										<div className="skill-progress wow animated slideInRight">
+											{skills?.map((skill) => {
+												return (
+													<div key={skill?.id} className="prgs-bar fact-counter">
+												<span>{skill?.name}</span>
 												<div
-												className="progress-bar"
-												role="progressbar"
-												aria-valuenow={skill?.percent}
-												aria-valuemax="100"
-												style={{ width: `${skill?.percent}%` }}
-												></div>
-											</div>
-											</div>
-											)
-										})}
-									</div>
+													className="progress count wow"
+													data-wow-duration="0ms"
+												>
+													<div className="skill-percent">
+													<span
+														className="count-num"
+														data-speed="3000"
+														data-stop={skill?.percent}
+													>
+														{skill?.percent}
+													</span>
+													%
+													</div>
+													<div
+													className="progress-bar"
+													role="progressbar"
+													aria-valuenow={skill?.percent}
+													aria-valuemax="100"
+													style={{ width: `${skill?.percent}%` }}
+													></div>
+												</div>
+												</div>
+												)
+											})}
+										</div>
+										:
+										<span style={{color:'red',fontSize:'1.5rem'}}>No short skill progress is available to show</span>
+									}
 								</div>
 							</div>
 						</div>

@@ -102,7 +102,7 @@ function Portfolio() {
                   Recent Projects
                 </h2>
                 <span className="sub_title">
-                  {portfolioData?.sub_title}
+                  {portfolioData?.sub_title ? portfolioData?.sub_title :<p style={{color:'red',fontSize:'1.5rem'}}>No portfolio title or projects is available to show</p>}
                 </span>
               </div>
             </div>
