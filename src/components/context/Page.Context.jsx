@@ -157,6 +157,7 @@ export function PageProvider({children}) {
         try {
             setLoadedMyProfileSection(true)
 			const response = await axiosPublicInstance.get('/my-profile?populate=*')
+            console.log(response.data)
             setMyProfileData(response.data?.data?.attributes)
             setLoadedMyProfileSection(false)
 		} catch (err) {

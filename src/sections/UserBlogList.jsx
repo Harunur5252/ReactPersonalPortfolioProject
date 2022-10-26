@@ -1,7 +1,9 @@
 import { useContext,useEffect,useState } from 'react'
 import format from 'date-fns/format'
+import { animateScroll as scroll } from 'react-scroll'
 import { AuthContext } from '../components/context/Auth.Context'
 import notFoundImage from '../assets/R.jpg'
+
 
 const generateArr = (totalPost,postPerPage) => {
 	const arr = []
@@ -21,6 +23,10 @@ function UserBlogList() {
   const userBlogsArr = userBlogs?.map((userBlog) => userBlog)
   const reverseUserBlogArr = userBlogsArr?.reverse()
 
+  useEffect(()=>{
+		scroll.scrollToTop()
+	},[currentPage])
+  
   const lastPostIndex = currentPage * postPerPage 
 	const firstPostIndex = lastPostIndex - postPerPage
 	const currentPosts = reverseUserBlogArr?.slice(firstPostIndex,lastPostIndex)

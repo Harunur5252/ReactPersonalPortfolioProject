@@ -2,9 +2,12 @@ import React, { useEffect,useContext } from 'react'
 import {Link as RouterLink, useLocation} from 'react-router-dom';
 import { Link } from 'react-scroll'
 import { AuthContext } from '../context/Auth.Context'
+import { PageContext } from '../context/Page.Context';
+import notFoundImage from '../../assets/R.jpg'
 
 function Header() {
 	const {logout,user} = useContext(AuthContext)
+	const {myProfileData} = useContext(PageContext)
 	const {pathname} = useLocation();
 
 	const isNavigate = pathname === '/' 
@@ -39,7 +42,7 @@ function Header() {
 							className="navbar navbar-expand-lg navbar-light w-100"
 						>
 							<div className="navbar-brand"
-								><img className="nav-logo" src="/images/logo/1.png" alt="logo"
+								><img className="nav-logo" style={{height:'27px',width:'130px'}} src={myProfileData?.logo?.data?.attributes?.url ? myProfileData?.logo?.data?.attributes?.url : notFoundImage} alt="logo"
 							/></div>
 							<button
 								className="navbar-toggler"
