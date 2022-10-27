@@ -2,83 +2,13 @@ import { useEffect,useContext } from 'react';
 import Venobox from 'venobox'
 import { PageContext } from '../components/context/Page.Context';
 
-// const projectsData = [
-// 	{
-// 	  image: "/images/portfolio/01.jpg",
-// 	  tag_one: "Web Development",
-// 	  tag_two: "Wordpress",
-// 	  tags: ["development", "wordpress"],
-// 	},
-// 	{
-// 	  image: "/images/portfolio/02.jpg",
-// 	  tag_one: "Branding",
-// 	  tag_two: "Wordpress",
-// 	  tags: ["branding", "wordpress"],
-// 	},
-// 	{
-// 	  image: "/images/portfolio/03.jpg",
-// 	  tag_one: "Web Design",
-// 	  tag_two: "Web Development",
-// 	  tags: ["design", "development"],
-// 	},
-// 	{
-// 	  image: "/images/portfolio/04.jpg",
-// 	  tag_one: "Branding",
-// 	  tag_two: "Wordpress",
-// 	  tags: ["branding", "wordpress"],
-// 	},
-// 	{
-// 	  image: "/images/portfolio/05.jpg",
-// 	  tag_one: "Web Design",
-// 	  tag_two: "Wordpress",
-// 	  tags: ["design", "wordpress"],
-// 	},
-// 	{
-// 	  image: "/images/portfolio/06.jpg",
-// 	  tag_one: "Web Design",
-// 	  tag_two: "Web Development",
-// 	  tags: ["design", "development"],
-// 	},
-//   ];
-  
-//   const menusData = [
-// 	{
-// 	  id: 1,
-// 	  name: "all",
-// 	  isActive: true,
-// 	  tag: "all",
-// 	},
-// 	{
-// 	  id: 2,
-// 	  name: "web design",
-// 	  isActive: false,
-// 	  tag: "design",
-// 	},
-// 	{
-// 	  id: 3,
-// 	  name: "wordpress",
-// 	  isActive: false,
-// 	  tag: "wordpress",
-// 	},
-// 	{
-// 	  id: 4,
-// 	  name: "web development",
-// 	  isActive: false,
-// 	  tag: "development",
-// 	},
-// 	{
-// 	  id: 5,
-// 	  name: "branding",
-// 	  isActive: false,
-// 	  tag: "branding",
-// 	},
-//   ]; 
 
 function Portfolio() {
   const {menus,projects,handleClick,portfolioData} = useContext(PageContext)
 
 	  useEffect(() => {
 		new Venobox({
+      selector:'.venobox',
       maxWidth:'600px',
 		  spinner:'flow',
 		})

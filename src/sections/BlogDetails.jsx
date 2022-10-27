@@ -21,7 +21,7 @@ function BlogDetails() {
 		resolver: yupResolver(schema)
 	  });
 
-	const {blogs,tags,blogsWithoutPaginationData,setShowForm,handleLike,handleUnLike,loadedCategory,comment,commentSubmit,commentLoadedArr} = useContext(BlogContext)
+	const {blogs,tags,blogsWithoutPaginationData,handleLike,handleUnLike,loadedCategory,comment,commentSubmit,commentLoadedArr} = useContext(BlogContext)
 	const {user,token,} = useContext(AuthContext)
 	const [blog,setBlog] = useState({})
 	const [likes,setLikes] = useState([])
@@ -46,7 +46,6 @@ function BlogDetails() {
        if(findSingleBlog && id){
 		  setBlog(findSingleBlog)
 		  setLikes(findSingleBlog?.likes)
-		  setShowForm(false)
 	   }
 	},[findSingleBlog,id])
 
@@ -175,7 +174,7 @@ function BlogDetails() {
 										<ul className="user_comments">
 											{comments?.map((comment) => {
 												return (
-													<Comment key={comment.cmtId} comment={comment} blogId={blogId} />
+													<Comment key={comment?.cmtId} comment={comment} blogId={blogId} />
 												)
 											})}
 										</ul>

@@ -28,7 +28,7 @@ function TagWisePost() {
 	const [currentPage,setCurrentPage] = useState(1)
 	const postPerPage = import.meta.env.VITE_CATEGORY_PAGE_SIZE
 
-    const blog = blogs?.find(blog=>blog?.authorId === user?.id)
+    const blog = blogsWithoutPaginationData?.find(blog=>blog?.authorId === user?.id)
 
     // latest posts
 	const BlogsData = blogsWithoutPaginationData?.map((post) => post)

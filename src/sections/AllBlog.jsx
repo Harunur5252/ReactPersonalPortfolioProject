@@ -22,7 +22,7 @@ function AllBlog() {
 	const pageCountArray = generateArr(pageCount)
 
 	// finding single post for user socials link
-	const blog = blogs && blogs?.find(blog=>blog?.authorId === user?.id)
+	const blog = blogsWithoutPaginationData && blogsWithoutPaginationData?.find(blog=>blog?.authorId === user?.id)
 
 	// latest posts
 	const BlogsData = blogsWithoutPaginationData?.map((post) => post)

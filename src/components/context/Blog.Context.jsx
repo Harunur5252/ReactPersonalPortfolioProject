@@ -18,16 +18,13 @@ export function BlogProvider({children}) {
   const {user,token,loadUserBlog,loginSubmit,registerSubmit} = useContext(AuthContext)
   const [blogSubmit,setBlogSubmit] = useState(false)
 
-  const [commentSubmit,setCommentSubmit] = useState(false)
-  const [repliedCommentSubmit,setRepliedCommentSubmit] = useState(false)
-  const [repliedArr, setRepliedArr] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-
   const [loaded,setLoaded] = useState(false)
   const [loadedCategory,setLoadedCategory] = useState([])
   const [tags,setTags] = useState([])
 
   const [commentLoadedArr,setCommentLoadedArr] = useState([])
+  const [commentSubmit,setCommentSubmit] = useState(false)
+
   const [loadedLike,setLoadedLike] = useState(false)
   const [trigger,setTrigger] = useState(false)
   const [loadedUnLike,setLoadedUnLike] = useState(false)
@@ -39,7 +36,6 @@ export function BlogProvider({children}) {
   useEffect(() => {
     if(loginSubmit || registerSubmit){
       setPageNumber(1)
-      setShowForm(false)
     }
   },[loginSubmit,registerSubmit])
 
@@ -83,13 +79,13 @@ export function BlogProvider({children}) {
     }
   },[user,token,commentSubmit])
 
-  useEffect(() => {
-    if(user && token){
-        (async () => {
-          loadAllRepliedComment()
-        })()
-    }
-  },[user,token,repliedCommentSubmit])
+  // useEffect(() => {
+  //   if(user && token){
+  //       (async () => {
+  //         loadAllRepliedComment()
+  //       })()
+  //   }
+  // },[user,token,repliedCommentSubmit])
 
   useEffect(() => {
     (async () => {
@@ -99,63 +95,48 @@ export function BlogProvider({children}) {
     })()
 },[user,token,blogSubmit])
 
-  const loadAllRepliedComment = async () => {
-    const query = qs.stringify({
-      populate : [
-         'comment',
-         'comment.blog_post',
-         'user',
-         'user.profile',
-         'user.profile.profilePicture'
-      ]
-   })
-     try {
-       const response = await axiosPrivateInstance(token).get(`/replay-comments?${query}`)
-       const repliedArr = response.data?.data?.map((replay) => {
-          return ({
-             replayId : replay?.id,
-             description : replay?.attributes?.description,
-             replayDate  : replay?.attributes?.replayDate,
-             cmtId  : replay?.attributes?.comment?.data?.id,
-             userId : replay?.attributes?.user?.data?.id,
-             blogId     : replay?.attributes?.comment?.data?.attributes?.blog_post?.data?.id,
-             firstName  : replay?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.firstName,
-             lastName  : replay?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.lastName,
-             profilePicture  : replay?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.attributes?.url,
-          })
-       })
-       setRepliedArr(repliedArr)
-     } catch (err) {
-       console.log(err.response)
-     }
-  }
+  // const loadAllRepliedComment = async () => {
+  //   const query = qs.stringify({
+  //     populate : [
+  //        'comment',
+  //        'comment.blog_post',
+  //        'user',
+  //        'user.profile',
+  //        'user.profile.profilePicture'
+  //     ]
+  //  })
+  //    try {
+  //      const response = await axiosPrivateInstance(token).get(`/replay-comments?${query}`)
+  //      const repliedArr = response.data?.data?.map((replay) => {
+  //         return ({
+  //            replayId : replay?.id,
+  //            description : replay?.attributes?.description,
+  //            replayDate  : replay?.attributes?.replayDate,
+  //            cmtId  : replay?.attributes?.comment?.data?.id,
+  //            userId : replay?.attributes?.user?.data?.id,
+  //            blogId     : replay?.attributes?.comment?.data?.attributes?.blog_post?.data?.id,
+  //            firstName  : replay?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.firstName,
+  //            lastName  : replay?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.lastName,
+  //            profilePicture  : replay?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.attributes?.url,
+  //         })
+  //      })
+  //      setRepliedArr(repliedArr)
+  //    } catch (err) {
+  //      console.log(err.response)
+  //    }
+  // }
   
-  const createRepliedComment = async (repliedCmt) => {
-    const data = {
-       description : repliedCmt?.description,
-       comment : repliedCmt?.comment,
-       replayDate : new Date(),
-       user : user?.id
-    }
-     try {
-        setRepliedCommentSubmit(true)
-        const response = await axiosPrivateInstance(token).post('/replay-comments?populate=*',
-         {
-          data : data
-         }
-        )
-        setRepliedCommentSubmit(false)
-        setShowForm(false)
-        toast.success('comment replied successfully!')
-     } catch (err) {
-        setRepliedCommentSubmit(false)
-        toast.error(err?.response?.data?.error?.message)
-     }
-  }
+
 
   const loadAllComment = async () => {
     const query = qs.stringify({
       populate : [
+         'replay_comments',
+         'replay_comments.comment',
+         'replay_comments.comment.blog_post',
+         'replay_comments.user',
+         'replay_comments.user.profile',
+         'replay_comments.user.profile.profilePicture',
          'blog_post',
          'user',
          'user.profile',
@@ -164,11 +145,13 @@ export function BlogProvider({children}) {
    })
      try {
         const response = await axiosPrivateInstance(token).get(`/comments?${query}`)
+        // console.log(response.data)
         const commentArr = response.data?.data?.map((comment) => {
             return ({
               cmtId : comment?.id,
               blogId: comment?.attributes?.blog_post?.data?.id,
               userId : comment?.attributes?.user?.data?.id,
+              replay_comments:comment?.attributes?.replay_comments,
               profilePictureId : comment?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.id,
               description: comment?.attributes?.description,
               commentDate: comment?.attributes?.commentDate,
@@ -569,11 +552,7 @@ export function BlogProvider({children}) {
     pageCount,
     pageNumber,
     setPageNumber,
-    createRepliedComment,
-    repliedCommentSubmit,
-    showForm,
-    setShowForm,
-    repliedArr
+    loadAllComment
   }
 
   return (
