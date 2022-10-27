@@ -42,7 +42,7 @@ function Header() {
 							className="navbar navbar-expand-lg navbar-light w-100"
 						>
 							<div className="navbar-brand"
-								><img className="nav-logo" style={{height:'27px',width:'130px'}} src={myProfileData?.logo?.data?.attributes?.url ? myProfileData?.logo?.data?.attributes?.url : notFoundImage} alt="logo"
+								><img className="nav-logo" style={{height:'27px',width:'130px'}} title={myProfileData?.logo?.data?.attributes?.url ? 'website logo' : 'website logo not found'} src={myProfileData?.logo?.data?.attributes?.url ? myProfileData?.logo?.data?.attributes?.url : notFoundImage} alt="logo"
 							/></div>
 							<button
 								className="navbar-toggler"

@@ -92,8 +92,8 @@ function About() {
 												to={about?.video_link ? about?.video_link :''}
 												title={about?.video_title ? about?.video_title : <span style={{color:'red',fontSize:'1rem'}}> No video title is available to show</span>}
 											>
-												<i className="fa fa-play" aria-hidden="true"></i
-											></Link>
+												<i className="fa fa-play" aria-hidden="true"></i>
+											</Link>
 										</div>
 										<div className="loader">
 											<div className="loader-inner ball-scale-multiple">
