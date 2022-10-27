@@ -169,7 +169,7 @@ function Header() {
 														CreateBlog
 													</RouterLink>
 													:
-                                                    <RouterLink className="nav-link" to="/create-blog" state={`/create-blog`}>
+                                                    <RouterLink className="nav-link" activeClass="active" to="/create-blog" state={`/create-blog`}>
 													    CreateBlog
 													</RouterLink>
 												}

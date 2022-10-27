@@ -7,6 +7,7 @@ import { AuthContext } from './context/Auth.Context';
 import { BlogContext } from './context/Blog.Context';
 import { toast } from 'react-toastify';
 import { axiosPrivateInstance } from '../Utils/axios';
+import notFoundImage from '../assets/R.jpg'
 
 // validation rules for all input fields
 const schema = yup.object({
@@ -18,10 +19,9 @@ function Comment({comment,blogId}) {
 		resolver: yupResolver(schema)
 	});
     
-    const {loadAllComment,commentSubmit} = useContext(BlogContext)
+    const {loadAllComment} = useContext(BlogContext)
     const {user,token} = useContext(AuthContext)
     const [showForm, setShowForm] = useState(false);
-    const [repliedArr, setRepliedArr] = useState([]);
     const [repliedCommentSubmit,setRepliedCommentSubmit] = useState(false)
     const [resetComment,setResetComment] = useState({description:''})
     // console.log(comment)
@@ -31,7 +31,6 @@ function Comment({comment,blogId}) {
             return replay
         }
     })
-console.log(repliedComments)
     
     const onSubmit = (data) => {
         const modifiedData = { ...data, comment: comment?.cmtId };
@@ -87,68 +86,68 @@ console.log(repliedComments)
 
   return (
     <>
-            <li className="mb_20 wow animated slideInUp">
-                <div className="comment_description bg_white p_20">
-                    <div className="author_img">
-                        <img src={comment?.profilePicture} alt="images" />
-                    </div>
-                    <div className="author_text">
-                        <div className="author_info">
-                            <h5 className="author_name color_primary">{comment?.firstName} {comment?.lastName} </h5>
-                            <span>{comment?.commentDate && format(new Date(comment?.commentDate), 'dd MMMM, yyyy p')}</span>
-                        </div>
-                        <p>{comment?.description}</p>
-                        <button className="btn btn_info mt_15" onClick={() => setShowForm(true)}>Replay</button>
-                    </div>
-                </div>
-            </li>
-            {repliedComments?.map((repliedComment) => {
-            return (
-            <li key={repliedComment?.id} className="mb_20 replied">
-                <div className="comment_description bg_white p_20">
+        <li className="mb_20 wow animated slideInUp">
+            <div className="comment_description bg_white p_20">
                 <div className="author_img">
-                    <img
-                    src={repliedComment?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.attributes?.url}
-                    alt="images"
-                    />
+                    <img src={comment?.profilePicture ? comment?.profilePicture : notFoundImage} alt="images" />
                 </div>
                 <div className="author_text">
                     <div className="author_info">
-                    <h5 className="author_name color_primary">
-                        {repliedComment?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.firstName} {repliedComment?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.lastName}
-                    </h5>
-                    <span>
-                    {repliedComment?.attributes?.replayDate && format(new Date(repliedComment?.attributes?.replayDate), 'dd MMMM, yyyy p')}
-                    </span>
+                        <h5 className="author_name color_primary">{comment?.firstName ? comment?.firstName : <span style={{color:'red'}}>no firstName</span>} {comment?.lastName ? comment?.lastName : <span style={{color:'red'}}>no lastName</span>} </h5>
+                        <span>{comment?.commentDate && format(new Date(comment?.commentDate), 'dd MMMM, yyyy p') ? comment?.commentDate && format(new Date(comment?.commentDate), 'dd MMMM, yyyy p') : <span style={{color:'red'}}>no published date</span>}</span>
                     </div>
-                    <div>
-                    <p>{repliedComment?.attributes?.description}</p>
-                    <span className="btn btn_info mt_15">Replay</span>
-                    </div>
+                    <p>{comment?.description ? comment?.description :<span style={{color:'red'}}>no description</span>}</p>
+                    <button className="btn btn_info mt_15" onClick={() => setShowForm(true)}>Replay</button>
                 </div>
+            </div>
+        </li>
+        {repliedComments?.map((repliedComment) => {
+        return (
+        <li key={repliedComment?.id} className="mb_20 replied">
+            <div className="comment_description bg_white p_20">
+            <div className="author_img">
+                <img
+                src={repliedComment?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.attributes?.url ? repliedComment?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.attributes?.url : notFoundImage}
+                alt="images"
+                />
+            </div>
+            <div className="author_text">
+                <div className="author_info">
+                <h5 className="author_name color_primary">
+                    {repliedComment?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.firstName ? repliedComment?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.firstName : <span style={{color:'red'}}>no firstName</span>} {repliedComment?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.lastName ? repliedComment?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.lastName : <span style={{color:'red'}}>no lastName</span>}
+                </h5>
+                <span>
+                {repliedComment?.attributes?.replayDate && format(new Date(repliedComment?.attributes?.replayDate), 'dd MMMM, yyyy p') ? repliedComment?.attributes?.replayDate && format(new Date(repliedComment?.attributes?.replayDate), 'dd MMMM, yyyy p') :<span style={{color:'red'}}>no published date</span> }
+                </span>
+                </div>
+                <div>
+                <p>{repliedComment?.attributes?.description ? repliedComment?.attributes?.description : <span style={{color:'red'}}>no description</span>}</p>
+                {/* <span className="btn btn_info mt_15">Replay</span> */}
+                </div>
+            </div>
+            </div>
+        </li>
+        );
+        })}
+        {showForm && 
+            <li className="mb_20 wow animated slideInUp custom_replied_block">
+            <div className="comment_description replied bg_white p_20">
+                <h4 className="text-uppercase color_primary mb_30">Replay Comment</h4>
+                <form  className="reply_form" onSubmit={handleSubmit(onSubmit)}>
+                    <div className="row">
+                        <div className="col-md-12">
+                            <textarea className="form-control" defaultValue={description} {...register("description")} rows="3" placeholder="Type replay comment..."></textarea>
+                            <span style={{color:'red'}}>{errors?.description?.message}</span>
+                        </div>
+                        <div className="col-md-12">
+                            <button type="submit" className="btn btn-default" disabled={repliedCommentSubmit}>
+                                {repliedCommentSubmit ? 'Loading...' : 'Replay Comment'}
+                            </button>
+                        </div>
+                    </div>
+                </form>
                 </div>
             </li>
-            );
-            })}
-        {showForm && 
-             <li className="mb_20 wow animated slideInUp custom_replied_block">
-             <div className="comment_description replied bg_white p_20">
-                 <h4 className="text-uppercase color_primary mb_30">Replay Comment</h4>
-                 <form  className="reply_form" onSubmit={handleSubmit(onSubmit)}>
-                     <div className="row">
-                         <div className="col-md-12">
-                             <textarea className="form-control" defaultValue={description} {...register("description")} rows="3" placeholder="Type replay comment..."></textarea>
-                             <span style={{color:'red'}}>{errors?.description?.message}</span>
-                         </div>
-                         <div className="col-md-12">
-                             <button type="submit" className="btn btn-default" disabled={repliedCommentSubmit}>
-                                 {repliedCommentSubmit ? 'Loading...' : 'Replay Comment'}
-                             </button>
-                         </div>
-                     </div>
-                 </form>
-                 </div>
-             </li>
         }
     </>
   )

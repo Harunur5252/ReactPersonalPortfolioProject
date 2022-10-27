@@ -162,129 +162,129 @@ function Profile() {
 
   return (
     <>
-    {
-        !singleProfile?.profileId && !singleProfile?.userId && 
-        <form
-        className="form contact_message wow animated fadeInRight"
-        id="contact-form"
-        onSubmit={handleSubmit(onSubmit)}
-    >
-        <div className="row">
-            <div className="col-md-6 col-lg-6">
-                <div className="form-group">
-                    <input
-                        className="form-control"
-                        type="text"
-                        {...register("firstName",{required:'firstName is required'})}
-                        placeholder="Enter Your FirstName"
-                        defaultValue={firstName}
-                    />
-                    <span style={{color:'red'}}>{errors?.firstName?.message}</span>
+        {
+            !singleProfile?.profileId && !singleProfile?.userId && 
+            <form
+            className="form contact_message wow animated fadeInRight"
+            id="contact-form"
+            onSubmit={handleSubmit(onSubmit)}
+        >
+            <div className="row">
+                <div className="col-md-6 col-lg-6">
+                    <div className="form-group">
+                        <input
+                            className="form-control"
+                            type="text"
+                            {...register("firstName",{required:'firstName is required'})}
+                            placeholder="Enter Your FirstName"
+                            defaultValue={firstName}
+                        />
+                        <span style={{color:'red'}}>{errors?.firstName?.message}</span>
+                    </div>
                 </div>
-            </div>
-            <div className="col-md-6 col-lg-6">
-                <div className="form-group">
-                    <input
-                        className="form-control"
-                        type="text"
-                        {...register("lastName",{required:'lastName is required'})}
-                        placeholder="Enter Your LastName"
-                        defaultValue={lastName}
-                    />
-                    <span style={{color:'red'}}>{errors?.lastName?.message}</span>
+                <div className="col-md-6 col-lg-6">
+                    <div className="form-group">
+                        <input
+                            className="form-control"
+                            type="text"
+                            {...register("lastName",{required:'lastName is required'})}
+                            placeholder="Enter Your LastName"
+                            defaultValue={lastName}
+                        />
+                        <span style={{color:'red'}}>{errors?.lastName?.message}</span>
+                    </div>
                 </div>
-            </div>
-            <div className="col-md-6 col-lg-6">
-                <div className="form-group">
-                    <input
-                        className="form-control"
-                        type="file"
-                        accept='image/*'
-                        {...register("profilePicture",{required:'profilePicture is required'})}
-                        defaultValue={profilePicture}
-                    />
-                    <span style={{color:'red'}}>{errors?.profilePicture?.message}</span>
-                    {profileSubmit && <BarLoader color="#36d7b7" height={8} width={470}/>}
-					{profileSubmit && <p style={{textAlign:'center',color:'green',fontSize:'1.3rem'}}>{`${now}%`}</p>}
+                <div className="col-md-6 col-lg-6">
+                    <div className="form-group">
+                        <input
+                            className="form-control"
+                            type="file"
+                            accept='image/*'
+                            {...register("profilePicture",{required:'profilePicture is required'})}
+                            defaultValue={profilePicture}
+                        />
+                        <span style={{color:'red'}}>{errors?.profilePicture?.message}</span>
+                        {profileSubmit && <BarLoader color="#36d7b7" height={8} width={470}/>}
+                        {profileSubmit && <p style={{textAlign:'center',color:'green',fontSize:'1.3rem'}}>{`${now}%`}</p>}
+                    </div>
                 </div>
-            </div>
-            <div className="col-md-6 col-lg-6">
-                <div className="form-group">
-                    <input
-                        className="form-control"
-                        type="text"
-                        {...register("facebookAccount",{required:'facebookAccount link is required'})}
-                        placeholder="Enter Your facebookAccount Link"
-                        defaultValue={facebookAccount}
-                    />
-                    <span style={{color:'red'}}>{errors?.facebookAccount?.message}</span>
+                <div className="col-md-6 col-lg-6">
+                    <div className="form-group">
+                        <input
+                            className="form-control"
+                            type="text"
+                            {...register("facebookAccount",{required:'facebookAccount link is required'})}
+                            placeholder="Enter Your facebookAccount Link"
+                            defaultValue={facebookAccount}
+                        />
+                        <span style={{color:'red'}}>{errors?.facebookAccount?.message}</span>
+                    </div>
                 </div>
-            </div>
 
-            <div className="col-md-6 col-lg-6">
-                <div className="form-group">
-                    <input
-                        className="form-control"
-                        type="text"
-                        {...register("twitterAccount",{required:'twitterAccount link is required'})}
-                        placeholder="Enter Your twitterAccount Link"
-                        defaultValue={twitterAccount}
-                    />
-                    <span style={{color:'red'}}>{errors?.twitterAccount?.message}</span>
+                <div className="col-md-6 col-lg-6">
+                    <div className="form-group">
+                        <input
+                            className="form-control"
+                            type="text"
+                            {...register("twitterAccount",{required:'twitterAccount link is required'})}
+                            placeholder="Enter Your twitterAccount Link"
+                            defaultValue={twitterAccount}
+                        />
+                        <span style={{color:'red'}}>{errors?.twitterAccount?.message}</span>
+                    </div>
                 </div>
-            </div>
-            <div className="col-md-6 col-lg-6">
-                <div className="form-group">
-                    <input
-                        className="form-control"
-                        type="text"
-                        {...register("googlePlusAccount",{required:'googlePlusAccount link is required'})}
-                        placeholder="Enter Your googlePlusAccount Link"
-                        defaultValue={googlePlusAccount}
-                    />
-                    <span style={{color:'red'}}>{errors?.googlePlusAccount?.message}</span>
+                <div className="col-md-6 col-lg-6">
+                    <div className="form-group">
+                        <input
+                            className="form-control"
+                            type="text"
+                            {...register("googlePlusAccount",{required:'googlePlusAccount link is required'})}
+                            placeholder="Enter Your googlePlusAccount Link"
+                            defaultValue={googlePlusAccount}
+                        />
+                        <span style={{color:'red'}}>{errors?.googlePlusAccount?.message}</span>
+                    </div>
                 </div>
-            </div>
-            <div className="col-md-6 col-lg-6">
-                <div className="form-group">
-                    <input
-                        className="form-control"
-                        type="text"
-                        {...register("instagramAccount",{required:'instagramAccount link is required'})}
-                        placeholder="Enter Your instagramAccount Link"
-                        defaultValue={instagramAccount}
-                    />
-                    <span style={{color:'red'}}>{errors?.instagramAccount?.message}</span>
+                <div className="col-md-6 col-lg-6">
+                    <div className="form-group">
+                        <input
+                            className="form-control"
+                            type="text"
+                            {...register("instagramAccount",{required:'instagramAccount link is required'})}
+                            placeholder="Enter Your instagramAccount Link"
+                            defaultValue={instagramAccount}
+                        />
+                        <span style={{color:'red'}}>{errors?.instagramAccount?.message}</span>
+                    </div>
                 </div>
-            </div>
 
-            <div className="col-md-6 col-lg-6">
-                <div className="form-group">
-                    <input
-                        className="form-control"
-                        type="text"
-                        {...register("linkedinAccount",{required:'linkedinAccount link is required'})}
-                        placeholder="Enter Your linkedinAccount Link"
-                        defaultValue={linkedinAccount}
-                    />
-                    <span style={{color:'red'}}>{errors?.linkedinAccount?.message}</span>
+                <div className="col-md-6 col-lg-6">
+                    <div className="form-group">
+                        <input
+                            className="form-control"
+                            type="text"
+                            {...register("linkedinAccount",{required:'linkedinAccount link is required'})}
+                            placeholder="Enter Your linkedinAccount Link"
+                            defaultValue={linkedinAccount}
+                        />
+                        <span style={{color:'red'}}>{errors?.linkedinAccount?.message}</span>
+                    </div>
+                </div>
+                <div className="col-md-12 col-lg-12">
+                    <div className="form-group">
+                        <button
+                            className="btn btn-default"
+                            id="send"
+                            type="submit"
+                            disabled={profileSubmit && 'disabled'}
+                        >
+                        {profileSubmit ? 'Loading....' :'Submit'}
+                        </button>
+                    </div>
                 </div>
             </div>
-            <div className="col-md-12 col-lg-12">
-                <div className="form-group">
-                    <button
-                        className="btn btn-default"
-                        id="send"
-                        type="submit"
-                        disabled={profileSubmit && 'disabled'}
-                    >
-                       {profileSubmit ? 'Loading....' :'Submit'}
-                    </button>
-                </div>
-            </div>
-		</div>
-        </form>
-    }
+            </form>
+        }
        
         <table className="table table-responsive table-striped table-dark table-hover table-borderless">
         <thead>

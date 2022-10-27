@@ -89,7 +89,7 @@ function About() {
 											<Link
 												className="video-popup round_shape"
 												data-vbtype="video"
-												to={about?.video_link ? about?.video_link :''}
+												to={about?.video_link ? about?.video_link :'/'}
 												title={about?.video_title ? about?.video_title : <span style={{color:'red',fontSize:'1rem'}}> No video title is available to show</span>}
 											>
 												<i className="fa fa-play" aria-hidden="true"></i>
