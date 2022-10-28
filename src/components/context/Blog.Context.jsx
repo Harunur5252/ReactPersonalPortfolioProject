@@ -346,6 +346,7 @@ export function BlogProvider({children}) {
         return ({
          tagId:tag?.id,
          name : tag?.attributes?.name,
+         slug : tag?.attributes?.slug,
          tagWisePostData : tag?.attributes?.blog_posts
         })
      })

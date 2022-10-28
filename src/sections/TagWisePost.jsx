@@ -69,9 +69,11 @@ function TagWisePost() {
 			const tagPostArr = response.data.data?.map((tagPost) => {
 				return ({
 				 tagId:tagPost?.id,
+				 slug : tagPost?.attributes?.slug,
 				 tagWisePostData : tagPost?.attributes?.blog_posts
 				})
 			})
+	
             setLoadedTagPost(false)
 			 setPostArr(tagPostArr)
 		} catch (err) {
@@ -81,7 +83,7 @@ function TagWisePost() {
 	}
 
     const singleTag = postArr?.find((tag) => {
-		if(tag?.tagId === +tagId){
+		if(tag?.slug === tagId){
 			return tag
 		}
 	})
@@ -95,6 +97,7 @@ function TagWisePost() {
               profileId :post?.attributes?.author?.data?.attributes?.profile?.data?.id,
               profilePictureId :post?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.id,
               title : post?.attributes?.title,
+			  slug : post?.attributes?.slug,
 			  likes:post?.attributes?.likes?.data,
               description:post?.attributes?.description,
               blog_image:post?.attributes?.blog_image?.data?.attributes?.url,
@@ -176,7 +179,7 @@ function TagWisePost() {
                                     </div>
                                     <div className="blog_content bg_white">
                                         <div className="blog_title">
-                                            <Link className="color_primary" to={`/blog-details/${blog?.blogId}`}
+                                            <Link className="color_primary" to={`/blog-details/${blog?.slug}`}
                                                 ><h5>
                                                     {blog?.title} 
                                                 </h5></Link
@@ -261,7 +264,7 @@ function TagWisePost() {
 										   <div className="category_sidebar">
 											<ul>
 												{loadedCategory?.map((category)=> {
-													return <li key={category?.categoryId}><Link to={`/category-wise-post/${category?.categoryId}`}>{category?.name}</Link><span>({category?.totalPostLength})</span></li>
+													return <li key={category?.categoryId}><Link to={`/category-wise-post/${category?.slug}`}>{category?.name}</Link><span>({category?.totalPostLength})</span></li>
 												})}
 											</ul>
 									       </div>
@@ -283,7 +286,7 @@ function TagWisePost() {
 												{sliceRecentBlogArr?.map((recentPost) => {
                                                    return (
 													<li className="mb_30" key={recentPost?.blogId}>
-													<Link to={`/blog-details/${recentPost?.blogId}`}>
+													<Link to={`/blog-details/${recentPost?.slug}`}>
 														<div className="post_img">
 															<img
 																src={recentPost?.blog_image}
@@ -317,7 +320,7 @@ function TagWisePost() {
 												<ul>
 													{tags?.map((tag) => {
 														return (
-															<li key={tag?.tagId}><Link to={`/tag-wise-post/${tag?.tagId}`}>{tag?.name}</Link></li>
+															<li key={tag?.tagId}><Link to={`/tag-wise-post/${tag?.slug}`}>{tag?.name}</Link></li>
 														)
 													})}
 												</ul>

@@ -9,7 +9,6 @@ function Blog() {
 	const {ThreeBlogsData} = useContext(PageContext)
 	const {user} = useContext(AuthContext)
 	
-	
   return (
     <>  
 	 
@@ -53,7 +52,7 @@ function Blog() {
 												</div>
 												<div className="blog_content bg_white color_secondery">
 													<div className="blog_title">
-														<Link className="color_primary" to={`/blog-details/${blog?.blogId}`}>
+														<Link className="color_primary" to={`/blog-details/${blog?.slug}`}>
 															<h5>
 															   {blog?.title}
 															</h5>

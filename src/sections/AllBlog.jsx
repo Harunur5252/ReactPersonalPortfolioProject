@@ -200,7 +200,7 @@ function AllBlog() {
 												{sliceRecentBlogArr?.map((recentPost) => {
                                                    return (
 													<li className="mb_30" key={recentPost?.blogId}>
-													<Link to={`/blog-details/${recentPost?.blogId}`}>
+													<Link to={`/blog-details/${recentPost?.slug}`}>
 														<div className="post_img">
 															<img
 																src={recentPost?.blog_image}
@@ -234,7 +234,7 @@ function AllBlog() {
 												<ul>
 													{tags?.map((tag) => {
 														return (
-															<li key={tag?.tagId}><Link to={`/tag-wise-post/${tag?.tagId}`}>{tag?.name}</Link></li>
+															<li key={tag?.tagId}><Link to={`/tag-wise-post/${tag?.slug}`}>{tag?.name}</Link></li>
 														)
 													})}
 												</ul>

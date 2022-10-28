@@ -98,6 +98,7 @@ function CategoryWisePost() {
               profileId :post?.attributes?.author?.data?.attributes?.profile?.data?.id,
               profilePictureId :post?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.id,
               title : post?.attributes?.title,
+			  slug : post?.attributes?.slug,
 			  likes:post?.attributes?.likes?.data,
               description:post?.attributes?.description,
               blog_image:post?.attributes?.blog_image?.data?.attributes?.url,
@@ -114,7 +115,7 @@ function CategoryWisePost() {
               profilePicture :post?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.attributes?.url,
 		})
 	})
-      
+
 	const lastPostIndex = currentPage * postPerPage 
 	const firstPostIndex = lastPostIndex - postPerPage
 	const currentPosts = categoryWisePostArr?.slice(firstPostIndex,lastPostIndex)
@@ -178,7 +179,7 @@ function CategoryWisePost() {
 								</div>
 								<div className="blog_content bg_white">
 									<div className="blog_title">
-										<Link className="color_primary" to={`/blog-details/${blog?.blogId}`}
+										<Link className="color_primary" to={`/blog-details/${blog?.slug}`}
 											><h5>
 												{blog?.title} 
 											</h5></Link
@@ -281,7 +282,7 @@ function CategoryWisePost() {
 												{sliceRecentBlogArr?.map((recentPost) => {
                                                    return (
 													<li className="mb_30" key={recentPost?.blogId}>
-													<Link to={`/blog-details/${recentPost?.blogId}`}>
+													<Link to={`/blog-details/${recentPost?.slug}`}>
 														<div className="post_img">
 															<img
 																src={recentPost?.blog_image}
