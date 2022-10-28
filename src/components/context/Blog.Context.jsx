@@ -79,14 +79,6 @@ export function BlogProvider({children}) {
     }
   },[user,token,commentSubmit])
 
-  // useEffect(() => {
-  //   if(user && token){
-  //       (async () => {
-  //         loadAllRepliedComment()
-  //       })()
-  //   }
-  // },[user,token,repliedCommentSubmit])
-
   useEffect(() => {
     (async () => {
         if(user && token){
@@ -95,37 +87,6 @@ export function BlogProvider({children}) {
     })()
 },[user,token,blogSubmit])
 
-  // const loadAllRepliedComment = async () => {
-  //   const query = qs.stringify({
-  //     populate : [
-  //        'comment',
-  //        'comment.blog_post',
-  //        'user',
-  //        'user.profile',
-  //        'user.profile.profilePicture'
-  //     ]
-  //  })
-  //    try {
-  //      const response = await axiosPrivateInstance(token).get(`/replay-comments?${query}`)
-  //      const repliedArr = response.data?.data?.map((replay) => {
-  //         return ({
-  //            replayId : replay?.id,
-  //            description : replay?.attributes?.description,
-  //            replayDate  : replay?.attributes?.replayDate,
-  //            cmtId  : replay?.attributes?.comment?.data?.id,
-  //            userId : replay?.attributes?.user?.data?.id,
-  //            blogId     : replay?.attributes?.comment?.data?.attributes?.blog_post?.data?.id,
-  //            firstName  : replay?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.firstName,
-  //            lastName  : replay?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.lastName,
-  //            profilePicture  : replay?.attributes?.user?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.attributes?.url,
-  //         })
-  //      })
-  //      setRepliedArr(repliedArr)
-  //    } catch (err) {
-  //      console.log(err.response)
-  //    }
-  // }
-  
 
 
   const loadAllComment = async () => {
@@ -267,6 +228,7 @@ export function BlogProvider({children}) {
               likes : data?.attributes?.likes?.data,
               profilePictureId :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.id,
               title : data?.attributes?.title,
+              slug : data?.attributes?.slug,
               description:data?.attributes?.description,
               blog_image:data?.attributes?.blog_image?.data?.attributes?.url,
               blog_date:data?.attributes?.blog_date,
@@ -343,6 +305,7 @@ export function BlogProvider({children}) {
               likes : data?.attributes?.likes?.data,
               profilePictureId :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.id,
               title : data?.attributes?.title,
+              slug : data?.attributes?.slug,
               description:data?.attributes?.description,
               blog_image:data?.attributes?.blog_image?.data?.attributes?.url,
               blog_date:data?.attributes?.blog_date,
@@ -409,6 +372,7 @@ export function BlogProvider({children}) {
         const categoryArr = response.data.data?.map((category) => {
            return ({
             categoryId:category?.id,
+            slug:category?.attributes?.slug,
             name : category?.attributes?.name,
             totalPostLength : category?.attributes?.blog_posts.data.length,
             categoryWisePostData : category?.attributes?.blog_posts

@@ -30,9 +30,9 @@ function BlogDetails() {
 	const [resetComment,setResetComment] = useState({description:''})
 	const {id} = useParams()
 
-	const findSingleBlog = blogsWithoutPaginationData?.find((blog) => blog?.blogId === +id)
+	const findSingleBlog = blogsWithoutPaginationData?.find((blog) => blog?.slug === id)
     const checkAuthorProfile = blogsWithoutPaginationData?.find(blog => blog?.authorId === user?.id)
-
+    console.log(blog)
 	// latest posts
 	const BlogsData = blogsWithoutPaginationData?.map((post) => post)
 	const reverseBlogsData = BlogsData?.reverse()
@@ -126,7 +126,7 @@ function BlogDetails() {
 								<div className="blog_details">
 										{Object.keys(blog && blog)?.length === 0 ? <p style={{color:'red',fontSize:'1.5rem'}}>No blog show</p> : 
 										<>
-											<div className="blog_img overlay_one wow animated slideInUp"><img src={blog?.blog_image} alt="image" /></div>
+											<div key={blog?.blogId} className="blog_img overlay_one wow animated slideInUp"><img src={blog?.blog_image} alt="image" /></div>
 											<div className="blog_content bg_white">
 												<div className="blog_title mb_20 color_primary">
 													<h5>{blog?.title}</h5>

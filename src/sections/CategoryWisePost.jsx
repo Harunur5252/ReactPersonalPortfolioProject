@@ -71,6 +71,7 @@ function CategoryWisePost() {
 			const categoryPostArr = response.data.data?.map((categoryPost) => {
 				return ({
 				 categoryId:categoryPost?.id,
+				 slug : categoryPost?.attributes?.slug,
 				 categoryWisePostData : categoryPost?.attributes?.blog_posts
 				})
 			})
@@ -83,7 +84,7 @@ function CategoryWisePost() {
 	}
 
 	const singleCategory = postArr?.find((category) => {
-		if(category?.categoryId === +categoryId){
+		if(category?.slug === categoryId){
 			return category
 		}
 	})
@@ -261,7 +262,7 @@ function CategoryWisePost() {
 											<div className="category_sidebar">
 												<ul>
 													{loadedCategory?.map((category)=> {
-														return <li key={category?.categoryId}><Link to={`/category-wise-post/${category?.categoryId}`}>{category?.name}</Link><span>({category?.totalPostLength})</span></li>
+														return <li key={category?.categoryId}><Link to={`/category-wise-post/${category?.slug}`}>{category?.name}</Link><span>({category?.totalPostLength})</span></li>
 													})}
 												</ul>
 											</div>

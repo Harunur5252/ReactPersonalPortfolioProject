@@ -83,7 +83,7 @@ function AllBlog() {
 									   <div className="blog_list mb_60">
 										{blogs && blogs?.map((blog)=>{
 											return (
-												<div key={blog?.blogId} className="blog_item mb_30 wow animated slideInUp">
+												<div key={blog?.slug} className="blog_item mb_30 wow animated slideInUp">
 												<div className="comments">
 													<i className="fa fa-comment" aria-hidden="true"></i>
 													<span className="color_white">{blog?.likes?.length}</span>
@@ -93,7 +93,7 @@ function AllBlog() {
 												</div>
 												<div className="blog_content bg_white">
 													<div className="blog_title">
-														<Link className="color_primary" to={`/blog-details/${blog?.blogId}`}>
+														<Link className="color_primary" to={`/blog-details/${blog?.slug}`}>
 															<h5>
 																{blog?.title} 
 															</h5>
@@ -178,7 +178,7 @@ function AllBlog() {
 										   <div className="category_sidebar">
 											<ul>
 												{loadedCategory?.map((category)=> {
-													return <li key={category?.categoryId}><Link to={`/category-wise-post/${category?.categoryId}`}>{category?.name}</Link><span>({category?.totalPostLength})</span></li>
+													return <li key={category?.categoryId}><Link to={`/category-wise-post/${category?.slug}`}>{category?.name}</Link><span>({category?.totalPostLength})</span></li>
 												})}
 											</ul>
 									       </div>
