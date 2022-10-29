@@ -187,7 +187,7 @@ export function PageProvider({children}) {
     const loadAboutSection = async () => {
         try {
             setLoadedAboutSection(true)
-           const response = await axiosPublicInstance.get('/about')
+           const response = await axiosPublicInstance.get('/about?populate=*')
            setAbout({
                broad_details :  response.data?.data?.attributes?.broad_details,
                short_details :  response.data?.data?.attributes?.short_details,
