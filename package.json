@@ -28,6 +28,7 @@
     "react-typed": "^1.2.0",
     "react-visibility-sensor": "^5.1.1",
     "react-water-wave": "^2.0.1",
+    "slugify": "^1.6.5",
     "venobox": "^2.0.4",
     "yup": "^0.32.11"
   },

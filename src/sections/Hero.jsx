@@ -56,7 +56,7 @@ function Hero() {
 									}
 								</h1>
 								<p className="color_white mb_30">
-									{heroSectionData?.short_des ? heroSectionData?.short_des : <p style={{color:'red',fontSize:'1.5rem'}}>No short description is available to show</p>}
+									{heroSectionData?.short_des ? heroSectionData?.short_des : <span style={{color:'red',fontSize:'1.5rem'}}>No short description is available to show</span>}
 								</p>
 								<a className="btn btn-default" target='_blank' disabled={myProfileData?.cvLink ? '' : 'disabled'} href={myProfileData?.cvLink}>Download CV</a>
 							</div>

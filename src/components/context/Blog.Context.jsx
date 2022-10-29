@@ -1,6 +1,7 @@
 import React,{ useReducer,useContext,createContext,useState,useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
+import slugify from 'slugify'
 import qs from 'qs'
 import { axiosPrivateInstance } from '../../Utils/axios'
 import { ADD, LOAD_ALL_BLOGS } from '../actions/blogType'
@@ -424,10 +425,17 @@ export function BlogProvider({children}) {
       }, {
         encodeValuesOnly: true, 
       });
-
+     
      const blogData = {
         blog_date : data.blog_date,
         title : data.title,
+        slug:slugify(data.title,{
+          replacement: '-',
+          remove: undefined,
+          lower: true, 
+          strict: false,
+          trim: true 
+        }),
         description : data.description,
         author:user.id,
         categories : data.category,

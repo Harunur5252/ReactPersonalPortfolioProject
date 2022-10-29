@@ -9,7 +9,7 @@ function Footer() {
 							<div className="col-md-12 col-lg-12">
 								<div className="copyright">
 									<p>
-										<div style={{color:'rgba(132, 10, 241, 0.8)',fontSize:'1rem',fontWeight:'600'}}>Developed By Harunur Roshid</div>
+										<span style={{color:'rgba(132, 10, 241, 0.8)',fontSize:'1rem',fontWeight:'600'}}>Developed By Harunur Roshid</span>
 									</p>
 								</div>
 							</div>

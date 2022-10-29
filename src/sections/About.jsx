@@ -31,7 +31,7 @@ function About() {
 										>about myself
 									</h2>
 									<span className="sub_title">
-										{about.short_details ? about.short_details :<p style={{color:'red',fontSize:'1.1rem'}}>No short description is available to show</p>}
+										{about?.short_details ? about?.short_details :<span style={{color:'red',fontSize:'1.1rem'}}>No short description is available to show</span>}
 									</span>
 									
 								</div>
@@ -42,7 +42,7 @@ function About() {
 								<div className="col-md-7 col-lg-7">
 									<div className="myself color_secondery wow animated fadeInLeft">
 										<p>
-											{about?.broad_details ? about?.broad_details : <p style={{color:'red',fontSize:'1.1rem'}}>No broad description is available to show</p>}
+											{about?.broad_details ? about?.broad_details : <span style={{color:'red',fontSize:'1.1rem'}}>No broad description is available to show</span>}
 										</p>
 									</div>
 									<div className="personal_info">
