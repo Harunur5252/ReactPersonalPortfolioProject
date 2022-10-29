@@ -6,13 +6,16 @@ import { PageContext } from '../components/context/Page.Context';
 function Portfolio() {
   const {menus,projects,handleClick,portfolioData} = useContext(PageContext)
 
-	  useEffect(() => {
+  useEffect(() => {
 		new Venobox({
-      selector:'.venobox',
-      maxWidth:'600px',
-		  spinner:'flow',
-		})
-	  },[])
+			selector: '.my-image-links',
+			numeration: true,
+			infinigall: true,
+			share: true,
+			spinner: 'rotating-plane',
+      maxWidth:'600px'
+		});
+	}, []);
 
   return (
     <>
@@ -76,8 +79,8 @@ function Portfolio() {
                         <div className="default-portfolio-item">
                           <a
                             href={project?.image}
-                            data-gall="myGallery"
-                            className="venobox"
+                            data-gall="gallery01"
+                            className="my-image-links"
                           >
                             <img
                               src={project?.image}

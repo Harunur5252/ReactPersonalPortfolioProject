@@ -201,17 +201,19 @@ function AllBlog() {
                                                    return (
 													<li className="mb_30" key={recentPost?.blogId}>
 													<Link to={`/blog-details/${recentPost?.slug}`}>
-														<div className="post_img">
-															<img
-																src={recentPost?.blog_image}
-																alt="image"
-															/>
-														</div>
-														<div className="recent_post_content">
-															<h6>
-																{recentPost?.title}
-															</h6>
-															<span className="color_gray">{recentPost?.blog_date && format(new Date(recentPost?.blog_date), 'dd MMM yyyy')}</span>
+														<div className='d-flex align-item-center'>
+															<div className="post_img">
+																<img
+																	src={recentPost?.blog_image}
+																	alt="image"
+																/>
+															</div>
+															<div className="recent_post_content">
+																<h6>
+																	{recentPost?.title}
+																</h6>
+																<span className="color_gray">{recentPost?.blog_date && format(new Date(recentPost?.blog_date), 'dd MMM yyyy')}</span>
+															</div>
 														</div>
 													</Link>
 												</li>
