@@ -1,31 +1,60 @@
-import React,{ useContext } from 'react';
+import { useEffect,useState } from 'react';
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import { AuthContext } from '../components/context/Auth.Context';
 import Layout from '../components/layouts/Layout';
 import ScrollToTop from '../components/shared/ScrollToTop';
-import { Link } from 'react-router-dom';
+import { useSearchParams,useNavigate } from 'react-router-dom';
+import { axiosPublicInstance } from '../Utils/axios';
+import { toast } from 'react-toastify';
 
 // validation rules for all input fields
 const schema = yup.object({
     password: yup.string().required('password is required').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{6,})/,'Must Contain 6 character,One Uppercase,One Lowercase,One Number and One special case character'),
-    email: yup.string().lowercase().required('Email is required').email('Must be valid email')
+    passwordConfirmation : yup.string().required('confirm password is required').oneOf([yup.ref('password')],'confirm password does"t match')
   })
 
-function Login() {
-    const { register, formState: { errors,isSubmitting,isSubmitSuccessful }, handleSubmit, watch } = useForm({
+function ResetPassword() {
+    const { register,reset, formState: { errors,isSubmitting,isSubmitSuccessful }, handleSubmit, watch } = useForm({
         resolver: yupResolver(schema)
     });
-	const {login,loginSubmit} = useContext(AuthContext)
+    const [submit,setSubmit] = useState(false)
+    const [resetData,setResetData] = useState({})
+    const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
+    const code = searchParams.get('code')
 
-    const onSubmit = (data) => {
-		login({
-			identifier : data.email,
-			password: data.password
-		  })
+    const defaultValue ={
+        password : resetData?.password || '',
+        passwordConfirmation : resetData?.passwordConfirmation || '',
     }
+    const {password,passwordConfirmation} = defaultValue
+    useEffect(() => {
+        if(submit){
+            reset({
+                password : '',
+                passwordConfirmation : ''
+            })
+        }
+    },[submit])
 
+    const onSubmit = async (data) => {
+        setResetData(data)
+        try {
+            setSubmit(true)
+            const response = await axiosPublicInstance.post('auth/reset-password',{
+                code : code,
+                password : data?.password,
+                passwordConfirmation : data?.passwordConfirmation
+            })
+            setSubmit(false)
+            toast.success('password resets successfully,please login with update password')
+            navigate('/login')
+        } catch (err) {
+            setSubmit(false)
+            toast.error(err?.response?.data?.error?.message)
+        }
+    }
 
   return (
     <>
@@ -36,7 +65,7 @@ function Login() {
 					<div className="row">
 						<div className="col-md-12 col-lg-12">
 							<div className="banner_text text-center">
-								<h1 className="page_banner_title color_white text-uppercase">Login</h1>
+								<h1 className="page_banner_title color_white text-uppercase">Reset Password</h1>
 								<div className="breadcrumbs m-auto d-inline-block">
 									
 								</div>
@@ -54,14 +83,10 @@ function Login() {
 								>
 									<h2 className="title text-uppercase">
 										<span className="mx-auto color_default">
-											Login
+											Reset Password
                                         </span>
 										
 									</h2>
-									<span className="sub_title">
-                                        Login to create a new blog post
-									</span>
-									
 								</div>
 							</div>
 							<div className="col-md-12 col-lg-12">
@@ -78,22 +103,25 @@ function Login() {
 													<div className="form-group">
 														<input
 															className="form-control"
-															type="email"
-                                                            {...register("email")}
-															placeholder="Email Address"
+															type="password"
+															{...register("password")}
+                                                            defaultValue={password}
+															placeholder="Password"
 														/>
-                                                        <span style={{color:'red'}}>{errors?.email?.message}</span>
+                                                        <span style={{color:'red'}}>{errors?.password?.message}</span>
 													</div>
 												</div>
-												<div className="col-md-6 col-lg-6">
+
+                                                <div className="col-md-6 col-lg-6">
 													<div className="form-group">
 														<input
 															className="form-control"
 															type="password"
-															{...register("password")}
-															placeholder="Password"
+                                                            {...register("passwordConfirmation")}
+                                                            defaultValue={passwordConfirmation}
+															placeholder="Confirm Password"
 														/>
-                                                        <span style={{color:'red'}}>{errors?.password?.message}</span>
+                                                        <span style={{color:'red'}}>{errors?.passwordConfirmation?.message}</span>
 													</div>
 												</div>
 												
@@ -103,13 +131,10 @@ function Login() {
 															className="btn btn-default"
 															id="send"
 															type="submit"
-															disabled={loginSubmit}
+                                                            disabled={submit}
 														>
-															{loginSubmit ? 'Loading....' : 'Login'}
+															{submit ? 'Loading...' : 'Reset Password'}
 														</button>
-													</div>
-													<div className="form-group">
-														<p style={{color:'red'}}>Forgot Password ? <Link to='/forgot-password'><span style={{color:'green'}}>Click here</span></Link></p>
 													</div>
 												</div>
 											</div>
@@ -126,4 +151,4 @@ function Login() {
   )
 }
 
-export default Login
+export default ResetPassword

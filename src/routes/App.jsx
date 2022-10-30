@@ -17,6 +17,8 @@ import TagWisePost from '../sections/TagWisePost'
 import Wrapper from '../components/Wrapper'
 import PrivateRoute from './PrivateRoute'
 import PublicRoute from './PublicRoute'
+import ForgotPassword from '../components/ForgotPassword'
+import ResetPassword from '../components/ResetPassword'
 
 
 function App() {
@@ -93,6 +95,8 @@ function App() {
               } 
             />
             <Route path="*" element={ <NotFound/> } />
+            <Route path="/forgot-password" element={ <PublicRoute><ForgotPassword/></PublicRoute> } />
+            <Route path="/reset-password" element={ <PublicRoute><ResetPassword/></PublicRoute> } />
             <Route path="/user-dashboard" element={<PrivateRoute><DashBoard/></PrivateRoute>  }>
                 <Route path="profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
                 <Route path="manage-password" element={<PrivateRoute><ManagePassword /></PrivateRoute>} />
