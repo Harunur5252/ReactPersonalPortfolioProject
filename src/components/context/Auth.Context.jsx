@@ -1,6 +1,6 @@
 import React,{ useReducer,useState,useEffect, useContext,createContext } from 'react';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 import qs from 'qs'
 import { authReducer } from '../reducer/authReducer';
 import { LOGIN, LOGOUT, REGISTER, USER_BLOGS } from '../actions/authType';
@@ -26,6 +26,7 @@ export function AuthProvider({children}) {
     const [percentage,setPercentage] = useState(0)
 
     const navigate = useNavigate()
+    const location = useLocation()
 
     useEffect(() => {
         (async () => {
@@ -166,13 +167,13 @@ export function AuthProvider({children}) {
          console.log(err.response)
        }
     }
-    
+ 
     const login = async (data) => {
         try {
             setLoginSubmit(true)
             const response = await axiosPublicInstance.post('/auth/local',data)
             dispatch({type : LOGIN ,payload: {data : response.data,setUser,setToken}})
-            navigate('/')
+            navigate(location?.state?.from ? location?.state?.from : '/')
             toast.success('Login successfully!', {
                 position: "top-right",
                 autoClose: 2000,

@@ -275,7 +275,7 @@ function BlogDetails() {
 												</ul>
 										    </div>
 										:
-                                          <p style={{color:'red',fontSize:'1.3rem'}}>No recent post</p>
+                                          <p style={{color:'red',fontSize:'1.3rem'}}>No tag</p>
 										}
 									</div>
 								</div>

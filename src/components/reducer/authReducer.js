@@ -1,7 +1,6 @@
 import { REGISTER,LOGOUT, LOGIN,USER_BLOGS } from "../actions/authType"
 
 
-
 export const authReducer = (state,action) => {
     const {type,payload} = action
 
