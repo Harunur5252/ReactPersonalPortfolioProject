@@ -56,6 +56,8 @@ const skillInfoVariants = {
 
 function Skills() {
 	const {allSkill,skills,handleEvent} = useContext(PageContext)
+
+	console.log(skills)
 		// animation
 		const controls = useAnimation()
 		const [ref,inView] = useInView()
@@ -134,8 +136,7 @@ function Skills() {
 													<div className="skill-percent">
 													<span
 														className="count-num"
-														data-speed="3000"
-														data-stop={skill?.percent}
+														
 													>
 														{skill?.percent}
 													</span>
