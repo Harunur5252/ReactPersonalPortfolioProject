@@ -136,7 +136,8 @@ function Skills() {
 													<div className="skill-percent">
 													<span
 														className="count-num"
-														
+														data-speed="3000"
+														data-stop={skill?.percent}
 													>
 														{skill?.percent}
 													</span>

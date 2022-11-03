@@ -33,7 +33,7 @@ const skillsData = [
         id:5,
         name:'WORDPRESS',
         percent : 0,
-    },
+    }
 ]
 
 export function PageProvider({children}) {
