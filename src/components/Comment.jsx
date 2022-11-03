@@ -6,6 +6,7 @@ import * as yup from "yup";
 import { AuthContext } from './context/Auth.Context';
 import { BlogContext } from './context/Blog.Context';
 import { toast } from 'react-toastify';
+import {motion} from 'framer-motion'
 import { axiosPrivateInstance } from '../Utils/axios';
 import notFoundImage from '../assets/R.jpg'
 
@@ -97,7 +98,12 @@ function Comment({comment,blogId}) {
                         <span>{comment?.commentDate && format(new Date(comment?.commentDate), 'dd MMMM, yyyy p') ? comment?.commentDate && format(new Date(comment?.commentDate), 'dd MMMM, yyyy p') : <span style={{color:'red'}}>no published date</span>}</span>
                     </div>
                     <p>{comment?.description ? comment?.description :<span style={{color:'red'}}>no description</span>}</p>
-                    <button className="btn btn_info mt_15" onClick={() => setShowForm(true)}>Replay</button>
+                    <motion.button 
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}			
+                    className="btn btn_info mt_15" onClick={() => setShowForm(true)}>
+                        Replay
+                    </motion.button>
                 </div>
             </div>
         </li>
@@ -140,9 +146,10 @@ function Comment({comment,blogId}) {
                             <span style={{color:'red'}}>{errors?.description?.message}</span>
                         </div>
                         <div className="col-md-12">
-                            <button type="submit" className="btn btn-default" disabled={repliedCommentSubmit}>
+                            <motion.button whileHover={{ scale: 1.1 }}
+															whileTap={{ scale: 0.9 }} type="submit" className="btn btn-default" disabled={repliedCommentSubmit}>
                                 {repliedCommentSubmit ? 'Loading...' : 'Replay Comment'}
-                            </button>
+                            </motion.button>
                         </div>
                     </div>
                 </form>

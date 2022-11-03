@@ -2,6 +2,7 @@ import React,{ useContext,useState,useEffect } from 'react';
 import { useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import BarLoader from "react-spinners/BarLoader";
+import {motion} from 'framer-motion'
 import { BlogContext } from '../components/context/Blog.Context';
 import Layout from '../components/layouts/Layout';
 import ScrollToTop from '../components/shared/ScrollToTop';
@@ -189,14 +190,16 @@ function CreateBlog() {
 
 													<div className="col-md-12 col-lg-12">
 														<div className="form-group">
-															<button
+															<motion.button
 																className="btn btn-default"
 																id="send"
 																type="submit"
 																disabled={blogSubmit}
+																whileHover={{ scale: 1.1 }}
+															    whileTap={{ scale: 0.9 }}
 															>
 															{blogSubmit ? 'Loading....' : 'Submit'} 
-															</button>
+															</motion.button>
 														</div>
 													</div>
 												</div>

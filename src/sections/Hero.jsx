@@ -1,10 +1,42 @@
-import React,{ useContext } from 'react';
+import { useContext,useEffect } from 'react';
 import Typed from 'react-typed';
 import WaterWave from 'react-water-wave';
+import { motion,useAnimation } from "framer-motion"
+import { useInView } from 'react-intersection-observer'
 import { PageContext } from '../components/context/Page.Context';
+
+const heroSectionVariants = {
+	hidden : {
+		opacity:0,
+		scale:0
+	},
+	visible:{
+		opacity:1,
+		scale:1,
+		transition:{
+			type:'spring',
+			delay: 0.5,
+			ease: "easeOut",
+			duration:1,
+		}
+	}
+}
 
 function Hero() {
     const {professionData,heroSectionData,myProfileData} = useContext(PageContext)
+
+	// animation
+	const controls = useAnimation()
+	const [ref,inView] = useInView()
+	
+	useEffect(() => {
+		if(inView){
+			controls.start('visible')
+		}
+		if(!inView){
+		    controls.start('hidden')
+		}
+	},[controls,inView])
 
 	const strings = professionData?.map((profession) => {
 		return profession?.profession
@@ -23,16 +55,20 @@ function Hero() {
 
   return (
     <>
-	    <WaterWave dropRadius={20} interactive= {true} perturbance={0.03} resolution={500} imageUrl={myProfileData?.profilePicture?.data?.attributes?.url} className='banner_water_effect overlay_one'>
+	    <WaterWave dropRadius={20} interactive= {true} perturbance={0.03} resolution={500} imageUrl={myProfileData?.profilePicture?.data?.attributes?.url} className='banner_water_effect overlay_one'
+		>
 			{() => (
 		        <section
 				id="main_banner" name="top"
 				className="banner_water_effect overlay_one"
 			   >
-				<div className="container h-100">
+				<div ref={ref} className="container h-100">
 					<div className="row h-100 align-items-center">
 						<div className="col-md-12 col-lg-12 home-content text-left">
-							<div className="mainbanner_content">
+							<motion.div className="mainbanner_content"
+							variants={heroSectionVariants} animate={controls}
+							initial='hidden'
+							>
 								<span className="pb_5 banner_title color_white">
 									{myProfileData?.fullName ? 'I Am' :''} {myProfileData?.fullName ? myProfileData?.fullName : <span style={{color:'red',fontSize:'1.5rem'}}>No name is available to show</span>}!
 								</span>
@@ -58,8 +94,9 @@ function Hero() {
 								<p className="color_white mb_30">
 									{heroSectionData?.short_des ? heroSectionData?.short_des : <span style={{color:'red',fontSize:'1.5rem'}}>No short description is available to show</span>}
 								</p>
-								<a className="btn btn-default" target='_blank' disabled={myProfileData?.cvLink ? '' : 'disabled'} href={myProfileData?.cvLink}>Download CV</a>
-							</div>
+								<motion.a  whileHover={{ scale: 1.1 }}
+                                  whileTap={{ scale: 0.9 }} className="btn btn-default" target='_blank' disabled={myProfileData?.cvLink ? '' : 'disabled'} href={myProfileData?.cvLink}>Download CV</motion.a>
+							</motion.div>
 						</div>
 					</div>
 				</div>

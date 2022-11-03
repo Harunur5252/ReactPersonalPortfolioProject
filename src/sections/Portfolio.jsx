@@ -1,10 +1,42 @@
 import { useEffect,useContext } from 'react';
 import Venobox from 'venobox'
+import { motion,useAnimation } from "framer-motion"
+import { useInView } from 'react-intersection-observer';
 import { PageContext } from '../components/context/Page.Context';
+
+const portfolioDesVariants = {
+	hidden : {
+		opacity:0,
+		scale:0
+	},
+	visible:{
+		opacity:1,
+		scale:1,
+		transition:{
+			type:'spring',
+			delay: 0.5,
+			ease: "easeOut",
+			duration:1,
+		}
+	}
+}
 
 
 function Portfolio() {
   const {menus,projects,handleClick,portfolioData} = useContext(PageContext)
+
+  	// animation
+	const controls = useAnimation()
+	const [ref,inView] = useInView()
+	
+	useEffect(() => {
+		if(inView){
+			controls.start('visible')
+		}
+		if(!inView){
+			controls.start('hidden')
+		}
+	},[controls,inView])
 
   useEffect(() => {
 		new Venobox({
@@ -12,7 +44,7 @@ function Portfolio() {
 			numeration: true,
 			infinigall: true,
 			share: true,
-			spinner: 'rotating-plane',
+			spinner: 'flow',
       maxWidth:'600px'
 		});
 	}, []);
@@ -24,7 +56,7 @@ function Portfolio() {
       name="portfolio"
       className="py_80 bg_secondery full_row"
     >
-      <div className="container">
+      <div ref={ref} className="container">
         <div className="row">
             <div className="col-md-12 col-lg-12">
               <div className="section_title_1 text-center mx-auto pb_60 wow animated slideInUp">
@@ -34,9 +66,9 @@ function Portfolio() {
                   </span>
                   Recent Projects
                 </h2>
-                <span className="sub_title">
+                <motion.span variants={portfolioDesVariants} animate={controls} initial='hidden' className="sub_title">
                   {portfolioData?.sub_title ? portfolioData?.sub_title :<p style={{color:'red',fontSize:'1.5rem'}}>No portfolio title or projects is available to show</p>}
-                </span>
+                </motion.span>
               </div>
             </div>
           <div className="col-md-12 col-lg-12">
@@ -69,10 +101,10 @@ function Portfolio() {
 
               <div className="filter-list">
                 <div className="portfolio-items">
-                  <div className="row">
+                  <motion.div variants={portfolioDesVariants} initial='hidden' animate={controls} className="row">
                     {projects?.map((project) => {
                       return (
-                        <div
+                        <div 
                         key={project?.id}
                         className="mb_30 col-md-4 col-lg-4"
                       >
@@ -105,7 +137,7 @@ function Portfolio() {
                       </div>
                       );
                     })}
-                  </div>
+                  </motion.div>
                 </div>
               </div>
             </div>

@@ -3,12 +3,14 @@ import { Link, useParams } from 'react-router-dom'
 import format from 'date-fns/format'
 import { FaThumbsUp,FaThumbsDown } from "react-icons/fa";
 import { useForm } from "react-hook-form";
+import {motion} from 'framer-motion'
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { BlogContext } from '../components/context/Blog.Context'
 import { AuthContext } from '../components/context/Auth.Context';
 import Layout from '../components/layouts/Layout'
 import Comment from '../components/Comment';
+import { useRef } from 'react';
 
 
     // validation rules for all input fields
@@ -16,10 +18,11 @@ import Comment from '../components/Comment';
 		description: yup.string().required('description is required').min(5,'userName must be 5 or more').max(5000,'userName must be equal or less than 5000'),
 	})
 
+
 function BlogDetails() {
 	const { register,reset, formState: { errors,isSubmitting,isSubmitSuccessful }, handleSubmit, watch } = useForm({
 		resolver: yupResolver(schema)
-	  });
+	});
 
 	const {blogs,tags,blogsWithoutPaginationData,handleLike,handleUnLike,loadedCategory,comment,commentSubmit,commentLoadedArr} = useContext(BlogContext)
 	const {user,token,} = useContext(AuthContext)
@@ -32,7 +35,7 @@ function BlogDetails() {
 
 	const findSingleBlog = blogsWithoutPaginationData?.find((blog) => blog?.slug === id)
     const checkAuthorProfile = blogsWithoutPaginationData?.find(blog => blog?.authorId === user?.id)
-    console.log(blog)
+
 	// latest posts
 	const BlogsData = blogsWithoutPaginationData?.map((post) => post)
 	const reverseBlogsData = BlogsData?.reverse()
@@ -77,6 +80,7 @@ function BlogDetails() {
 	   setResetComment(data)
        comment(data,blogId)
 	}
+
 
     const defaultValue = {
 		description : resetComment?.description || ''
@@ -188,9 +192,10 @@ function BlogDetails() {
 													<span style={{color:'red'}}>{errors?.description?.message}</span>
 												</div>
 												<div className="col-md-12">
-													<button type="submit" className="btn btn-default" disabled={commentSubmit}>
+													<motion.button whileHover={{ scale: 1.1 }} 
+															whileTap={{ scale: 0.9 }} type="submit" className="btn btn-default" disabled={commentSubmit}>
 														{commentSubmit ? 'Loading...':'Post Comment'} 
-													</button>
+													</motion.button>
 												</div>
 											</div>
 										</form>

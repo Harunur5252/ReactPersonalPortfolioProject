@@ -2,6 +2,7 @@ import React,{ useContext } from 'react';
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
+import {motion} from 'framer-motion'
 import { AuthContext } from '../components/context/Auth.Context';
 import Layout from '../components/layouts/Layout';
 import ScrollToTop from '../components/shared/ScrollToTop';
@@ -99,14 +100,16 @@ function Login() {
 												
 												<div className="col-md-12 col-lg-12">
 													<div className="form-group">
-														<button
+														<motion.button
 															className="btn btn-default"
 															id="send"
 															type="submit"
 															disabled={loginSubmit}
+															whileHover={{ scale: 1.1 }}
+															whileTap={{ scale: 0.9 }}
 														>
 															{loginSubmit ? 'Loading....' : 'Login'}
-														</button>
+														</motion.button>
 													</div>
 													<div className="form-group">
 														<p style={{color:'red'}}>Forgot Password ? <Link to='/forgot-password'><span style={{color:'green'}}>Click here</span></Link></p>

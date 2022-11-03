@@ -1,6 +1,25 @@
-import React,{ useState,useEffect,useContext } from 'react';
+import { useEffect,useContext } from 'react';
 import Slider from 'react-slick'
+import { motion,useAnimation } from "framer-motion"
+import { useInView } from 'react-intersection-observer';
 import { PageContext } from '../components/context/Page.Context';
+
+const testimonialDesVariants = {
+	hidden : {
+		opacity:0,
+		scale:0
+	},
+	visible:{
+		opacity:1,
+		scale:1,
+		transition:{
+			type:'spring',
+			delay: 0.5,
+			ease: "easeOut",
+			duration:1,
+		}
+	}
+}
 
 function Testimonial() {
 	const settings = {
@@ -17,6 +36,19 @@ function Testimonial() {
 		prevArrow: <SamplePrevArrow />,
 	};
 	const {testimonialData} = useContext(PageContext)
+
+	  	// animation
+		  const controls = useAnimation()
+		  const [ref,inView] = useInView()
+		  
+		  useEffect(() => {
+			  if(inView){
+				  controls.start('visible')
+			  }
+			  if(!inView){
+				  controls.start('hidden')
+			  }
+		  },[controls,inView])
 
 	function SampleNextArrow(props) {
 		const { className, style, onClick } = props;
@@ -43,7 +75,7 @@ function Testimonial() {
   return (
     <>
         <section id="testimonial" name="testimonial" className="py_80 full_row bg_white">
-					<div className="container">
+					<div ref={ref} className="container">
 						<div className="row">
 							<div className="col-md-12 col-lg-12">
 								<div
@@ -54,13 +86,13 @@ function Testimonial() {
 											>testimonial</span
 										>What Client Say’s
 									</h2>
-									<span className="sub_title">
+									<motion.span variants={testimonialDesVariants} animate={controls} initial='hidden' className="sub_title">
 										{testimonialData?.tes_sub_title ? testimonialData?.tes_sub_title : <p style={{color:'red',fontSize:'1.5rem'}}>testimonial data is not available to show</p>}
-									</span>
+									</motion.span>
 									
 								</div>
 							</div>
-							<div className="col-md-12 col-lg-12">
+							<motion.div variants={testimonialDesVariants} animate={controls} initial='hidden' className="col-md-12 col-lg-12">
 								<div
 									className="animated slideInUp"
 								>
@@ -153,7 +185,7 @@ function Testimonial() {
 									</div> */}
 									</Slider>
 								</div>
-							</div>
+							</motion.div>
 						</div>
 					</div>
 		</section> 

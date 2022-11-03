@@ -1,19 +1,56 @@
-import React,{useContext} from 'react'
+import {useContext,useEffect} from 'react'
 import CountUp from 'react-countup';
 import VisibilitySensor from "react-visibility-sensor";
+import { motion,useAnimation } from "framer-motion"
+import { useInView } from 'react-intersection-observer'
 import { PageContext } from '../components/context/Page.Context';
+
+const experienceVariants = {
+	hidden : {
+		y:1000,
+		opacity:0,
+		scale:0,
+	},
+	visible:{
+		y:0,
+		opacity:1,
+		scale:1,
+		transition:{
+			type:'spring',
+			delay:0.3,
+			ease: "easeInOut",
+			duration:0.5
+		}
+	}
+}
 
 function Experience() {
     const {experience} = useContext(PageContext)
+	
+	// animation
+	const controls = useAnimation()
+	const [ref,inView] = useInView()
+    
+	useEffect(() => {
+	   if(inView){
+		 controls.start('visible')
+	   }
+	   if(!inView){
+		controls.start('hidden')
+	  }
+	 },[controls,inView])
+
   return (
     <>
         <div className="experience background2 overlay_two py_60 full_row">
-					<div className="container">
+					<div ref={ref} className="container">
 						<div className="row">
 							<div className="col-md-12 col-lg-12">
 								<div className="fact-counter">
-									<div className="row">
-										<div className="col-md-4 col-lg-4">
+									<motion.div variants={experienceVariants} initial='hidden' animate={controls} className="row">
+										<div className="col-md-4 col-lg-4"
+										
+										>
 											<div
 												className="counter count wow text-center"
 												data-wow-duration="300ms"
@@ -42,7 +79,9 @@ function Experience() {
 												<h3 className="color_white mt_15">Years of Experience</h3>
 											</div>
 										</div>
-										<div className="col-md-4 col-lg-4">
+										<div className="col-md-4 col-lg-4"
+										
+										>
 											<div
 												className="counter count wow text-center"
 												data-wow-duration="300ms"
@@ -69,7 +108,9 @@ function Experience() {
 												<h3 className="color_white mt_15">Projects Done</h3>
 											</div>
 										</div>
-										<div className="col-md-4 col-lg-4">
+										<div className="col-md-4 col-lg-4"
+										
+										>
 											<div
 												className="counter count wow text-center"
 												data-wow-duration="300ms"
@@ -96,7 +137,7 @@ function Experience() {
 												<h3 className="color_white mt_15">Happy Clients</h3>
 											</div>
 										</div>
-									</div>
+									</motion.div>
 								</div>
 							</div>
 						</div>

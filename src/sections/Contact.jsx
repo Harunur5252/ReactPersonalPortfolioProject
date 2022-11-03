@@ -2,7 +2,60 @@ import React,{useContext,useEffect} from 'react'
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
+import { motion,useAnimation } from "framer-motion"
+import { useInView } from 'react-intersection-observer'
 import { PageContext } from '../components/context/Page.Context';
+
+const contactDesVariants = {
+	hidden : {
+		opacity:0,
+		scale:0
+	},
+	visible:{
+		opacity:1,
+		scale:1,
+		transition:{
+			type:'spring',
+			delay: 0.5,
+			ease: "easeOut",
+			duration:1,
+		}
+	}
+}
+
+const contactPersonaInfoVariants = {
+	hidden: {
+		x:-1000,
+		opacity:0,
+		scale:0
+	},
+	visible:{
+		x:0,
+		opacity:1,
+		scale:1,
+		transition:{
+			delay: 0.3,
+			duration:0.9,
+		}
+	}
+}
+
+const contactFormVariants = {
+	hidden: {
+		x:1000,
+		opacity:0,
+		scale:0
+	},
+	visible:{
+		x:0,
+		opacity:1,
+		scale:1,
+		transition:{
+			delay: 0.3,
+			duration:0.9,
+		}
+	}
+}
 
 // validation rules for all input fields
 const schema = yup.object({
@@ -40,11 +93,24 @@ function Contact() {
 	const onSubmit = async (data) => {
 		contactAdd(data)
     }
+
+	// animation
+	const controls = useAnimation()
+	const [ref,inView] = useInView()
+	
+	useEffect(() => {
+		if(inView){
+			controls.start('visible')
+		}
+		if(!inView){
+			controls.start('hidden')
+		}
+	},[controls,inView])
     
   return (
     <>
         <section id="contact" name="contact" className="py_80 full_row bg_white">
-					<div className="container">
+					<div ref={ref} className="container">
 						<div className="row">
 							<div className="col-md-12 col-lg-12">
 								<div
@@ -55,16 +121,16 @@ function Contact() {
 											>contact</span
 										>Get In Touch
 									</h2>
-									<span className="sub_title"
+									<motion.span variants={contactDesVariants} animate={controls} initial='hidden' className="sub_title"
 										>Interdum a etiam sagittis vehicula porta. Massa felis eros
 										quam blandit nulla dolor habitant. Ullamcorper quis ornare
-										et proin pellentesque.</span
+										et proin pellentesque.</motion.span
 									>
 								</div>
 							</div>
 							<div className="col-md-12 col-lg-12">
 								<div className="row">
-									<div className="col-md-4 col-lg-4">
+									<motion.div variants={contactPersonaInfoVariants} animate={controls} initial='hidden' className="col-md-4 col-lg-4">
 										<div className="contact_info wow animated fadeInLeft">
 											<ul>
 												<li>
@@ -139,8 +205,8 @@ function Contact() {
 												</li>
 											</ul>
 										</div>
-									</div>
-									<div className="col-md-8 col-lg-8">
+									</motion.div>
+									<motion.div variants={contactFormVariants} animate={controls} initial='hidden' className="col-md-8 col-lg-8">
 										<form
 											className="form contact_message wow animated fadeInRight"
 											id="contact-form"
@@ -198,19 +264,21 @@ function Contact() {
 												</div>
 												<div className="col-md-12 col-lg-12">
 													<div className="form-group">
-														<button
+														<motion.button
 															className="btn btn-default"
 															id="send"
 															type="submit"
 															disabled={contactSubmit}
+															whileHover={{ scale: 1.1 }}
+															whileTap={{ scale: 0.9 }}
 														>
                                                             {contactSubmit ? 'Loading...' : 'Send Massage'} 
-														</button>
+														</motion.button>
 													</div>
 												</div>
 											</div>
 										</form>
-									</div>
+									</motion.div>
 								</div>
 							</div>
 						</div>

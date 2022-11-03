@@ -7,6 +7,7 @@ import MenuFooter from '../components/shared/Menu/MenuFooter'
 import { useContext } from 'react';
 import { AuthContext } from '../components/context/Auth.Context';
 import Layout from '../components/layouts/Layout';
+import {motion} from 'framer-motion'
 import ScrollToTop from '../components/shared/ScrollToTop';
 
 // validation rules for all input fields
@@ -121,14 +122,16 @@ function Register() {
 												
 												<div className="col-md-12 col-lg-12">
 													<div className="form-group">
-														<button
+														<motion.button
 															className="btn btn-default"
 															id="send"
 															type="submit"
                                                             disabled={registerSubmit}
+															whileHover={{ scale: 1.1 }}
+															whileTap={{ scale: 0.9 }}
 														>
                                                            {registerSubmit ? 'Loading....' : 'Register'}
-                                                        </button>
+                                                        </motion.button>
 													</div>
 												</div>
 											</div>
