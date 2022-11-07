@@ -2,39 +2,13 @@ import { useContext,useState,useEffect } from 'react'
 import { createContext } from 'react'
 import qs from 'qs'
 import { toast } from 'react-toastify';
-import { axiosPrivateInstance, axiosPublicInstance } from '../../Utils/axios'
+import { axiosPublicInstance } from '../../Utils/axios'
 import { AuthContext } from './Auth.Context'
 import { BlogContext } from './Blog.Context'
 
 export const PageContext = createContext()
 
-const skillsData = [
-    {
-        id:1,
-        name:'HTML',
-        percent : 0,
-    },
-    {
-        id:2,
-        name:'CSS',
-        percent : 0,
-    },
-    {
-        id:3,
-        name:'PHP',
-        percent : 0,
-    },
-    {
-        id:4,
-        name:'JQUERY',
-        percent : 0,
-    },
-    {
-        id:5,
-        name:'WORDPRESS',
-        percent : 0,
-    }
-]
+
 
 export function PageProvider({children}) {
     const {user,token} = useContext(AuthContext)
@@ -54,7 +28,7 @@ export function PageProvider({children}) {
     const [myProfileData,setMyProfileData] = useState({})
     const [about,setAbout] = useState({})
     const [allSkill,setAllSkill] = useState({})
-    const [skills , setSkills] = useState(skillsData)
+    
     const [experience,setExperience] = useState({})
     const [servicesData,setServicesData] = useState({})
     const [portfolioData,setPortfolioData] = useState({})
@@ -72,21 +46,16 @@ export function PageProvider({children}) {
 		ThreeBlogsData = reverseBlogsData?.slice(0,3)
 	}
 
-    const featureSkill = allSkill?.SkillFeature?.map((skill) => {
-        return({
-			id : skill?.id,
-			name : skill?.name,
-			percent:skill?.percent
-		})
-	})
-    const handleEvent = () => {
-        const value = window.scrollY  
-        if(value >= 1140){
-            setSkills(featureSkill)
-        }
-    }
+
+
+    // const handleEvent = () => {
+    //     const value = window.scrollY  
+    //     if(value >= 1140){
+    //         setSkills(featureSkill)
+    //     }
+    // }
     
-    // filter projects for portfolio page
+    // filter projects for portfolio section
     const handleClick = (menu) => {
 		const modifiedArr = menus?.map((singleMenu) => {
 		  if (singleMenu?.id === menu?.id) {
@@ -325,8 +294,6 @@ export function PageProvider({children}) {
         about,
         loadedAboutSection,
         allSkill,
-        skills,
-        handleEvent,
         experience,
         servicesData,
         menus,
@@ -344,7 +311,7 @@ export function PageProvider({children}) {
         loadedTestimonialSection,
         loadedPortfolioSection,
         loadedMyProfileSection,
-        myProfileData
+        myProfileData,
     }
   return (
     <PageContext.Provider value={value} >{children}</PageContext.Provider>

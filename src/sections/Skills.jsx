@@ -1,4 +1,4 @@
-import { useEffect,useContext } from 'react';
+import { useEffect,useContext,useState } from 'react';
 import { motion,useAnimation } from "framer-motion"
 import { useInView } from 'react-intersection-observer'
 import { PageContext } from '../components/context/Page.Context';
@@ -54,10 +54,46 @@ const skillInfoVariants = {
 	}
 }
 
-function Skills() {
-	const {allSkill,skills,handleEvent} = useContext(PageContext)
+const skillsData = [
+    {
+        id:1,
+        name:'HTML',
+        percent : 0,
+    },
+    {
+        id:2,
+        name:'CSS',
+        percent : 0,
+    },
+    {
+        id:3,
+        name:'PHP',
+        percent : 0,
+    },
+    {
+        id:4,
+        name:'JQUERY',
+        percent : 0,
+    },
+    {
+        id:5,
+        name:'WORDPRESS',
+        percent : 0,
+    }
+]
 
-	console.log(skills)
+function Skills() {
+	const {allSkill} = useContext(PageContext)
+	const [skills , setSkills] = useState(skillsData)
+
+	const featureSkill = allSkill?.SkillFeature?.map((skill) => {
+        return({
+			id : skill?.id,
+			name : skill?.name,
+			percent:skill?.percent
+		})
+	})
+
 		// animation
 		const controls = useAnimation()
 		const [ref,inView] = useInView()
@@ -65,18 +101,20 @@ function Skills() {
 		useEffect(() => {
 		   if(inView){
 			 controls.start('visible')
+			 setSkills(featureSkill)
 		   }
 		   if(!inView){
 			controls.start('hidden')
+			setSkills(skillsData)
 		  }
 		 },[controls,inView])
 
-	useEffect(() =>{
-		document.addEventListener('scroll',handleEvent)
-		return () => {
-			document.removeEventListener('scroll',handleEvent)
-		}
-	})
+	// useEffect(() =>{
+	// 	document.addEventListener('scroll',handleEvent)
+	// 	return () => {
+	// 		document.removeEventListener('scroll',handleEvent)
+	// 	}
+	// })
 
   return (
     <>
