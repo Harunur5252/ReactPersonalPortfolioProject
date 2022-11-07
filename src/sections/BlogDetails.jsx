@@ -10,7 +10,6 @@ import { BlogContext } from '../components/context/Blog.Context'
 import { AuthContext } from '../components/context/Auth.Context';
 import Layout from '../components/layouts/Layout'
 import Comment from '../components/Comment';
-import { useRef } from 'react';
 
 
     // validation rules for all input fields
@@ -35,7 +34,7 @@ function BlogDetails() {
 
 	const findSingleBlog = blogsWithoutPaginationData?.find((blog) => blog?.slug === id)
     const checkAuthorProfile = blogsWithoutPaginationData?.find(blog => blog?.authorId === user?.id)
-
+ 
 	// latest posts
 	const BlogsData = blogsWithoutPaginationData?.map((post) => post)
 	const reverseBlogsData = BlogsData?.reverse()
@@ -146,6 +145,10 @@ function BlogDetails() {
 												</div>
 												<div className="single_blog_content d-inline-block mt_30 color_secondery wow animated slideInUp">
 													<p>{blog?.description}</p>
+												</div>
+												<div className='mt-2'>
+													<Link to={`/edit-blog/${id}`}><motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className='btn btn-success'>Edit</motion.button></Link>&nbsp;&nbsp;&nbsp;
+													<motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className='btn btn-danger'>Delete</motion.button>
 												</div>
 												<div className="share_post mt_30 wow animated slideInUp">
 													<h4 className="float-left mr_20">Share : </h4>

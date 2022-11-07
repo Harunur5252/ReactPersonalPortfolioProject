@@ -45,15 +45,6 @@ export function PageProvider({children}) {
 	if(reverseBlogsData?.slice(0,3)){
 		ThreeBlogsData = reverseBlogsData?.slice(0,3)
 	}
-
-
-
-    // const handleEvent = () => {
-    //     const value = window.scrollY  
-    //     if(value >= 1140){
-    //         setSkills(featureSkill)
-    //     }
-    // }
     
     // filter projects for portfolio section
     const handleClick = (menu) => {

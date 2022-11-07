@@ -56,12 +56,12 @@ const skillInfoVariants = {
 
 const skillsData = [
     {
-        id:1,
+        id:2,
         name:'HTML',
         percent : 0,
     },
     {
-        id:2,
+        id:1,
         name:'CSS',
         percent : 0,
     },
@@ -79,7 +79,8 @@ const skillsData = [
         id:5,
         name:'WORDPRESS',
         percent : 0,
-    }
+    },
+	
 ]
 
 function Skills() {

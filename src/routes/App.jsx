@@ -19,6 +19,7 @@ import PrivateRoute from './PrivateRoute'
 import PublicRoute from './PublicRoute'
 import ForgotPassword from '../components/ForgotPassword'
 import ResetPassword from '../components/ResetPassword'
+import EditBlog from '../sections/EditBlog'
 
 
 function App() {
@@ -75,6 +76,14 @@ function App() {
               element={ 
                 <PrivateRoute>
                   <CreateBlog/> 
+                </PrivateRoute>
+              } 
+            />
+            <Route 
+              path="/edit-blog/:id" 
+              element={ 
+                <PrivateRoute>
+                  <EditBlog/> 
                 </PrivateRoute>
               } 
             />
