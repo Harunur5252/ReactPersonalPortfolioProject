@@ -1,8 +1,11 @@
 import { useContext,useEffect,useState } from 'react'
 import format from 'date-fns/format'
+import {motion} from 'framer-motion'
 import { animateScroll as scroll } from 'react-scroll'
+import {FaEdit,FaTrashAlt} from 'react-icons/fa'
 import { AuthContext } from '../components/context/Auth.Context'
 import notFoundImage from '../assets/R.jpg'
+import { Link } from 'react-router-dom'
 
 
 const generateArr = (totalPost,postPerPage) => {
@@ -15,6 +18,7 @@ const generateArr = (totalPost,postPerPage) => {
 
 function UserBlogList() {
   const {userBlogs} = useContext(AuthContext)
+
   	// pagination
     const [currentPage,setCurrentPage] = useState(1)
     const postPerPage = import.meta.env.VITE_USER_BLOGS_PAGE_SIZE
@@ -22,6 +26,7 @@ function UserBlogList() {
   // latest userBlogPosts 
   const userBlogsArr = userBlogs?.map((userBlog) => userBlog)
   const reverseUserBlogArr = userBlogsArr?.reverse()
+ 
 
   useEffect(()=>{
 		scroll.scrollToTop()
@@ -54,6 +59,7 @@ function UserBlogList() {
           <th scope="col">Title</th>
           <th scope="col">Description</th>
           <th scope="col">Blog Published</th>
+          <th scope="col">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -69,6 +75,10 @@ function UserBlogList() {
                 <td>{blog?.title}</td>
                 <td>{blog?.description}</td>
                 <td>{blog?.blog_date && format(new Date(blog?.blog_date), 'dd-MMM-yyyy')}</td>
+                <td>
+                      <Link to={`/edit-blog/${blog?.slug}`}><motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className='btn btn-success btn-sm'><FaEdit /></motion.button></Link>&nbsp;
+                      <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className='btn btn-danger btn-sm'><FaTrashAlt /></motion.button>
+                </td>
               </tr>
             )
           })
@@ -91,7 +101,7 @@ function UserBlogList() {
        
       </tbody>
       
-</table>
+     </table>
     </>
   )
 }

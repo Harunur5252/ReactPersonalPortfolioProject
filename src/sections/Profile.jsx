@@ -7,10 +7,12 @@ import { AuthContext } from '../components/context/Auth.Context';
 import notFoundImage from '../assets/R.jpg'
 import { axiosPrivateInstance } from '../Utils/axios';
 import { toast } from 'react-toastify';
+import { BlogContext } from '../components/context/Blog.Context';
 
 function Profile() {
     const { register, reset, formState: { errors,isSubmitting,isSubmitSuccessful }, handleSubmit, watch } = useForm();
-    const {profile,profileSubmit,percentage,user,token,multipleProfileData,loadAllProfile} = useContext(AuthContext)
+    const {loadAllBlogWithoutPagination,loadAllBlog} = useContext(BlogContext)
+    const {profile,profileSubmit,loadUserBlog,percentage,user,token,multipleProfileData,loadAllProfile} = useContext(AuthContext)
     const [profileAllData,setProfileAllData] = useState({})
     const [file,setFile] = useState(null)
     const [loadedProfile,setLoadedProfile] = useState(false)
@@ -75,6 +77,30 @@ function Profile() {
         }
     })()
 },[user,token,loadedProfile,profileDeleteImg])
+
+useEffect(() => {
+    (async () => {
+        if(user && token){
+            loadUserBlog()
+        }
+    })()
+},[user,token,loadedProfile,profileDeleteImg])
+
+useEffect(() => {
+    if(user && token){
+        (async () => {
+          loadAllBlogWithoutPagination()
+        })()
+    }
+  },[user,token,loadedProfile,profileDeleteImg])
+
+  useEffect(() => {
+    if(user && token){
+        (async () => {
+          loadAllBlog()
+        })()
+    }
+  },[user,token,loadedProfile,profileDeleteImg])
 
   const handleChange = (evt) => {
     setProfileControlData({

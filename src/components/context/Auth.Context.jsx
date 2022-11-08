@@ -1,5 +1,6 @@
 import React,{ useReducer,useState,useEffect, useContext,createContext } from 'react';
 import { toast } from 'react-toastify';
+import slugify from 'slugify'
 import { useNavigate,useLocation } from 'react-router-dom';
 import qs from 'qs'
 import { authReducer } from '../reducer/authReducer';
@@ -22,8 +23,13 @@ export function AuthProvider({children}) {
     const [loginSubmit,setLoginSubmit] = useState(false)
     const [profileSubmit,setProfileSubmit] = useState(false)
     const [passwordSubmit,setPasswordSubmit] = useState(false)
+    const [blogUpdate,setBlogUpdate] = useState(false)
+    const [blogImgDelete,setBlogImgDelete] = useState(false)
     const [multipleProfileData,setMultipleProfileData] = useState([])
     const [percentage,setPercentage] = useState(0)
+    const [imageError,setImageError] = useState({
+        error:''
+    })
 
     const navigate = useNavigate()
     const location = useLocation()
@@ -42,7 +48,7 @@ export function AuthProvider({children}) {
                 loadUserBlog()
             }
         })()
-    },[user,token,profileSubmit])
+    },[user,token,profileSubmit,blogUpdate,blogImgDelete])
 
     const passwordChange = async (data) => {
         try {
@@ -111,6 +117,109 @@ export function AuthProvider({children}) {
           toast.error(err?.response?.data?.error?.message)
        }
     }
+
+    const deleteUserBlogImg = async (imgId) => {
+        try {
+            setBlogImgDelete(true)
+            const response = await axiosPrivateInstance(token).delete(`upload/files/${imgId}`)
+            setBlogImgDelete(false)
+        } catch (err) {
+            setBlogImgDelete(false)
+            console.log(err.response)
+        }
+    }
+
+    const userBlogUpdate = async (data,foundBlog) => {
+        const blogData = {
+			title : data.title,
+			description : data.description,
+			blog_date : data.blog_date,
+			author:user?.id,
+		}
+
+		try {
+            if((blogData.title && blogData.description && blogData.blog_date)  && (data?.blog_image[0]  && foundBlog?.imgId)){
+                setImageError({
+                    error : 'You have already an image,if you want to update then delete before image'
+                })
+                toast.error('already an image exist')
+            }else if((blogData.title && blogData.description && blogData.blog_date && data?.blog_image[0]) && !foundBlog?.imgId){
+                const formData = new FormData()
+                formData.append('files.blog_image',data?.blog_image[0],data?.blog_image[0]?.name)
+                formData.append('data',JSON.stringify(blogData))
+                setBlogUpdate(true)
+                const response = await axiosPrivateInstance(token).put(`/blog-posts/${foundBlog?.blogId}`,
+                  formData
+                )
+                setImageError({
+                    error : ''
+                })
+                setBlogUpdate(false)
+                toast.success('blog updated successfully with image!')
+            }else if((blogData.title || blogData.description || blogData.blog_date) && (data?.blog_image[0] && !foundBlog?.imgId)){
+                const formData = new FormData()
+                formData.append('files.blog_image',data?.blog_image[0],data?.blog_image[0]?.name)
+                formData.append('data',JSON.stringify(blogData))
+                setBlogUpdate(true)
+                const response = await axiosPrivateInstance(token).put(`/blog-posts/${foundBlog?.blogId}`,
+                  formData
+                )
+                setImageError({
+                    error : ''
+                })
+                setBlogUpdate(false)
+                toast.success('blog updated successfully with image!')
+            }else if(blogData.title && blogData.description && blogData.blog_date){
+                setBlogUpdate(true)
+                const response = await axiosPrivateInstance(token).put(`/blog-posts/${foundBlog?.blogId}`,
+                  {
+                    data : blogData
+                  }
+                )
+                if(foundBlog?.imgId){
+                    setImageError({
+                    error : 'You have already an image,if you want to update then delete before image'
+                   })
+                }else if(!foundBlog?.imgId){
+                    setImageError({
+                        error : ''
+                    })
+                }
+                
+                setBlogUpdate(false)
+                toast.success('blog update successfully!')
+            }else if (blogData.title || blogData.description || blogData.blog_date){
+                setBlogUpdate(true)
+                const response = await axiosPrivateInstance(token).put(`/blog-posts/${foundBlog?.blogId}`,
+                  {
+                    data : blogData
+                  }
+                )
+                if(foundBlog?.imgId){
+                    setImageError({
+                    error : 'You have already an image,if you want to update then delete before image'
+                   })
+                }else if(!foundBlog?.imgId){
+                    setImageError({
+                        error : ''
+                    })
+                }
+                
+                setBlogUpdate(false)
+                toast.success('blog update successfully!')
+            }else if((!blogData.title && !blogData.description && !blogData.blog_date) && !data?.blog_image[0]){
+                toast.error('please fill up fields')
+            }else if((data?.blog_image[0] && !foundBlog?.imgId) && (!blogData?.title || !blogData?.description || !blogData?.blog_date)){
+                toast.error('please fill up other fields with image')
+            }else if((data?.blog_image[0] && !foundBlog?.imgId) && (!blogData?.title && !blogData?.description && !blogData?.blog_date)){
+                toast.error('please fill up other fields with image')
+            }
+           } catch (err) {
+               setBlogUpdate(false)
+               console.log(err.response)
+               toast.error(err?.response?.data?.error?.message)
+           }
+    }
     
     const loadUserBlog = async () => {
         const query = qs.stringify({
@@ -123,10 +232,10 @@ export function AuthProvider({children}) {
         })
         try {
             const response = await axiosPrivateInstance(token).get(`/users/me?${query}`)
-            // console.log(response.data)
             const userBlogArr = response.data?.blog_posts?.map((blog) => {
                 return ({
                     title : blog?.title,
+                    slug : blog?.slug,
                     id:blog?.id,
                     description : blog?.description,
                     blog_date : blog?.blog_date,
@@ -258,6 +367,11 @@ export function AuthProvider({children}) {
         passwordChange,
         passwordSubmit,
         loadUserBlog,
+        userBlogUpdate,
+        blogUpdate,
+        deleteUserBlogImg,
+        blogImgDelete,
+        imageError
     }
   return (
     <AuthContext.Provider value={value}>

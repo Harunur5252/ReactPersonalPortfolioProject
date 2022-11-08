@@ -10,7 +10,7 @@ import { BlogContext } from '../components/context/Blog.Context'
 import { AuthContext } from '../components/context/Auth.Context';
 import Layout from '../components/layouts/Layout'
 import Comment from '../components/Comment';
-
+import notFoundImage from '../assets/R.jpg'
 
     // validation rules for all input fields
 	const schema = yup.object({
@@ -129,26 +129,27 @@ function BlogDetails() {
 								<div className="blog_details">
 										{Object.keys(blog && blog)?.length === 0 ? <p style={{color:'red',fontSize:'1.5rem'}}>No blog show</p> : 
 										<>
-											<div key={blog?.blogId} className="blog_img overlay_one wow animated slideInUp"><img src={blog?.blog_image} alt="image" /></div>
+											<div key={blog?.blogId} className="blog_img overlay_one wow animated slideInUp"><img src={blog?.blog_image ? blog?.blog_image : notFoundImage} alt="image" /></div>
 											<div className="blog_content bg_white">
 												<div className="blog_title mb_20 color_primary">
-													<h5>{blog?.title}</h5>
+													<h5>{blog?.title ? blog?.title : <p style={{color:"red"}}>no title</p>}</h5>
 												</div>
 												<div className="admin">
-													<img src={blog?.profilePicture} alt="image" />
-													<span className="color_primary">{`by - `} {blog?.firstName} {blog?.lastName}</span>
+													<img src={blog?.profilePicture ? blog?.profilePicture : notFoundImage} alt="image" />
+													<span className="color_primary">{`by - `} {blog?.firstName ? blog?.firstName : <span style={{color:'red'}}>no author name</span>} {blog?.lastName} </span>
 												</div>
-												<div className="date color_primary float-left">{blog?.blog_date && format(new Date(blog?.blog_date), 'dd MMM yyyy')}</div>
+												<div className="date color_primary float-left">{blog?.blog_date ? format(new Date(blog?.blog_date), 'dd MMM yyyy') : <p style={{color:"red"}}>no published date</p>}</div>
+												{
+												blog?.blog_image && blog?.title && blog?.description && blog?.blog_date ? 
 												<div className="comments">
-													<i className="fa fa-comment" aria-hidden="true"></i>
-													<span className="color_primary">{blog?.likes?.length}</span>
-												</div>
+												  <i className="fa fa-comment" aria-hidden="true"></i>
+												  <span className="color_primary">{blog?.likes?.length}</span>
+											    </div>
+												:
+												null
+											   }
 												<div className="single_blog_content d-inline-block mt_30 color_secondery wow animated slideInUp">
-													<p>{blog?.description}</p>
-												</div>
-												<div className='mt-2'>
-													<Link to={`/edit-blog/${id}`}><motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className='btn btn-success'>Edit</motion.button></Link>&nbsp;&nbsp;&nbsp;
-													<motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className='btn btn-danger'>Delete</motion.button>
+													<p>{blog?.description ? blog?.description : <p style={{color:"red"}}>no description</p>}</p>
 												</div>
 												<div className="share_post mt_30 wow animated slideInUp">
 													<h4 className="float-left mr_20">Share : </h4>
@@ -165,15 +166,18 @@ function BlogDetails() {
 											</div>
 										</>
 										}
-									
-									<div className="comment_area mt_60">
+									{
+										blog?.blog_image && blog?.title && blog?.description && blog?.blog_date ?
+
+										<>
+										   <div className="comment_area mt_60">
 										<h4 className="text-uppercase color_primary mb_30">
-											Comments ({comments?.length})&nbsp;&nbsp;
+											Comments ({blog?.blog_image && blog?.title && blog?.description && blog?.blog_date ? comments?.length : 0})&nbsp;&nbsp;
 											<span style={{fontSize:'2rem',cursor:'pointer'}}>
 												{
 													isLike ? <button className='btn btn-default'   onClick={() =>handleLike(blog?.blogId)}>{<FaThumbsUp  />}</button> 
 													:
-													<button className='btn btn-default'  onClick={() =>handleUnLike(blog?.blogId,findLike?.id)}>{<FaThumbsDown  />}</button> 
+													<button className='btn btn-default'  onClick={() =>handleUnLike(blog?.blogId,findLike?.id)}>{<FaThumbsDown  />}</button>
 												}
 												
 											</span>
@@ -185,24 +189,31 @@ function BlogDetails() {
 												)
 											})}
 										</ul>
-									</div>
-									<div className="replay mt_60 wow animated slideInUp">
-										<h4 className="text-uppercase color_primary mb_30">Leave A Comment</h4>
-										<form  className="reply_form" onSubmit={handleSubmit(onSubmit)}>
-											<div className="row">
-												<div className="col-md-12">
-													<textarea className="form-control" defaultValue={description}  {...register("description")} rows="7" placeholder="Type Comments..."></textarea>
-													<span style={{color:'red'}}>{errors?.description?.message}</span>
-												</div>
-												<div className="col-md-12">
-													<motion.button whileHover={{ scale: 1.1 }} 
-															whileTap={{ scale: 0.9 }} type="submit" className="btn btn-default" disabled={commentSubmit}>
-														{commentSubmit ? 'Loading...':'Post Comment'} 
-													</motion.button>
-												</div>
+									       </div>
+									
+											<div className="replay mt_60 wow animated slideInUp">
+												<h4 className="text-uppercase color_primary mb_30">Leave A Comment</h4>
+												<form  className="reply_form" onSubmit={handleSubmit(onSubmit)}>
+													<div className="row">
+														<div className="col-md-12">
+															<textarea className="form-control" defaultValue={description}  {...register("description")} rows="7" placeholder="Type Comments..."></textarea>
+															<span style={{color:'red'}}>{errors?.description?.message}</span>
+														</div>
+														
+														<div className="col-md-12">
+															<motion.button whileHover={{ scale: 1.1 }} 
+																	whileTap={{ scale: 0.9 }} type="submit" className="btn btn-default" disabled={commentSubmit}>
+																{commentSubmit ? 'Loading...':'Post Comment'} 
+															</motion.button>
+														</div>
+													</div>
+												</form>
 											</div>
-										</form>
-									</div>
+										</>
+										:
+										null
+									}
+									
 								</div>
 							</div>
 							<div className="col-md-4 col-lg-4">
@@ -244,9 +255,10 @@ function BlogDetails() {
                                                    return (
 													<li className="mb_30" key={recentPost?.blogId}>
 													<Link to={`/blog-details/${recentPost?.slug}`}>
+													<div className='d-flex align-item-center'>
 														<div className="post_img">
 															<img
-																src={recentPost?.blog_image}
+																src={recentPost?.blog_image ? recentPost?.blog_image : notFoundImage}
 																alt="image"
 															/>
 														</div>
@@ -255,6 +267,7 @@ function BlogDetails() {
 																{recentPost?.title}
 															</h6>
 															<span className="color_gray">{recentPost?.blog_date && format(new Date(recentPost?.blog_date), 'dd MMM yyyy')}</span>
+														</div>
 														</div>
 													</Link>
 												</li>

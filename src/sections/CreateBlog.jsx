@@ -9,7 +9,7 @@ import ScrollToTop from '../components/shared/ScrollToTop';
 
 
 function CreateBlog() {
-      const { register,setValue, reset,formState: { errors,isSubmitting,isSubmitSuccessful }, handleSubmit } = useForm();
+const { register,setValue, reset,formState: { errors,isSubmitting,isSubmitSuccessful }, handleSubmit } = useForm();      
       // tracking date 
       const [blogDate,setBlogDate] = useState(new Date())
       const {createBlog,blogSubmit,percentage,loadedCategory,tags} = useContext(BlogContext)

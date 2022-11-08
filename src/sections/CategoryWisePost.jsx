@@ -9,6 +9,7 @@ import { AuthContext } from '../components/context/Auth.Context'
 import { axiosPrivateInstance } from '../Utils/axios'
 import Layout from '../components/layouts/Layout'
 import ScrollToTop from '../components/shared/ScrollToTop'
+import notFoundImage from '../assets/R.jpg'
 
 
 const generateArr = (totalPost,postPerPage) => {
@@ -170,31 +171,36 @@ function CategoryWisePost() {
 									{currentPosts?.map((blog)=>{
 								return (
 								<div key={blog?.blogId} className="blog_item mb_30 wow    animated slideInUp">
+								{
+								blog?.blog_image && blog?.title && blog?.description && blog?.blog_date ? 
 								<div className="comments">
 									<i className="fa fa-comment" aria-hidden="true"></i>
 									<span className="color_white">{blog?.likes?.length}</span>
 								</div>
+								:
+								null
+								}
 								<div className="blog_img overlay_one">
-									<img src={blog?.blog_image} alt="image" />
+									<img src={blog?.blog_image ? blog?.blog_image : notFoundImage} alt="image" />
 								</div>
 								<div className="blog_content bg_white">
 									<div className="blog_title">
 										<Link className="color_primary" to={`/blog-details/${blog?.slug}`}
 											><h5>
-												{blog?.title} 
+												{blog?.title ? blog?.title : <p style={{color:"red"}}>no title</p>} 
 											</h5></Link
 										>
 									</div>
 									<p className="mt_15 mb_30">
-										{blog?.description}
+										{blog?.description ? blog?.description : <p style={{color:"red"}}>no description</p>}
 									</p>
 
 									<div className="admin">
-										<img src={blog?.profilePicture} alt="image" />
-										<span className="color_white">{`by - `} {blog?.firstName} {blog?.lastName}</span>
+										<img src={blog?.profilePicture ? blog?.profilePicture : notFoundImage} alt="image" />
+										<span className="color_white">{`by - `} {blog?.firstName ? blog?.firstName : <span style={{color:'rgba(208, 213, 17, 0.8)'}}>no author name</span>} {blog?.lastName} </span>
 									</div>
 									<div className="date float-right color_primary">
-									{blog?.blog_date && format(new Date(blog?.blog_date), 'dd MMM yyyy')}
+									{blog?.blog_date ? format(new Date(blog?.blog_date), 'dd MMM yyyy') : <p style={{color:"red"}}>no published date</p>}
 									</div>
 								</div>
 								</div>
@@ -283,9 +289,10 @@ function CategoryWisePost() {
                                                    return (
 													<li className="mb_30" key={recentPost?.blogId}>
 													<Link to={`/blog-details/${recentPost?.slug}`}>
+													<div className='d-flex align-item-center'>
 														<div className="post_img">
 															<img
-																src={recentPost?.blog_image}
+																src={recentPost?.blog_image ? recentPost?.blog_image : notFoundImage}
 																alt="image"
 															/>
 														</div>
@@ -294,6 +301,7 @@ function CategoryWisePost() {
 																{recentPost?.title}
 															</h6>
 															<span className="color_gray">{recentPost?.blog_date && format(new Date(recentPost?.blog_date), 'dd MMM yyyy')}</span>
+														</div>
 														</div>
 													</Link>
 												</li>
@@ -316,7 +324,7 @@ function CategoryWisePost() {
 												<ul>
 													{tags?.map((tag) => {
 														return (
-															<li key={tag?.tagId}><Link to={`/tag-wise-post/${tag?.tagId}`}>{tag?.name}</Link></li>
+															<li key={tag?.tagId}><Link to={`/tag-wise-post/${tag?.slug}`}>{tag?.name}</Link></li>
 														)
 													})}
 												</ul>

@@ -16,7 +16,7 @@ const initialBlogsWithoutPaginationData = []
 export function BlogProvider({children}) {
   const [blogs,dispatch] = useReducer(blogReducer,initialBlogs)
   const [blogsWithoutPaginationData,setBlogsWithoutPaginationData] = useState(initialBlogsWithoutPaginationData)
-  const {user,token,loadUserBlog,loginSubmit,registerSubmit} = useContext(AuthContext)
+  const {user,token,loadUserBlog,loginSubmit,registerSubmit,blogUpdate,blogImgDelete} = useContext(AuthContext)
   const [blogSubmit,setBlogSubmit] = useState(false)
 
   const [loaded,setLoaded] = useState(false)
@@ -46,7 +46,7 @@ export function BlogProvider({children}) {
           loadAllBlog()
         })()
     }
-  },[user,token,pageNumber,trigger,blogSubmit])
+  },[user,token,pageNumber,trigger,blogSubmit,blogImgDelete,blogUpdate])
 
   useEffect(() => {
     if(user && token){
@@ -62,7 +62,7 @@ export function BlogProvider({children}) {
           loadAllBlogWithoutPagination()
         })()
     }
-  },[user,token,loadedLike,loadedUnLike,blogSubmit])
+  },[user,token,loadedLike,loadedUnLike,blogSubmit,blogImgDelete,blogUpdate])
 
   useEffect(() => {
     if(user && token){
@@ -312,13 +312,11 @@ export function BlogProvider({children}) {
               blog_date:data?.attributes?.blog_date,
               firstName :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.firstName,
               lastName :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.lastName,
-              address :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.address,
               facebookAccount :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.facebookAccount,
               googlePlusAccount :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.googlePlusAccount,
               instagramAccount :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.instagramAccount,
               linkedinAccount :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.linkedinAccount,
               twitterAccount :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.twitterAccount,
-              website :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.website,
               profilePicture :data?.attributes?.author?.data?.attributes?.profile?.data?.attributes?.profilePicture?.data?.attributes?.url,
             }
           )
@@ -437,7 +435,7 @@ export function BlogProvider({children}) {
           trim: true 
         }),
         description : data.description,
-        author:user.id,
+        author:user?.id,
         categories : data.category,
         tags:data.tag
      }
@@ -525,7 +523,9 @@ export function BlogProvider({children}) {
     pageCount,
     pageNumber,
     setPageNumber,
-    loadAllComment
+    loadAllComment,
+    loadAllBlogWithoutPagination,
+    loadAllBlog
   }
 
   return (
