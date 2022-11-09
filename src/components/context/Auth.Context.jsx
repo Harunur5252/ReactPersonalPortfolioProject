@@ -25,6 +25,7 @@ export function AuthProvider({children}) {
     const [passwordSubmit,setPasswordSubmit] = useState(false)
     const [blogUpdate,setBlogUpdate] = useState(false)
     const [blogImgDelete,setBlogImgDelete] = useState(false)
+    const [userBlogDelete,setUserBlogDelete] = useState(false)
     const [multipleProfileData,setMultipleProfileData] = useState([])
     const [percentage,setPercentage] = useState(0)
     const [imageError,setImageError] = useState({
@@ -48,7 +49,7 @@ export function AuthProvider({children}) {
                 loadUserBlog()
             }
         })()
-    },[user,token,profileSubmit,blogUpdate,blogImgDelete])
+    },[user,token,profileSubmit,blogUpdate,blogImgDelete,userBlogDelete])
 
     const passwordChange = async (data) => {
         try {
@@ -127,6 +128,18 @@ export function AuthProvider({children}) {
             setBlogImgDelete(false)
             console.log(err.response)
         }
+    }
+
+    const blogDelete = async (id) => {
+       try {
+        setUserBlogDelete(true)
+         const response = await axiosPrivateInstance(token).delete(`/blog-posts/${id}`)
+         toast.success('blog deleted successfully!')
+         setUserBlogDelete(false)
+       } catch (err) {
+        setUserBlogDelete(false)
+        toast.success(err?.response?.data?.error?.message)
+       }
     }
 
     const userBlogUpdate = async (data,foundBlog) => {
@@ -232,6 +245,7 @@ export function AuthProvider({children}) {
         })
         try {
             const response = await axiosPrivateInstance(token).get(`/users/me?${query}`)
+            // console.log(response.data)
             const userBlogArr = response.data?.blog_posts?.map((blog) => {
                 return ({
                     title : blog?.title,
@@ -371,7 +385,9 @@ export function AuthProvider({children}) {
         blogUpdate,
         deleteUserBlogImg,
         blogImgDelete,
-        imageError
+        imageError,
+        blogDelete,
+        userBlogDelete
     }
   return (
     <AuthContext.Provider value={value}>

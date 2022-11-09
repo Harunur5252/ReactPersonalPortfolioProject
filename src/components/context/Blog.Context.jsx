@@ -16,7 +16,7 @@ const initialBlogsWithoutPaginationData = []
 export function BlogProvider({children}) {
   const [blogs,dispatch] = useReducer(blogReducer,initialBlogs)
   const [blogsWithoutPaginationData,setBlogsWithoutPaginationData] = useState(initialBlogsWithoutPaginationData)
-  const {user,token,loadUserBlog,loginSubmit,registerSubmit,blogUpdate,blogImgDelete} = useContext(AuthContext)
+  const {user,token,loadUserBlog,loginSubmit,registerSubmit,blogUpdate,blogImgDelete,userBlogDelete} = useContext(AuthContext)
   const [blogSubmit,setBlogSubmit] = useState(false)
 
   const [loaded,setLoaded] = useState(false)
@@ -46,7 +46,7 @@ export function BlogProvider({children}) {
           loadAllBlog()
         })()
     }
-  },[user,token,pageNumber,trigger,blogSubmit,blogImgDelete,blogUpdate])
+  },[user,token,pageNumber,trigger,blogSubmit,blogImgDelete,blogUpdate,userBlogDelete])
 
   useEffect(() => {
     if(user && token){
@@ -54,7 +54,7 @@ export function BlogProvider({children}) {
           loadAllTag()
         })()
     }
-  },[user,token,blogSubmit])
+  },[user,token,blogSubmit,userBlogDelete])
 
   useEffect(() => {
     if(user && token){
@@ -62,7 +62,7 @@ export function BlogProvider({children}) {
           loadAllBlogWithoutPagination()
         })()
     }
-  },[user,token,loadedLike,loadedUnLike,blogSubmit,blogImgDelete,blogUpdate])
+  },[user,token,loadedLike,loadedUnLike,blogSubmit,blogImgDelete,blogUpdate,userBlogDelete])
 
   useEffect(() => {
     if(user && token){
@@ -70,7 +70,7 @@ export function BlogProvider({children}) {
           loadAllCategory()
         })()
     }
-  },[user,token,blogSubmit])
+  },[user,token,blogSubmit,userBlogDelete])
 
   useEffect(() => {
     if(user && token){
@@ -78,7 +78,7 @@ export function BlogProvider({children}) {
           loadAllComment()
         })()
     }
-  },[user,token,commentSubmit])
+  },[user,token,commentSubmit,userBlogDelete])
 
   useEffect(() => {
     (async () => {

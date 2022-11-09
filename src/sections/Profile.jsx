@@ -2,12 +2,15 @@ import React,{useContext,useState,useEffect} from 'react'
 import { useForm } from "react-hook-form";
 import { BarLoader,BeatLoader } from 'react-spinners';
 import DatePicker from "react-datepicker";
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 import {FaEdit} from 'react-icons/fa'
 import { AuthContext } from '../components/context/Auth.Context';
 import notFoundImage from '../assets/R.jpg'
 import { axiosPrivateInstance } from '../Utils/axios';
 import { toast } from 'react-toastify';
 import { BlogContext } from '../components/context/Blog.Context';
+
 
 function Profile() {
     const { register, reset, formState: { errors,isSubmitting,isSubmitSuccessful }, handleSubmit, watch } = useForm();
@@ -336,11 +339,13 @@ useEffect(() => {
                     <td>{user?.email ? user?.email : <span style={{color:'rgba(208, 213, 17, 0.8)',fontSize:'1rem'}}>no email</span>}</td>
                     <td><img src={singleProfile?.profilePicture ? singleProfile?.profilePicture : notFoundImage} style={{height:'107px',width:'156px'}} alt='notFoundImage' /></td>
                     {
-                            singleProfile?.profileId && singleProfile?.userId && 
-                            <td>
-                            <button type='button' className="btn btn-success" data-toggle="modal" data-target="#exampleModal" title="Edit Profile">
-                                <FaEdit />
-                            </button>
+                        singleProfile?.profileId && singleProfile?.userId && 
+                        <td>
+                            <Tippy content={<span>Edit Profile</span>}>
+                                <button type='button' className="btn btn-success" data-toggle="modal" data-target="#exampleModal">
+                                    <FaEdit />
+                                </button>
+                            </Tippy>
                         </td>
                     }
                     

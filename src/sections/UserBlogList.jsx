@@ -1,6 +1,8 @@
 import { useContext,useEffect,useState } from 'react'
 import format from 'date-fns/format'
 import {motion} from 'framer-motion'
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 import { animateScroll as scroll } from 'react-scroll'
 import {FaEdit,FaTrashAlt} from 'react-icons/fa'
 import { AuthContext } from '../components/context/Auth.Context'
@@ -17,7 +19,7 @@ const generateArr = (totalPost,postPerPage) => {
 }
 
 function UserBlogList() {
-  const {userBlogs} = useContext(AuthContext)
+  const {userBlogs,blogDelete,userBlogDelete} = useContext(AuthContext)
 
   	// pagination
     const [currentPage,setCurrentPage] = useState(1)
@@ -76,8 +78,15 @@ function UserBlogList() {
                 <td>{blog?.description}</td>
                 <td>{blog?.blog_date && format(new Date(blog?.blog_date), 'dd-MMM-yyyy')}</td>
                 <td>
-                      <Link to={`/edit-blog/${blog?.slug}`}><motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className='btn btn-success btn-sm'><FaEdit /></motion.button></Link>&nbsp;
-                      <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className='btn btn-danger btn-sm'><FaTrashAlt /></motion.button>
+                    <Tippy content={<span>Edit Blog</span>}>
+                      <Link to={`/edit-blog/${blog?.slug}`}><motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className='btn btn-success btn-sm'><FaEdit /></motion.button></Link>
+                    </Tippy>
+                      &nbsp;&nbsp;
+                      <Tippy content={<span>Delete Blog</span>}>
+                      <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className='btn btn-danger btn-sm' onClick={() => blogDelete(blog?.id)} disabled={userBlogDelete}>
+                       {userBlogDelete ? 'Loading...' : <FaTrashAlt />} 
+                      </motion.button>
+                    </Tippy>
                 </td>
               </tr>
             )
