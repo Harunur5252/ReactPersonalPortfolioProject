@@ -272,7 +272,7 @@ export function PageProvider({children}) {
 			 }
 			)
 			setContactSubmit(false)
-			toast.success('contact added successfully')
+			toast.success('contact added and email sent successfully!')
 		} catch (err) {
 			toast.error(err?.response?.data?.error?.message)
 		}
