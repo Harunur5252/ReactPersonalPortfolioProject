@@ -41,9 +41,6 @@ function Portfolio() {
   useEffect(() => {
 		new Venobox({
 			selector: '.my-image-links',
-			numeration: true,
-			infinigall: true,
-			share: true,
 			spinner: 'flow',
       maxWidth:'600px'
 		});
@@ -111,7 +108,7 @@ function Portfolio() {
                         <div className="default-portfolio-item">
                           <a
                             href={project?.image}
-                            data-gall="gallery01"
+                            data-gall="myGallery"
                             className="my-image-links"
                           >
                             <img

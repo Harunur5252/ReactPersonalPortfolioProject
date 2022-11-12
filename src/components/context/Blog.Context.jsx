@@ -525,7 +525,6 @@ export function BlogProvider({children}) {
     setPageNumber,
     loadAllComment,
     loadAllBlogWithoutPagination,
-    loadAllBlog
   }
 
   return (

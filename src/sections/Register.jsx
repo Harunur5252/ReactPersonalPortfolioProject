@@ -2,8 +2,6 @@ import React from 'react'
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import Menu from '../components/shared/Menu/Menu'
-import MenuFooter from '../components/shared/Menu/MenuFooter'
 import { useContext } from 'react';
 import { AuthContext } from '../components/context/Auth.Context';
 import Layout from '../components/layouts/Layout';

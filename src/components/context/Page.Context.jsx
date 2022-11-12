@@ -2,7 +2,7 @@ import { useContext,useState,useEffect } from 'react'
 import { createContext } from 'react'
 import qs from 'qs'
 import { toast } from 'react-toastify';
-import { axiosPublicInstance } from '../../Utils/axios'
+import { axiosPrivateInstance, axiosPublicInstance } from '../../Utils/axios'
 import { AuthContext } from './Auth.Context'
 import { BlogContext } from './Blog.Context'
 

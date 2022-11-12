@@ -1,6 +1,7 @@
 import { useContext,useEffect } from 'react'
 import { scroller } from "react-scroll";
 import { useLocation } from "react-router-dom";
+
 import Layout from '../components/layouts/Layout'
 import About from '../sections/About'
 import Skills from '../sections/Skills'

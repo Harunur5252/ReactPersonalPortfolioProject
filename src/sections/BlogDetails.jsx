@@ -24,7 +24,7 @@ function BlogDetails() {
 	});
 
 	const {blogs,tags,blogsWithoutPaginationData,handleLike,handleUnLike,loadedCategory,comment,commentSubmit,commentLoadedArr} = useContext(BlogContext)
-	const {user,token,} = useContext(AuthContext)
+	const {user,token,multipleProfileData} = useContext(AuthContext)
 	const [blog,setBlog] = useState({})
 	const [likes,setLikes] = useState([])
 	const [findLike,setFindLike] = useState({})
@@ -33,7 +33,8 @@ function BlogDetails() {
 	const {id} = useParams()
 
 	const findSingleBlog = blogsWithoutPaginationData?.find((blog) => blog?.slug === id)
-    const checkAuthorProfile = blogsWithoutPaginationData?.find(blog => blog?.authorId === user?.id)
+   	// finding socials link
+	const checkUserSocialLink =  multipleProfileData?.find(userSocialLink=>userSocialLink?.userId === user?.id)
  
 	// latest posts
 	const BlogsData = blogsWithoutPaginationData?.map((post) => post)
@@ -222,11 +223,11 @@ function BlogDetails() {
 										<h3 className="widget_title mb_30 text-capitalize">Follow Me</h3>
 										<div className="socal_media">
 											<ul>
-												<li><a target='_blank' href={checkAuthorProfile?.facebookAccount}><i className="fa fa-facebook" aria-hidden="true"></i></a></li>
-												<li><a target='_blank' href={checkAuthorProfile?.twitterAccount}><i className="fa fa-twitter" aria-hidden="true"></i></a></li>
-												<li><a target='_blank' href={checkAuthorProfile?.googlePlusAccount}><i className="fa fa-google-plus" aria-hidden="true"></i></a></li>
-												<li><a target='_blank' href={checkAuthorProfile?.linkedinAccount}><i className="fa fa-linkedin" aria-hidden="true"></i></a></li>
-												<li><a target='_blank' href={checkAuthorProfile?.instagramAccount}><i className="fa fa-instagram" aria-hidden="true"></i></a></li>
+												<li><a target='_blank' href={checkUserSocialLink?.facebookAccount}><i className="fa fa-facebook" aria-hidden="true"></i></a></li>
+												<li><a target='_blank' href={checkUserSocialLink?.twitterAccount}><i className="fa fa-twitter" aria-hidden="true"></i></a></li>
+												<li><a target='_blank' href={checkUserSocialLink?.googlePlusAccount}><i className="fa fa-google-plus" aria-hidden="true"></i></a></li>
+												<li><a target='_blank' href={checkUserSocialLink?.linkedinAccount}><i className="fa fa-linkedin" aria-hidden="true"></i></a></li>
+												<li><a target='_blank' href={checkUserSocialLink?.instagramAccount}><i className="fa fa-instagram" aria-hidden="true"></i></a></li>
 											</ul>
 										</div>
 									</div>
