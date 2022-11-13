@@ -4,6 +4,7 @@ import { Link } from 'react-scroll'
 import { AuthContext } from '../context/Auth.Context'
 import { PageContext } from '../context/Page.Context';
 import notFoundImage from '../../assets/R.jpg'
+import Tippy from '@tippyjs/react';
 
 function Header() {
 	const {logout,user} = useContext(AuthContext)
@@ -32,7 +33,9 @@ function Header() {
 		   document.removeEventListener('scroll',handleScroll)
 		}
 	 },[])
-	 
+
+	 const title = <Tippy content={<span>{myProfileData?.logo?.data?.attributes?.url ? 'website logo' : 'website logo not found'}</span>}></Tippy>
+
   return (
     <>
         <header className="main_nav">
@@ -41,9 +44,11 @@ function Header() {
 							id="navbar-example2"
 							className="navbar navbar-expand-lg navbar-light w-100"
 						>
-							<div className="navbar-brand"
-								><img className="nav-logo" style={{height:'27px',width:'130px'}} title={myProfileData?.logo?.data?.attributes?.url ? 'website logo' : 'website logo not found'} src={myProfileData?.logo?.data?.attributes?.url ? myProfileData?.logo?.data?.attributes?.url : notFoundImage} alt="logo"
-							/></div>
+							<div className="navbar-brand">
+								<img className="nav-logo" style={{height:'27px',width:'130px'}} src={myProfileData?.logo?.data?.attributes?.url ? myProfileData?.logo?.data?.attributes?.url : notFoundImage} alt="logo"
+								title={title?.props?.content?.props?.children}
+								/>
+							</div>
 							<button
 								className="navbar-toggler"
 								type="button"

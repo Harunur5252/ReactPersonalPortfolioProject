@@ -1,6 +1,8 @@
 import { lazy, Suspense } from 'react'
 import { ToastContainer } from 'react-toastify'
 import { Routes, Route } from "react-router-dom"
+import ErrorFallback from '../components/ErrorFallback'
+import { ErrorBoundary } from 'react-error-boundary'
 
 
 // components using code spiting and lazy loading
@@ -41,6 +43,12 @@ function App() {
             pauseOnHover
         />
 
+    <ErrorBoundary
+        FallbackComponent={ErrorFallback}
+        onReset={() => {
+           location.reload()
+        }}
+      >
         <Suspense fallback={<div><Preloader /></div>}>
           <Wrapper>
             <Routes>
@@ -120,6 +128,7 @@ function App() {
             </Routes>
           </Wrapper>
         </Suspense>
+        </ErrorBoundary>
     </>
   )
 }
