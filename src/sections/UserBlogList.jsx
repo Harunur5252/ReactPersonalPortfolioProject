@@ -2,6 +2,7 @@ import { useContext,useEffect,useState } from 'react'
 import format from 'date-fns/format'
 import {motion} from 'framer-motion'
 import Tippy from '@tippyjs/react';
+import parse from 'html-react-parser';
 import 'tippy.js/dist/tippy.css';
 import { animateScroll as scroll } from 'react-scroll'
 import {FaEdit,FaTrashAlt} from 'react-icons/fa'
@@ -70,12 +71,12 @@ function UserBlogList() {
             return (
               <tr key={blog?.id}>
                 <th scope="row">{blog?.id}</th>
-                <td>{blog?.firstName}</td>
-                <td>{blog?.lastName}</td>
+                <td>{blog?.firstName ? blog?.firstName : <span style={{color:'rgba(208, 213, 17, 0.8)',fontSize:'1rem'}}>no firstName</span>}</td>
+                <td>{blog?.lastName ? blog?.lastName : <span style={{color:'rgba(208, 213, 17, 0.8)',fontSize:'1rem'}}>no firstName</span>}</td>
                 <td><img src={blog?.profilePicture ? blog?.profilePicture : notFoundImage} /></td>
                 <td><img src={blog?.blog_image ? blog?.blog_image : notFoundImage} /></td>
                 <td>{blog?.title}</td>
-                <td>{blog?.description}</td>
+                <td>{parse(blog?.description)}</td>
                 <td>{blog?.blog_date && format(new Date(blog?.blog_date), 'dd-MMM-yyyy')}</td>
                 <td>
                     <Tippy content={<span>Edit Blog</span>}>

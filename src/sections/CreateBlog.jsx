@@ -1,8 +1,9 @@
-import React,{ useContext,useState,useEffect } from 'react';
+import React,{ useContext,useState,useEffect,useRef} from 'react';
 import { useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import BarLoader from "react-spinners/BarLoader";
 import {motion} from 'framer-motion'
+import JoditEditor from 'jodit-react';
 import { BlogContext } from '../components/context/Blog.Context';
 import Layout from '../components/layouts/Layout';
 import ScrollToTop from '../components/shared/ScrollToTop';
@@ -13,6 +14,8 @@ const { register,setValue, reset,formState: { errors,isSubmitting,isSubmitSucces
       // tracking date 
       const [blogDate,setBlogDate] = useState(new Date())
       const {createBlog,blogSubmit,percentage,loadedCategory,tags} = useContext(BlogContext)
+	  const editor = useRef(null);
+	  const [valueContent, setValueContent] = useState('');
 	  const [createBlogData,setCreateBlogData] = useState({
 		title:'',
 		description:'',
@@ -24,7 +27,7 @@ const { register,setValue, reset,formState: { errors,isSubmitting,isSubmitSucces
 	  // creating a new blog
       const onSubmit = (data) => {
 		setCreateBlogData(data)
-        createBlog(data)
+        createBlog(data,valueContent)
       }
 	  const now = percentage
 
@@ -118,14 +121,11 @@ const { register,setValue, reset,formState: { errors,isSubmitting,isSubmitSucces
 													</div>
 													<div className="col-md-6 col-lg-6">
 														<div className="form-group">
-															<textarea
-																className="form-control"
-																type="text"
-																{...register("description", { required: 'description is required',minLength:{value:100,message:'description at least 100 or more character'},maxLength:{value:50000,message:'description must be equal or less than 50,000 character'} })}
-																placeholder="Description"
-																defaultValue={description}
+                                                            <label style={{color:'black',fontWeight:'600'}}>Blog Description : </label>
+															<JoditEditor 
+															  ref={editor}
+															  onChange={(content) => setValueContent(content)}
 															/>
-															<span style={{color:'red'}}>{errors?.description?.message}</span>
 														</div>
 													</div>
 													<div className="col-md-6 col-lg-6">

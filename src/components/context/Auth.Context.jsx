@@ -142,14 +142,13 @@ export function AuthProvider({children}) {
        }
     }
 
-    const userBlogUpdate = async (data,foundBlog) => {
+    const userBlogUpdate = async (data,foundBlog,des) => {
         const blogData = {
 			title : data.title,
-			description : data.description,
+			description : des,
 			blog_date : data.blog_date,
 			author:user?.id,
 		}
-
 		try {
             if((blogData.title && blogData.description && blogData.blog_date)  && (data?.blog_image[0]  && foundBlog?.imgId)){
                 setImageError({

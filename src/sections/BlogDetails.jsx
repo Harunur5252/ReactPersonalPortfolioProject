@@ -1,6 +1,7 @@
 import React,{ useContext,useEffect,useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import format from 'date-fns/format'
+import parse from 'html-react-parser';
 import { FaThumbsUp,FaThumbsDown } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import {motion} from 'framer-motion'
@@ -141,7 +142,7 @@ function BlogDetails() {
 												</div>
 												<div className="date color_primary float-left">{blog?.blog_date ? format(new Date(blog?.blog_date), 'dd MMM yyyy') : <p style={{color:"red"}}>no published date</p>}</div>
 												{
-												blog?.blog_image && blog?.title && blog?.description && blog?.blog_date ? 
+												blog?.blog_image && blog?.title && parse(blog?.description) && blog?.blog_date ? 
 												<div className="comments">
 												  <i className="fa fa-comment" aria-hidden="true"></i>
 												  <span className="color_primary">{blog?.likes?.length}</span>
@@ -150,7 +151,7 @@ function BlogDetails() {
 												null
 											   }
 												<div className="single_blog_content d-inline-block mt_30 color_secondery wow animated slideInUp">
-													<p>{blog?.description ? blog?.description : <p style={{color:"red"}}>no description</p>}</p>
+													<p>{blog?.description ? parse(blog?.description) : <p style={{color:"red"}}>no description</p>}</p>
 												</div>
 												<div className="share_post mt_30 wow animated slideInUp">
 													<h4 className="float-left mr_20">Share : </h4>

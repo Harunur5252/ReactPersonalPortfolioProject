@@ -1,6 +1,8 @@
 import React,{ useReducer,useContext,createContext,useState,useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
+// import TurndownService from 'turndown'
+
 import slugify from 'slugify'
 import qs from 'qs'
 import { axiosPrivateInstance } from '../../Utils/axios'
@@ -393,7 +395,7 @@ export function BlogProvider({children}) {
   }
 
   const uploadPercentage = (total,loaded) => Math.floor((total/loaded)*100)
-  const createBlog = async (data) => {
+  const createBlog = async (data,des) => {
       const query = qs.stringify({
         populate: {
           blog_image:{
@@ -423,7 +425,6 @@ export function BlogProvider({children}) {
       }, {
         encodeValuesOnly: true, 
       });
-     
      const blogData = {
         blog_date : data.blog_date,
         title : data.title,
@@ -434,12 +435,11 @@ export function BlogProvider({children}) {
           strict: false,
           trim: true 
         }),
-        description : data.description,
+        description : des,
         author:user?.id,
         categories : data.category,
         tags:data.tag
      }
-
      try {
       setBlogSubmit(true)
       const formData = new FormData()

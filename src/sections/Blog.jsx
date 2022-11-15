@@ -1,6 +1,7 @@
 import { useContext,useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import format from 'date-fns/format'
+import parse from 'html-react-parser';
 import { BarLoader } from 'react-spinners'
 import { motion,useAnimation } from "framer-motion"
 import { useInView } from 'react-intersection-observer';
@@ -104,7 +105,7 @@ function Blog() {
 										<div key={blog?.blogId} className="col-md-12 col-lg-4">
 										<motion.div variants={childVariants} className="blog_item">
 											{
-												blog?.blog_image && blog?.title && blog?.description && blog?.blog_date ? 
+												blog?.blog_image && blog?.title && parse(blog?.description) && blog?.blog_date ? 
 												<div className="comments">
 												  <i className="fa fa-comment" aria-hidden="true"></i>
 												  <span className="color_white">{blog?.likes?.length}</span>
@@ -126,7 +127,7 @@ function Blog() {
 												</div>
 												<p className="mt_15 mb_30">
 													{
-														blog?.description ? blog?.description : <p style={{color:"red"}}>no description</p>
+														blog?.description ? parse(blog?.description) : <p style={{color:"red"}}>no description</p>
 													}
 												</p>
 

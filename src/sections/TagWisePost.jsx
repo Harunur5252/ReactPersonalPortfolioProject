@@ -3,6 +3,7 @@ import { Link,useParams } from 'react-router-dom'
 import format from 'date-fns/format'
 import qs from 'qs'
 import { animateScroll as scroll } from 'react-scroll'
+import parse from 'html-react-parser';
 import BeatLoader  from "react-spinners/BeatLoader ";
 import { AuthContext } from '../components/context/Auth.Context'
 import { BlogContext } from '../components/context/Blog.Context'
@@ -173,7 +174,7 @@ function TagWisePost() {
                                     return (
                                     <div key={blog?.blogId} className="blog_item mb_30 wow    animated slideInUp">
                                     {
-									blog?.blog_image && blog?.title && blog?.description && blog?.blog_date ? 
+									blog?.blog_image && blog?.title && parse(blog?.description) && blog?.blog_date ? 
 									<div className="comments">
 										<i className="fa fa-comment" aria-hidden="true"></i>
 										<span className="color_white">{blog?.likes?.length}</span>
@@ -193,7 +194,7 @@ function TagWisePost() {
                                             >
                                         </div>
                                         <p className="mt_15 mb_30">
-                                            {blog?.description ? blog?.description : <p style={{color:"red"}}>no description</p>}
+                                            {blog?.description ? parse(blog?.description) : <p style={{color:"red"}}>no description</p>}
                                         </p>
 
                                         <div className="admin">

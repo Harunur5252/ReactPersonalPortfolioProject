@@ -1,8 +1,9 @@
-import { useContext ,useEffect,useState} from 'react';
+import { useContext ,useEffect,useState,useRef} from 'react';
 import { Link, useParams } from 'react-router-dom'
 import format from 'date-fns/format'
 import {motion} from 'framer-motion'
 import { useForm } from "react-hook-form";
+import JoditEditor from 'jodit-react';
 import DatePicker from "react-datepicker";
 import Layout from '../components/layouts/Layout'
 import ScrollToTop from '../components/shared/ScrollToTop'
@@ -13,6 +14,8 @@ import notFoundImage from '../assets/R.jpg'
 function EditBlog() {
 	const { register,setValue, reset,formState: { errors,isSubmitting,isSubmitSuccessful }, handleSubmit } = useForm();
     const {blogsWithoutPaginationData} = useContext(BlogContext)
+	const editor = useRef(null);
+	let [valueContent, setValueContent] = useState('');
 	const {userBlogUpdate,deleteUserBlogImg,blogImgDelete,imageError,blogUpdate} = useContext(AuthContext)
 	const {id} = useParams()
 	const foundBlog = blogsWithoutPaginationData?.find(blog => blog?.slug === id)
@@ -31,7 +34,7 @@ function EditBlog() {
 
 	// update blog
 	const onSubmit = async (data) => {
-		userBlogUpdate(data,foundBlog)
+		userBlogUpdate(data,foundBlog,valueContent)
 	}
 	
 
@@ -84,12 +87,11 @@ function EditBlog() {
 
 												<div className="col-md-6 col-lg-6">
 													<div className="form-group">
-														<textarea
-															className="form-control"
-															type="text"
-															defaultValue={description}
-															{...register("description")}
-															placeholder="Enter Blog Description"
+														 <label style={{color:'black',fontWeight:'600'}}>Blog Description : </label>
+														<JoditEditor 
+														    value={description}
+															ref={editor}
+															onChange={(content) => setValueContent(content)}
 														/>
 													</div>
 												</div>

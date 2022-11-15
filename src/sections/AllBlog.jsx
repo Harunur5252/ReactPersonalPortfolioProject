@@ -1,6 +1,7 @@
 import React, { useEffect,useContext } from 'react'
 import { Link } from 'react-router-dom';
 import format from 'date-fns/format'
+import parse from 'html-react-parser';
 import BeatLoader  from "react-spinners/BeatLoader ";
 import { BlogContext } from '../components/context/Blog.Context';
 import { AuthContext } from '../components/context/Auth.Context';
@@ -85,7 +86,7 @@ function AllBlog() {
 											return (
 												<div key={blog?.slug} className="blog_item mb_30 wow animated slideInUp">
 												{
-												blog?.blog_image && blog?.title && blog?.description && blog?.blog_date ? 
+												blog?.blog_image && blog?.title && parse(blog?.description) && blog?.blog_date ? 
 												<div className="comments">
 												  <i className="fa fa-comment" aria-hidden="true"></i>
 												  <span className="color_white">{blog?.likes?.length}</span>
@@ -106,7 +107,7 @@ function AllBlog() {
 													
 													</div>
 													<p className="mt_15 mb_30">
-														{blog?.description ? blog?.description : <p style={{color:"red"}}>no description</p>}
+														{blog?.description ? parse(blog?.description) : <p style={{color:"red"}}>no description</p>}
 													</p>
 
 													<div className="admin">
