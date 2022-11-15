@@ -14,8 +14,10 @@ const { register,setValue, reset,formState: { errors,isSubmitting,isSubmitSucces
       // tracking date 
       const [blogDate,setBlogDate] = useState(new Date())
       const {createBlog,blogSubmit,percentage,loadedCategory,tags} = useContext(BlogContext)
+	  // editor for blog 
 	  const editor = useRef(null);
 	  const [valueContent, setValueContent] = useState('');
+	  
 	  const [createBlogData,setCreateBlogData] = useState({
 		title:'',
 		description:'',
