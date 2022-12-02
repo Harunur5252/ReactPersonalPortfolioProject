@@ -3,27 +3,12 @@ import Venobox from 'venobox'
 import { motion,useAnimation } from "framer-motion"
 import { useInView } from 'react-intersection-observer';
 import { PageContext } from '../components/context/Page.Context';
-
-const portfolioDesVariants = {
-	hidden : {
-		opacity:0,
-		scale:0
-	},
-	visible:{
-		opacity:1,
-		scale:1,
-		transition:{
-			type:'spring',
-			delay: 0.5,
-			ease: "easeOut",
-			duration:1,
-		}
-	}
-}
+import {portfolioDesVariants} from '../components/portfolioSectionComponents/animationData'
+import AllPortfolio from '../components/portfolioSectionComponents/AllPortfolio';
 
 
 function Portfolio() {
-  const {menus,projects,handleClick,portfolioData} = useContext(PageContext)
+  const {portfolioData} = useContext(PageContext)
 
   	// animation
 	const controls = useAnimation()
@@ -68,77 +53,7 @@ function Portfolio() {
                 </motion.span>
               </div>
             </div>
-          <div className="col-md-12 col-lg-12">
-            <div className="my_portfolio" id="tab-panel">
-              <div className="row">
-                <div className="col-md-12">
-                  <div className="filters mb_30 w-100 text-center">
-                    <ul
-                      className="filter-tabs mx-auto d-inline-block"
-                    >
-                      {menus?.map((menu) => {
-                        return (
-                          <li
-                            key={menu?.id}
-                            className={`filter ${
-                              menu?.isActive ? "active" : ""
-                            }`}
-                            data-role="button"
-                            data-filter="all"
-                            onClick={() => handleClick(menu)}
-                          >
-                            {menu?.name}
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
-              <div className="filter-list">
-                <div className="portfolio-items">
-                  <motion.div variants={portfolioDesVariants} initial='hidden' animate={controls} className="row">
-                    {projects?.map((project) => {
-                      return (
-                        <div 
-                        key={project?.id}
-                        className="mb_30 col-md-4 col-lg-4"
-                      >
-                        <div className="default-portfolio-item">
-                          <a
-                            href={project?.image}
-                            data-gall="myGallery"
-                            className="my-image-links"
-                          >
-                            <img
-                              src={project?.image}
-                              alt="image"
-                            />
-                            <div className="overlay-box">
-                              <span>
-                                <i
-                                  className="fa fa-eye"
-                                  aria-hidden="true"
-                                ></i>
-                              </span>
-                              <div className="tag">
-                                <ul>
-                                  <li>{project?.tag_one},</li>
-                                  <li>{project?.tag_two}</li>
-                                </ul>
-                              </div>
-                            </div>
-                          </a>
-                        </div>
-                      </div>
-                      );
-                    })}
-                  </motion.div>
-                </div>
-              </div>
-            </div>
-          </div>
+            <AllPortfolio controls={controls} />
         </div>
       </div>
     </section>  

@@ -454,7 +454,7 @@ export function BlogProvider({children}) {
         }
       }
     )
-      const blogs_data ={
+      const blogs_data = {
         blogId:response.data.data?.id,
         imgId:response.data.data?.attributes?.blog_image?.data?.id,
         authorId : response.data.data?.attributes?.author?.data?.id,

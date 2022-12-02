@@ -1,51 +1,10 @@
-import React,{useContext } from 'react'
-import * as FaIcons from "react-icons/fa";
+import React,{useContext,useEffect } from 'react'
 import { motion,useAnimation } from "framer-motion"
 import { useInView } from 'react-intersection-observer';
 import { PageContext } from '../components/context/Page.Context';
-import { useEffect } from 'react';
+import { serviceDesVariants,parentVariants,childVariants } from '../components/serviceSectionComponents/animationData';
+import AllServices from '../components/serviceSectionComponents/AllServices';
 
-const serviceDesVariants = {
-	hidden : {
-		opacity:0,
-		scale:0
-	},
-	visible:{
-		opacity:1,
-		scale:1,
-		transition:{
-			type:'spring',
-			delay: 0.5,
-			ease: "easeOut",
-			duration:1,
-		}
-	}
-}
-
-const parentVariants = {
-	hidden : {
-		opacity:0, 
-	},
-	visible:{
-		opacity:1,
-		transition:{
-			when:'beforeChildren',
-			staggerChildren:0.4,
-		}
-	}
-}
-
-const childVariants = {
-	hidden : {
-		opacity:0,
-	},
-	visible:{
-		opacity:1,
-		transition:{
-			duration:0.4
-		}
-	}
-}
  
 function Service() {
 	const {servicesData} = useContext(PageContext)
@@ -86,37 +45,7 @@ function Service() {
 							<div className="services_item1">
 								<div className="col-md-12 col-lg-12">
 									<motion.div variants={parentVariants} initial='hidden' animate={controls} className="row">
-										{
-											servicesData?.ServiceFeature?.length >=1 ?
-											<>
-											   {servicesData?.ServiceFeature?.map  ((service) => {
-											let icon = service?.serviceIcon;
-											const DynamicIcon = FaIcons[icon];
-											return (
-													<motion.div variants={childVariants} key={service?.id} className="col-md-6 col-lg-4">
-														<div className="service_two text-center pt_15 mb_30 wow animated slideInUp">
-															<div className="srv_item_number color_lightgray">
-																<strong>{service?.serviceNumber}.</strong>
-															</div>
-															<h3 className="p_20 text-uppercase color_primary">
-															{service?.serviceName}
-															</h3>
-															<div className="srv_icon color_white d-flex align-items-center justify-content-center">
-															<DynamicIcon size={40} />
-															</div>
-															<p>{service?.serviceDescription}</p>
-														</div>
-													</motion.div>
-											)
-										       })}
-											</>
-                                             :
-											 <>
-											    <div className='row'>
-                                                  <div className='className="col-md-12 col-lg-12' style={{color:'red',fontSize:'1.5rem'}}> service data is not available to show</div>
-											    </div>
-											 </>
-										}
+										<AllServices />
 									</motion.div>
 								</div>
 							</div>

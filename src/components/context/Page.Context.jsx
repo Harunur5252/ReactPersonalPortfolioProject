@@ -252,7 +252,6 @@ export function PageProvider({children}) {
 			const response = await axiosPublicInstance.get(`/testimonial?${query}`)
 			setTestimonialData({
 				tes_sub_title : response.data?.data?.attributes?.tes_sub_title,
-				feedBackFeature : response.data?.data?.attributes?.feedBackFeature,
 				testimonialFeature : response.data?.data?.attributes?.testimonialFeature,
 			})
             setLoadedTestimonialSection(false)
@@ -275,6 +274,7 @@ export function PageProvider({children}) {
 			toast.success('contact added and email sent successfully!')
 		} catch (err) {
 			toast.error(err?.response?.data?.error?.message)
+            setContactSubmit(false)
 		}
     }
 

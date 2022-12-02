@@ -16,7 +16,7 @@ const schema = yup.object({
   })
 
 function ForgotPassword() {
-    const { register,reset, formState: { errors,isSubmitting,isSubmitSuccessful }, handleSubmit, watch } = useForm({
+    const { register,reset, formState: { errors }, handleSubmit, watch } = useForm({
         resolver: yupResolver(schema)
     });
     const [submit,setSubmit] = useState(false)

@@ -1,7 +1,6 @@
 import React,{useContext,useState,useEffect} from 'react'
 import { useForm } from "react-hook-form";
 import { BarLoader,BeatLoader } from 'react-spinners';
-import DatePicker from "react-datepicker";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import {FaEdit} from 'react-icons/fa'

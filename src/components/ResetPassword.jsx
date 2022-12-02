@@ -12,10 +12,10 @@ import { toast } from 'react-toastify';
 const schema = yup.object({
     password: yup.string().required('password is required').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{6,})/,'Must Contain 6 character,One Uppercase,One Lowercase,One Number and One special case character'),
     passwordConfirmation : yup.string().required('confirm password is required').oneOf([yup.ref('password')],'confirm password does"t match')
-  })
+})
 
 function ResetPassword() {
-    const { register,reset, formState: { errors,isSubmitting,isSubmitSuccessful }, handleSubmit, watch } = useForm({
+    const { register,reset, formState: { errors }, handleSubmit, watch } = useForm({
         resolver: yupResolver(schema)
     });
     const [submit,setSubmit] = useState(false)

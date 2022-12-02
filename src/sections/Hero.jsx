@@ -1,29 +1,15 @@
 import { useContext,useEffect } from 'react';
-import Typed from 'react-typed';
+
 import WaterWave from 'react-water-wave';
 import { motion,useAnimation } from "framer-motion"
 import { useInView } from 'react-intersection-observer'
 import { PageContext } from '../components/context/Page.Context';
+import {heroSectionVariants} from '../components/HeroSectionComponents/AnimationData'
+import Bio from '../components/HeroSectionComponents/Bio';
 
-const heroSectionVariants = {
-	hidden : {
-		opacity:0,
-		scale:0
-	},
-	visible:{
-		opacity:1,
-		scale:1,
-		transition:{
-			type:'spring',
-			delay: 0.5,
-			ease: "easeOut",
-			duration:1,
-		}
-	}
-}
 
 function Hero() {
-    const {professionData,heroSectionData,myProfileData} = useContext(PageContext)
+    const {myProfileData} = useContext(PageContext)
 
 	// animation
 	const controls = useAnimation()
@@ -37,21 +23,6 @@ function Hero() {
 		    controls.start('hidden')
 		}
 	},[controls,inView])
-
-	const strings = professionData?.map((profession) => {
-		return profession?.profession
-	})
-	
-	const options = {                    
-	  typeSpeed: 40,
-	  backSpeed: 40,
-	  startDelay:500,
-	  loop:true,
-	  stringElement : null,
-	  loopCount : 100,
-	  contentType : 'html'
-	};
-
 
   return (
     <>
@@ -69,32 +40,8 @@ function Hero() {
 							variants={heroSectionVariants} animate={controls}
 							initial='hidden'
 							>
-								<span className="pb_5 banner_title color_white">
-									{myProfileData?.fullName ? 'I Am' :''} {myProfileData?.fullName ? myProfileData?.fullName : <span style={{color:'red',fontSize:'1.5rem'}}>No name is available to show</span>}!
-								</span>
-								
-								<h1 className="cd-headline clip is-full-width text-uppercase">
-									{
-									   strings?.length >=1 ? 
-									   <>
-									<span className="color_white">
-										 I am a &nbsp;
-									</span>
-									<span className="color_default">
-										<Typed 
-											strings={strings}
-											{...options}
-										/>
-									</span>
-									</>
-									:
-									<span style={{color:'red',fontSize:'1.5rem'}}>No profession is available to show</span>
-									}
-								</h1>
-								<p className="color_white mb_30">
-									{heroSectionData?.short_des ? heroSectionData?.short_des : <span style={{color:'red',fontSize:'1.5rem'}}>No short description is available to show</span>}
-								</p>
-								<motion.a  whileHover={{ scale: 1.1 }}
+								<Bio />
+							<motion.a  whileHover={{ scale: 1.1 }}
                                   whileTap={{ scale: 0.9 }} className="btn btn-default" target='_blank' disabled={myProfileData?.cvLink ? '' : 'disabled'} href={myProfileData?.cvLink}>Download CV</motion.a>
 							</motion.div>
 						</div>

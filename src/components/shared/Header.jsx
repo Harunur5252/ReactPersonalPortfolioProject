@@ -137,6 +137,21 @@ function Header() {
 													</RouterLink>
 												}
 											</li>
+											{
+												user &&
+												<li className="nav-item">
+											   {
+													isNavigate ? 
+													<Link className="nav-link" activeClass="active"  to="blog" spy={true} smooth={true}>
+														Blog
+													</Link>
+													:
+                                                    <RouterLink className="nav-link" to="/" state={`blog`}>
+													    Blog
+													</RouterLink>
+												}
+											</li>
+											}
 											
 											<li className="nav-item">
 											   {
@@ -156,7 +171,7 @@ function Header() {
 									{
 										user && 
 										<>
-										<li className="nav-item">
+										{/* <li className="nav-item">
 											   {
 													isNavigate ? 
 													<Link className="nav-link" activeClass="active"  to="blog" spy={true} smooth={true}>
@@ -167,7 +182,7 @@ function Header() {
 													    Blog
 													</RouterLink>
 												}
-											</li>
+											</li> */}
 										   <li className="nav-item">
 											   {
 													isNavigate ? 

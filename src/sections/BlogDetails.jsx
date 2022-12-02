@@ -1,46 +1,28 @@
 import React,{ useContext,useEffect,useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import format from 'date-fns/format'
-import parse from 'html-react-parser';
 import { FaThumbsUp,FaThumbsDown } from "react-icons/fa";
-import { useForm } from "react-hook-form";
-import {motion} from 'framer-motion'
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from "yup";
 import { BlogContext } from '../components/context/Blog.Context'
 import { AuthContext } from '../components/context/Auth.Context';
 import Layout from '../components/layouts/Layout'
 import Comment from '../components/Comment';
-import notFoundImage from '../assets/R.jpg'
-
-    // validation rules for all input fields
-	const schema = yup.object({
-		description: yup.string().required('description is required').min(5,'userName must be 5 or more').max(5000,'userName must be equal or less than 5000'),
-	})
+import UserSocialLinks from '../components/shared/UserSocialLinks';
+import AllCategory from '../components/shared/AllCategory';
+import RecentPosts from '../components/shared/RecentPosts';
+import AllTags from '../components/shared/AllTags';
+import CommentForm from '../components/BlogDetailsPageComponents/CommentForm';
+import ShowSingleBlogDetails from '../components/BlogDetailsPageComponents/ShowSingleBlogDetails';
 
 
 function BlogDetails() {
-	const { register,reset, formState: { errors,isSubmitting,isSubmitSuccessful }, handleSubmit, watch } = useForm({
-		resolver: yupResolver(schema)
-	});
-
-	const {blogs,tags,blogsWithoutPaginationData,handleLike,handleUnLike,loadedCategory,comment,commentSubmit,commentLoadedArr} = useContext(BlogContext)
-	const {user,token,multipleProfileData} = useContext(AuthContext)
+	const {blogsWithoutPaginationData,handleLike,handleUnLike,comment,commentSubmit,commentLoadedArr} = useContext(BlogContext)
+	const {user,token} = useContext(AuthContext)
 	const [blog,setBlog] = useState({})
 	const [likes,setLikes] = useState([])
 	const [findLike,setFindLike] = useState({})
 	const [isLike,setIsLike] = useState(false)
-	const [resetComment,setResetComment] = useState({description:''})
 	const {id} = useParams()
 
 	const findSingleBlog = blogsWithoutPaginationData?.find((blog) => blog?.slug === id)
-   	// finding socials link
-	const checkUserSocialLink =  multipleProfileData?.find(userSocialLink=>userSocialLink?.userId === user?.id)
- 
-	// latest posts
-	const BlogsData = blogsWithoutPaginationData?.map((post) => post)
-	const reverseBlogsData = BlogsData?.reverse()
-	const sliceRecentBlogArr = reverseBlogsData?.slice(0,4)
 
 	useEffect(()=>{
 		window.scroll(0,0);
@@ -76,24 +58,6 @@ function BlogDetails() {
 	}
 
     const blogId = blog?.blogId
-
-	const onSubmit = (data) => {
-	   setResetComment(data)
-       comment(data,blogId)
-	}
-
-
-    const defaultValue = {
-		description : resetComment?.description || ''
-	}
-	const {description}= defaultValue
-	useEffect(() => {
-        if(commentSubmit){
-			reset({
-                description : ''
-			})
-		}
-	},[commentSubmit])
     
 	const comments = commentLoadedArr?.filter((comment) => {
 		if(comment?.blogId === blog?.blogId){
@@ -129,45 +93,7 @@ function BlogDetails() {
 						<div className="row">
 							<div className="col-md-8 col-lg-8">
 								<div className="blog_details">
-										{Object.keys(blog && blog)?.length === 0 ? <p style={{color:'red',fontSize:'1.5rem'}}>No blog show</p> : 
-										<>
-											<div key={blog?.blogId} className="blog_img overlay_one wow animated slideInUp"><img src={blog?.blog_image ? blog?.blog_image : notFoundImage} alt="image" /></div>
-											<div className="blog_content bg_white">
-												<div className="blog_title mb_20 color_primary">
-													<h5>{blog?.title ? blog?.title : <p style={{color:"red"}}>no title</p>}</h5>
-												</div>
-												<div className="admin">
-													<img src={blog?.profilePicture ? blog?.profilePicture : notFoundImage} alt="image" />
-													<span className="color_primary">{`by - `} {blog?.firstName ? blog?.firstName : <span style={{color:'red'}}>no author name</span>} {blog?.lastName} </span>
-												</div>
-												<div className="date color_primary float-left">{blog?.blog_date ? format(new Date(blog?.blog_date), 'dd MMM yyyy') : <p style={{color:"red"}}>no published date</p>}</div>
-												{
-												blog?.blog_image && blog?.title && parse(blog?.description) && blog?.blog_date ? 
-												<div className="comments">
-												  <i className="fa fa-comment" aria-hidden="true"></i>
-												  <span className="color_primary">{blog?.likes?.length}</span>
-											    </div>
-												:
-												null
-											   }
-												<div className="single_blog_content d-inline-block mt_30 color_secondery wow animated slideInUp">
-													<p>{blog?.description ? parse(blog?.description) : <p style={{color:"red"}}>no description</p>}</p>
-												</div>
-												<div className="share_post mt_30 wow animated slideInUp">
-													<h4 className="float-left mr_20">Share : </h4>
-													<div className="socal_media_2 d-inline-block">
-														<ul>
-															<li><Link to={blog?.facebookAccount}><i className="fa fa-facebook" aria-hidden="true"></i></Link></li>
-															<li><Link to={blog?.twitterAccount}><i className="fa fa-twitter" aria-hidden="true"></i></Link></li>
-															<li><Link to={blog?.googleAccount}><i className="fa fa-google-plus" aria-hidden="true"></i></Link></li>
-															<li><Link to={blog?.linkdinAccount}><i className="fa fa-linkedin" aria-hidden="true"></i></Link></li>
-															<li><Link to={blog?.instagramAccount}><i className="fa fa-instagram" aria-hidden="true"></i></Link></li>
-														</ul>
-													</div>
-												</div>
-											</div>
-										</>
-										}
+										<ShowSingleBlogDetails blog={blog} />
 									{
 										blog?.blog_image && blog?.title && blog?.description && blog?.blog_date ?
 
@@ -193,24 +119,7 @@ function BlogDetails() {
 										</ul>
 									       </div>
 									
-											<div className="replay mt_60 wow animated slideInUp">
-												<h4 className="text-uppercase color_primary mb_30">Leave A Comment</h4>
-												<form  className="reply_form" onSubmit={handleSubmit(onSubmit)}>
-													<div className="row">
-														<div className="col-md-12">
-															<textarea className="form-control" defaultValue={description}  {...register("description")} rows="7" placeholder="Type Comments..."></textarea>
-															<span style={{color:'red'}}>{errors?.description?.message}</span>
-														</div>
-														
-														<div className="col-md-12">
-															<motion.button whileHover={{ scale: 1.1 }} 
-																	whileTap={{ scale: 0.9 }} type="submit" className="btn btn-default" disabled={commentSubmit}>
-																{commentSubmit ? 'Loading...':'Post Comment'} 
-															</motion.button>
-														</div>
-													</div>
-												</form>
-											</div>
+											<CommentForm blogId={blogId} />
 										</>
 										:
 										null
@@ -220,87 +129,10 @@ function BlogDetails() {
 							</div>
 							<div className="col-md-4 col-lg-4">
 								<div className="blog_sidebar">
-									<div className="widget mb_60 d-inline-block p_30 bg_white full_row wow animated slideInUp">
-										<h3 className="widget_title mb_30 text-capitalize">Follow Me</h3>
-										<div className="socal_media">
-											<ul>
-												<li><a target='_blank' href={checkUserSocialLink?.facebookAccount}><i className="fa fa-facebook" aria-hidden="true"></i></a></li>
-												<li><a target='_blank' href={checkUserSocialLink?.twitterAccount}><i className="fa fa-twitter" aria-hidden="true"></i></a></li>
-												<li><a target='_blank' href={checkUserSocialLink?.googlePlusAccount}><i className="fa fa-google-plus" aria-hidden="true"></i></a></li>
-												<li><a target='_blank' href={checkUserSocialLink?.linkedinAccount}><i className="fa fa-linkedin" aria-hidden="true"></i></a></li>
-												<li><a target='_blank' href={checkUserSocialLink?.instagramAccount}><i className="fa fa-instagram" aria-hidden="true"></i></a></li>
-											</ul>
-										</div>
-									</div>
-									<div className="widget mb_60 d-inline-block p_30 primary_link bg_white full_row wow animated slideInUp">
-										<h3 className="widget_title mb_30 text-capitalize">Category</h3>
-										<div className="category_sidebar">
-												<ul>
-													{loadedCategory.map((category)=> {
-														return <li key={category?.categoryId}><Link to={`/category-wise-post/${category?.slug}`}>{category?.name}</Link><span>({category?.totalPostLength})</span></li>
-													})}
-												</ul>
-										</div>
-									</div>
-
-									<div
-										className="widget mb_60 d-inline-block p_30 primary_link bg_white full_row wow animated slideInUp"
-									>
-										<h3 className="widget_title mb_30 text-capitalize">
-											Recent Post
-										</h3>
-										{
-											sliceRecentBlogArr?.length >=1 ? 
-											<div className="recent_post">
-											<ul>
-												{sliceRecentBlogArr?.map((recentPost) => {
-                                                   return (
-													<li className="mb_30" key={recentPost?.blogId}>
-													<Link to={`/blog-details/${recentPost?.slug}`}>
-													<div className='d-flex align-item-center'>
-														<div className="post_img">
-															<img
-																src={recentPost?.blog_image ? recentPost?.blog_image : notFoundImage}
-																alt="image"
-															/>
-														</div>
-														<div className="recent_post_content">
-															<h6>
-																{recentPost?.title}
-															</h6>
-															<span className="color_gray">{recentPost?.blog_date && format(new Date(recentPost?.blog_date), 'dd MMM yyyy')}</span>
-														</div>
-														</div>
-													</Link>
-												</li>
-												   )
-												})}
-											</ul>
-										</div>
-										:
-										<p style={{color:'red',fontSize:'1.3rem'}}>No recent post</p>
-										}
-										
-									</div>
-									<div
-										className="widget mb_60 d-inline-block p_30 bg_white full_row wow animated slideInUp"
-									>
-										<h3 className="widget_title mb_30 text-capitalize">Archives</h3>
-										{
-											tags?.length >=1 ?
-											<div className="tags">
-												<ul>
-													{tags?.map((tag) => {
-														return (
-															<li key={tag?.tagId}><Link to={`/tag-wise-post/${tag?.slug}`}>{tag?.name}</Link></li>
-														)
-													})}
-												</ul>
-										    </div>
-										:
-                                          <p style={{color:'red',fontSize:'1.3rem'}}>No tag</p>
-										}
-									</div>
+								    <UserSocialLinks />
+									<AllCategory />
+									<RecentPosts />
+									<AllTags />
 								</div>
 							</div>
 						</div>
