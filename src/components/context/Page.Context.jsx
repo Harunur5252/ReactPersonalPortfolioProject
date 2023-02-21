@@ -126,6 +126,7 @@ export function PageProvider({children}) {
     }
 
     const loadHeroSection = async () => {
+        console.log(import.meta.env)
 		try {
             setLoadedHeroSection(true)
 			const response = await axiosPublicInstance.get('/home?populate=*')
