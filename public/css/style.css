@@ -796,7 +796,7 @@ ul#menu li a{
 }
 .progress-bar{
   transition: all 3000ms ease 0s;
-  width: 0
+  width: 0;
 }
 /* Fact Counter */
 
@@ -1389,6 +1389,23 @@ ul#menu li a{
   transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
 }
 
+
+
+/*===============================================================================
+24.   spinner for color change
+=================================================================================*/
+.color-setting {
+  position: fixed;
+  height: 62px;
+  width: 62px;
+  top: 20%;
+  right: 1px;
+  cursor: pointer;
+  overflow-wrap: normal;
+  z-index: 9999;
+}
+
+
 /*===============================================================================
 24.   Back to Top
 =================================================================================*/
@@ -1916,7 +1933,7 @@ label.radios {
   transition: all 500ms ease-in-out
 }
 .color-panel.open {
-  right: 0
+  right: 1
 }
 .on-panel img{
   padding: 10px

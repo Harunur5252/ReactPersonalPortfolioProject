@@ -8,7 +8,8 @@ import { heroSectionVariants } from "../components/HeroSectionComponents/Animati
 import Bio from "../components/HeroSectionComponents/Bio";
 
 function Hero() {
-  const { myProfileData } = useContext(PageContext);
+  const { myProfileData, colorData } = useContext(PageContext);
+
   // animation
   const controls = useAnimation();
   const [ref, inView] = useInView();
@@ -48,17 +49,18 @@ function Hero() {
                     initial="hidden"
                   >
                     <Bio />
-                    <motion.a
-                      download="cv of Harun"
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      className="btn btn-default"
-                      target="_blank"
-                      disabled={myProfileData?.cvLink ? null : "disabled"}
-                      href={myProfileData?.cvLink}
-                    >
-                      Download CV
-                    </motion.a>
+                      <motion.a
+                        download="cv of Harun"
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className="btn btn-default"
+                        target="_blank"
+                        disabled={myProfileData?.cvLink ? null : "disabled"}
+                        href={myProfileData?.cvLink}
+                        style={{ backgroundColor: colorData?.colorName }}
+                      >
+                          Download CV
+                      </motion.a>
                   </motion.div>
                 </div>
               </div>

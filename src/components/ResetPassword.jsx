@@ -7,6 +7,7 @@ import ScrollToTop from '../components/shared/ScrollToTop';
 import { useSearchParams,useNavigate } from 'react-router-dom';
 import { axiosPublicInstance } from '../Utils/axios';
 import { toast } from 'react-toastify';
+import ColorSetting from './shared/ColorSetting';
 
 // validation rules for all input fields
 const schema = yup.object({
@@ -60,6 +61,7 @@ function ResetPassword() {
     <>
         <Layout>
 		<ScrollToTop />
+		<ColorSetting />
         <section className="banner background9 py_80 overlay_three full_row">
 				<div className="container">
 					<div className="row">

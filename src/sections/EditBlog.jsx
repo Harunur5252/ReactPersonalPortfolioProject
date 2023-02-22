@@ -10,6 +10,7 @@ import ScrollToTop from '../components/shared/ScrollToTop'
 import { BlogContext } from '../components/context/Blog.Context';
 import { AuthContext } from '../components/context/Auth.Context';
 import notFoundImage from '../assets/R.jpg'
+import ColorSetting from '../components/shared/ColorSetting';
 
 function EditBlog() {
 	const { register,setValue, reset,formState: { errors,isSubmitting,isSubmitSuccessful }, handleSubmit } = useForm();
@@ -42,6 +43,7 @@ function EditBlog() {
     <>
         <Layout>
 		<ScrollToTop />
+		<ColorSetting />
 			<section className="banner background9 py_80 overlay_three full_row">
 						<div className="container">
 							<div className="row">

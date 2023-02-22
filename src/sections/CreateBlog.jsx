@@ -2,6 +2,7 @@ import React,{useEffect} from 'react';
 import Layout from '../components/layouts/Layout';
 import ScrollToTop from '../components/shared/ScrollToTop';
 import BlogCreateForm from '../components/blogCreatePageComponents/BlogCreateForm';
+import ColorSetting from '../components/shared/ColorSetting';
 
 
 function CreateBlog() {
@@ -13,6 +14,7 @@ function CreateBlog() {
     <>
         <Layout>
 		    <ScrollToTop />
+			<ColorSetting />
 			<section className="banner background9 py_80 overlay_three full_row">
 					<div className="container">
 						<div className="row">

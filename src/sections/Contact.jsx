@@ -11,7 +11,7 @@ import {
 } from "../components/contactSectionComponents/animationData";
 
 function Contact() {
-  const { contactData } = useContext(PageContext);
+  const { contactData,colorData } = useContext(PageContext);
 
   // animation
   const controls = useAnimation();
@@ -34,7 +34,7 @@ function Contact() {
             <div className="col-md-12 col-lg-12">
               <div className="section_title_1 text-center mx-auto pb_60 wow animated slideInUp">
                 <h2 className="title text-uppercase">
-                  <span className="line_double mx-auto color_default">
+                  <span style={{color:colorData?.colorName}} className="line_double mx-auto color_default">
                     contact
                   </span>
                   Get In Touch

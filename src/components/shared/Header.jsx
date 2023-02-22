@@ -8,7 +8,7 @@ import Tippy from "@tippyjs/react";
 
 function Header() {
   const { logout, user } = useContext(AuthContext);
-  const { myProfileData } = useContext(PageContext);
+  const { myProfileData, colorData } = useContext(PageContext);
   const { pathname } = useLocation();
 
   const isNavigate = pathname === "/";
@@ -110,6 +110,7 @@ function Header() {
                           to="top"
                           spy={true}
                           smooth={true}
+                          style={{ color: colorData?.colorName }}
                         >
                           Home
                         </Link>
@@ -127,6 +128,7 @@ function Header() {
                           to="about"
                           spy={true}
                           smooth={true}
+                          style={{ color: colorData?.colorName }}
                         >
                           About
                         </Link>
@@ -144,6 +146,7 @@ function Header() {
                           to="skill"
                           spy={true}
                           smooth={true}
+                          style={{ color: colorData?.colorName }}
                         >
                           Skill
                         </Link>
@@ -161,6 +164,7 @@ function Header() {
                           to="services"
                           spy={true}
                           smooth={true}
+                          style={{ color: colorData?.colorName }}
                         >
                           Services
                         </Link>
@@ -182,6 +186,7 @@ function Header() {
                           to="portfolio"
                           spy={true}
                           smooth={true}
+                          style={{ color: colorData?.colorName }}
                         >
                           Portfolio
                         </Link>
@@ -203,6 +208,7 @@ function Header() {
                           to="testimonial"
                           spy={true}
                           smooth={true}
+                          style={{ color: colorData?.colorName }}
                         >
                           Testimonial
                         </Link>
@@ -225,6 +231,7 @@ function Header() {
                             to="blog"
                             spy={true}
                             smooth={true}
+                            style={{ color: colorData?.colorName }}
                           >
                             Blog
                           </Link>
@@ -248,6 +255,7 @@ function Header() {
                           to="contact"
                           spy={true}
                           smooth={true}
+                          style={{ color: colorData?.colorName }}
                         >
                           Contact
                         </Link>
@@ -286,6 +294,7 @@ function Header() {
                           to="/create-blog"
                           spy={true}
                           smooth={true}
+                          style={{ color: colorData?.colorName }}
                         >
                           CreateBlog
                         </RouterLink>
@@ -308,6 +317,7 @@ function Header() {
                           to="/user-dashboard/profile"
                           spy={true}
                           smooth={true}
+                          style={{ color: colorData?.colorName }}
                         >
                           Dashboard
                         </RouterLink>
@@ -322,7 +332,11 @@ function Header() {
                       )}
                     </li>
                     <li className="nav-item">
-                      <a className="nav-link" onClick={logout}>
+                      <a
+                        className="nav-link"
+                        style={{ color: colorData?.colorName }}
+                        onClick={logout}
+                      >
                         Logout
                       </a>
                     </li>
@@ -339,6 +353,7 @@ function Header() {
                           to="/login"
                           spy={true}
                           smooth={true}
+                          style={{color:colorData?.colorName}}
                         >
                           Login
                         </RouterLink>
@@ -360,6 +375,7 @@ function Header() {
                           to="/register"
                           spy={true}
                           smooth={true}
+                          style={{color:colorData?.colorName}}
                         >
                           Register
                         </RouterLink>
