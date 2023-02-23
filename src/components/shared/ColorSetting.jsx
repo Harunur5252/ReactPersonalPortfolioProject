@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { useContext } from "react";
 import { PageContext } from "../context/Page.Context";
 function ColorSetting() {
-  const { handleColorSet } = useContext(PageContext);
+  const { handleColorSet, colorData } = useContext(PageContext);
 
   return (
     <>
@@ -13,6 +13,7 @@ function ColorSetting() {
           data-toggle="modal"
           data-target="#exampleModal"
           className="color-setting"
+          style={{ backgroundColor: colorData?.colorName }}
         />
       </Tippy>
 
@@ -42,68 +43,82 @@ function ColorSetting() {
             <div className="modal-body">
               <div className="container">
                 <div className="row">
-                  <div className="col-sm-4">
-                    <button
-                      type="submit"
-                      className="btn btn-primary btn-sm"
+                  <div className="col-sm-1">
+                    <div
+                      style={{
+                        cursor: "pointer",
+                        backgroundColor: "blue",
+                        height: "25px",
+                        width: "25px",
+                      }}
                       onClick={(e) => handleColorSet(e, "blue")}
-                    >
-                      Primary
-                    </button>
+                    ></div>
                   </div>
-                  <div className="col-sm-4">
-                    <button
-                      type="button"
+                  <div className="col-sm-1">
+                    <div
+                      style={{
+                        cursor: "pointer",
+                        backgroundColor: "green",
+                        height: "25px",
+                        width: "25px",
+                      }}
                       onClick={(e) => handleColorSet(e, "green")}
-                      className="btn btn-success btn-sm"
-                    >
-                      Success
-                    </button>
+                    ></div>
                   </div>
-                  <div className="col-sm-4">
-                    <button
-                      type="button"
+                  <div className="col-sm-1">
+                    <div
+                      style={{
+                        cursor: "pointer",
+                        backgroundColor: "red",
+                        height: "25px",
+                        width: "25px",
+                      }}
                       onClick={(e) => handleColorSet(e, "red")}
-                      className="btn btn-danger btn-sm"
-                    >
-                      Danger
-                    </button>
+                    ></div>
                   </div>
-                  <div className="col-sm-4 mt-3">
-                    <button
-                      type="button"
+                  <div className="col-sm-1">
+                    <div
+                      style={{
+                        cursor: "pointer",
+                        backgroundColor: "yellow",
+                        height: "25px",
+                        width: "25px",
+                      }}
                       onClick={(e) => handleColorSet(e, "yellow")}
-                      className="btn btn-warning btn-sm"
-                    >
-                      Warning
-                    </button>
+                    ></div>
                   </div>
-                  <div className="col-sm-4 mt-3">
-                    <button
-                      type="button"
+                  <div className="col-sm-1">
+                    <div
+                      style={{
+                        cursor: "pointer",
+                        backgroundColor: "rgb(16, 236, 239)",
+                        height: "25px",
+                        width: "25px",
+                      }}
                       onClick={(e) => handleColorSet(e, "rgb(16, 236, 239)")}
-                      className="btn btn-info btn-sm"
-                    >
-                      Info
-                    </button>
+                    ></div>
                   </div>
-                  <div className="col-sm-4 mt-3">
-                    <button
-                      type="button"
-                      onClick={(e) => handleColorSet(e, "black")}
-                      className="btn btn-dark btn-sm"
-                    >
-                      Dark
-                    </button>
+                  <div className="col-sm-1">
+                    <div
+                      style={{
+                        cursor: "pointer",
+                        backgroundColor: "black",
+                        height: "25px",
+                        width: "25px",
+                      }}
+                      onClick={(e) => handleColorSet(e, "balck")}
+                    ></div>
                   </div>
-                  <div className="col-sm-4 mt-3">
-                    <button
-                      type="button"
+                  <div className="col-sm-1">
+                    <div
+                      style={{
+                        cursor: "pointer",
+                        backgroundColor: "rgb(213, 222, 222)",
+                        height: "25px",
+                        width: "25px",
+                      }}
                       onClick={(e) => handleColorSet(e, "rgb(213, 222, 222)")}
-                      className="btn btn-light btn-sm"
-                    >
-                      Light
-                    </button>
+                    ></div>
                   </div>
                 </div>
               </div>
@@ -111,8 +126,13 @@ function ColorSetting() {
             <div className="modal-footer">
               <button
                 type="button"
-                className="btn btn-secondary"
                 data-dismiss="modal"
+                style={{
+                  backgroundColor: "rgb(6, 65, 38)",
+                  color:'white',
+                  cursor: "pointer",
+                  width: "80px",
+                }}
               >
                 Close
               </button>

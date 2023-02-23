@@ -127,10 +127,10 @@ export function PageProvider({ children }) {
       const res = await axiosPublicInstance.put(`/colors/${colorData?.id}`, {
         data: { colorName: color },
       });
-      toast.success(`${color} is set successfully!`);
+      toast.success("the color has seated successfully!");
       loadColor();
     } catch (err) {
-      toast.error(err.response.data.message);
+      toast.error(err.response?.data?.error?.message);
     }
   };
 

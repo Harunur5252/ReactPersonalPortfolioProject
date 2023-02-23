@@ -115,7 +115,12 @@ function Header() {
                           Home
                         </Link>
                       ) : (
-                        <RouterLink className="nav-link" to="/" state={`top`}>
+                        <RouterLink
+                          style={{ color: colorData?.colorName }}
+                          className="nav-link"
+                          to="/"
+                          state={`top`}
+                        >
                           Home
                         </RouterLink>
                       )}
@@ -133,7 +138,12 @@ function Header() {
                           About
                         </Link>
                       ) : (
-                        <RouterLink className="nav-link" to="/" state={`about`}>
+                        <RouterLink
+                          style={{ color: colorData?.colorName }}
+                          className="nav-link"
+                          to="/"
+                          state={`about`}
+                        >
                           About
                         </RouterLink>
                       )}
@@ -151,7 +161,12 @@ function Header() {
                           Skill
                         </Link>
                       ) : (
-                        <RouterLink className="nav-link" to="/" state={`skill`}>
+                        <RouterLink
+                          style={{ color: colorData?.colorName }}
+                          className="nav-link"
+                          to="/"
+                          state={`skill`}
+                        >
                           Skill
                         </RouterLink>
                       )}
@@ -173,6 +188,7 @@ function Header() {
                           className="nav-link"
                           to="/"
                           state={`services`}
+                          style={{ color: colorData?.colorName }}
                         >
                           Services
                         </RouterLink>
@@ -195,6 +211,7 @@ function Header() {
                           className="nav-link"
                           to="/"
                           state={`portfolio`}
+                          style={{ color: colorData?.colorName }}
                         >
                           Portfolio
                         </RouterLink>
@@ -217,6 +234,7 @@ function Header() {
                           className="nav-link"
                           to="/"
                           state={`testimonial`}
+                          style={{ color: colorData?.colorName }}
                         >
                           Testimonial
                         </RouterLink>
@@ -240,6 +258,7 @@ function Header() {
                             className="nav-link"
                             to="/"
                             state={`blog`}
+                            style={{ color: colorData?.colorName }}
                           >
                             Blog
                           </RouterLink>
@@ -264,6 +283,7 @@ function Header() {
                           className="nav-link"
                           to="/"
                           state={`contact`}
+                          style={{ color: colorData?.colorName }}
                         >
                           Contact
                         </RouterLink>
@@ -304,6 +324,7 @@ function Header() {
                           activeClass="active"
                           to="/create-blog"
                           state={`/create-blog`}
+                          style={{ color: colorData?.colorName }}
                         >
                           CreateBlog
                         </RouterLink>
@@ -326,6 +347,7 @@ function Header() {
                           className="nav-link"
                           to="/user-dashboard/profile"
                           state={`/user-dashboard/profile`}
+                          style={{ color: colorData?.colorName }}
                         >
                           Dashboard
                         </RouterLink>
@@ -353,7 +375,7 @@ function Header() {
                           to="/login"
                           spy={true}
                           smooth={true}
-                          style={{color:colorData?.colorName}}
+                          style={{ color: colorData?.colorName }}
                         >
                           Login
                         </RouterLink>
@@ -362,6 +384,7 @@ function Header() {
                           className="nav-link"
                           to="/login"
                           state={`/login`}
+                          style={{ color: colorData?.colorName }}
                         >
                           Login
                         </RouterLink>
@@ -375,7 +398,7 @@ function Header() {
                           to="/register"
                           spy={true}
                           smooth={true}
-                          style={{color:colorData?.colorName}}
+                          style={{ color: colorData?.colorName }}
                         >
                           Register
                         </RouterLink>
@@ -384,6 +407,7 @@ function Header() {
                           className="nav-link"
                           to="/register"
                           state={`/register`}
+                          style={{ color: colorData?.colorName }}
                         >
                           Register
                         </RouterLink>
