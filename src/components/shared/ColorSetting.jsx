@@ -11,7 +11,7 @@ function ColorSetting() {
         <img
           src="/Gear-0.2s-197px.svg"
           data-toggle="modal"
-          data-target="#exampleModal"
+          data-target="#exampleModal1"
           className="color-setting"
           style={{ backgroundColor: colorData?.colorName }}
         />
@@ -19,7 +19,7 @@ function ColorSetting() {
 
       <div
         className="modal fade"
-        id="exampleModal"
+        id="exampleModal1"
         tabindex="-1"
         role="dialog"
         aria-labelledby="exampleModalLabel"
@@ -106,7 +106,7 @@ function ColorSetting() {
                         height: "25px",
                         width: "25px",
                       }}
-                      onClick={(e) => handleColorSet(e, "balck")}
+                      onClick={(e) => handleColorSet(e, "black")}
                     ></div>
                   </div>
                   <div className="col-sm-1">

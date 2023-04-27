@@ -134,7 +134,7 @@ function Login() {
                               disabled={loginSubmit}
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.9 }}
-							  style={{backgroundColor:colorData?.colorName}}
+                              style={{ backgroundColor: colorData?.colorName }}
                             >
                               {loginSubmit ? "Loading...." : "Login"}
                             </motion.button>
