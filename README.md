@@ -19,27 +19,27 @@ This is a dynamic react portfolio project using backend strapi service.
 
 ### skill section
 
-![React-Blog!](/src/assets/Design_Skills.jpg "Design_Skills")
+![React-Blog!](/src/assets/Design_Skills.PNG "design_skills")
 
 ### recent project section
 
-![React-Blog!](/src/assets/recent_project.jpg "Design_Skills")
+![React-Blog!](/src/assets/recent_project.jpg "recent_project")
 
 ### review section
 
-![React-Blog!](/src/assets/review_section.jpg "Design_Skills")
+![React-Blog!](/src/assets/review_section.jpg "review_section")
 
 ### services section
 
-![React-Blog!](/src/assets/services.jpg "Design_Skills")
+![React-Blog!](/src/assets/services.jpg "services")
 
 ### create blog section
 
-![React-Blog!](/src/assets/create_blog.jpg "Design_Skills")
+![React-Blog!](/src/assets/create_blog.jpg "create_blog")
 
 ### user dashboard section
 
-![React-Blog!](/src/assets/user_dashboard.jpg "Design_Skills")
+![React-Blog!](/src/assets/user_dashboard.jpg "user_dashboard")
 
 ## Available Scripts
 
