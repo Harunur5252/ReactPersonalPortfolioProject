@@ -9,7 +9,6 @@ import Bio from "../components/HeroSectionComponents/Bio";
 
 function Hero() {
   const { myProfileData, colorData } = useContext(PageContext);
-
   // animation
   const controls = useAnimation();
   const [ref, inView] = useInView();
