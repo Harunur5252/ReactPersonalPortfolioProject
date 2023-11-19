@@ -23,23 +23,27 @@ This is a dynamic react portfolio project using backend strapi service.
 
 ### recent project section
 
-![React-Blog!](/src/assets/recent_project.jpg "recent_project")
+![React-Blog!](/src/assets/recent_project.PNG "recent_project")
 
 ### review section
 
-![React-Blog!](/src/assets/review_section.jpg "review_section")
+![React-Blog!](/src/assets/review.PNG "review_section")
 
 ### services section
 
-![React-Blog!](/src/assets/services.jpg "services")
+![React-Blog!](/src/assets/services.PNG "services")
 
 ### create blog section
 
-![React-Blog!](/src/assets/create_blog.jpg "create_blog")
+![React-Blog!](/src/assets/create_blog.PNG "create_blog")
 
 ### user dashboard section
 
-![React-Blog!](/src/assets/user_dashboard.jpg "user_dashboard")
+![React-Blog!](/src/assets/user_dashboard.PNG "user_dashboard")
+
+### contact section
+
+![React-Blog!](/src/assets/contact.PNG "contact")
 
 ## Available Scripts
 
